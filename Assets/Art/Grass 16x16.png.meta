@@ -220,7 +220,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Grass 16x16_4
+      name: Grass 16x16_Single_Corner_0
       rect:
         serializedVersion: 2
         x: 64
@@ -283,7 +283,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Grass 16x16_7
+      name: Grass 16x16_Single_Corner_1
       rect:
         serializedVersion: 2
         x: 112
@@ -304,7 +304,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Grass 16x16_8
+      name: Grass 16x16_Single_3Way_2
       rect:
         serializedVersion: 2
         x: 128
@@ -451,7 +451,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Grass 16x16_15
+      name: Grass 16x16_Middle_0
       rect:
         serializedVersion: 2
         x: 80
@@ -472,7 +472,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Grass 16x16_16
+      name: Grass 16x16_Middle_1
       rect:
         serializedVersion: 2
         x: 96
@@ -661,7 +661,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Grass 16x16_25
+      name: Grass 16x16_Middle_2
       rect:
         serializedVersion: 2
         x: 80
@@ -682,7 +682,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Grass 16x16_26
+      name: Grass 16x16_Middle_3
       rect:
         serializedVersion: 2
         x: 96
@@ -850,7 +850,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Grass 16x16_34
+      name: Grass 16x16_dot_0
       rect:
         serializedVersion: 2
         x: 48
@@ -871,7 +871,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Grass 16x16_35
+      name: Grass 16x16_Single_Corner_2
       rect:
         serializedVersion: 2
         x: 64
@@ -934,7 +934,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Grass 16x16_38
+      name: Grass 16x16_Single_Corner_3
       rect:
         serializedVersion: 2
         x: 112
@@ -955,7 +955,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Grass 16x16_39
+      name: Grass 16x16_Single_3Way_3
       rect:
         serializedVersion: 2
         x: 128
@@ -1060,7 +1060,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Grass 16x16_44
+      name: Grass 16x16_dot_1
       rect:
         serializedVersion: 2
         x: 32
@@ -1081,7 +1081,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Grass 16x16_45
+      name: Grass 16x16_dot_2
       rect:
         serializedVersion: 2
         x: 48
@@ -1102,7 +1102,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Grass 16x16_46
+      name: Grass 16x16_Single_3Way_0
       rect:
         serializedVersion: 2
         x: 64
@@ -1165,7 +1165,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Grass 16x16_49
+      name: Grass 16x16_Single_3Way_1
       rect:
         serializedVersion: 2
         x: 112
@@ -1639,15 +1639,11 @@ TextureImporter:
     nameFileIdTable:
       Grass 16x16_13: 2111166913
       Grass 16x16_14: 1252053731
-      Grass 16x16_15: 423061851
-      Grass 16x16_16: -636012327
       Grass 16x16_17: -1380867263
       Grass 16x16_18: -2060000191
       Grass 16x16_19: -1929067714
       Grass 16x16_23: 2092781954
       Grass 16x16_24: 1923649654
-      Grass 16x16_25: -914952645
-      Grass 16x16_26: -2010051532
       Grass 16x16_27: -1152959357
       Grass 16x16_28: 578155160
       Grass 16x16_29: 1936119369
@@ -1656,23 +1652,14 @@ TextureImporter:
       Grass 16x16_31: 1981807374
       Grass 16x16_32: 1386411661
       Grass 16x16_33: 1768287157
-      Grass 16x16_34: -1321270814
-      Grass 16x16_35: 1164666402
       Grass 16x16_36: -1250735500
       Grass 16x16_37: -2038134258
-      Grass 16x16_38: -242370102
-      Grass 16x16_39: 2086297050
-      Grass 16x16_4: -299663415
       Grass 16x16_40: -1703430837
       Grass 16x16_41: -1323982949
       Grass 16x16_42: -84576655
       Grass 16x16_43: -1783048755
-      Grass 16x16_44: -454773102
-      Grass 16x16_45: -217519300
-      Grass 16x16_46: 584831452
       Grass 16x16_47: 10150279
       Grass 16x16_48: -720676400
-      Grass 16x16_49: -119220292
       Grass 16x16_5: -16442307
       Grass 16x16_50: -1699253164
       Grass 16x16_51: 877988943
@@ -1695,9 +1682,7 @@ TextureImporter:
       Grass 16x16_67: -233378703
       Grass 16x16_68: -359620899
       Grass 16x16_69: -611328154
-      Grass 16x16_7: 854363794
       Grass 16x16_70: -1335676915
-      Grass 16x16_8: 450286221
       Grass 16x16_9: -1918055941
       Grass 16x16_Full_Rect_0: -291669331
       Grass 16x16_Full_Rect_1: 1048167045
@@ -1708,6 +1693,21 @@ TextureImporter:
       Grass 16x16_Full_Rect_6: -1564057057
       Grass 16x16_Full_Rect_7: 1623162785
       Grass 16x16_Full_Rect_8: 597782429
+      Grass 16x16_Middle_0: 423061851
+      Grass 16x16_Middle_1: -636012327
+      Grass 16x16_Middle_2: -914952645
+      Grass 16x16_Middle_3: -2010051532
+      Grass 16x16_Single_3Way_0: 584831452
+      Grass 16x16_Single_3Way_1: -119220292
+      Grass 16x16_Single_3Way_2: 450286221
+      Grass 16x16_Single_3Way_3: 2086297050
+      Grass 16x16_Single_Corner_0: -299663415
+      Grass 16x16_Single_Corner_1: 854363794
+      Grass 16x16_Single_Corner_2: 1164666402
+      Grass 16x16_Single_Corner_3: -242370102
+      Grass 16x16_dot_0: -1321270814
+      Grass 16x16_dot_1: -454773102
+      Grass 16x16_dot_2: -217519300
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
