@@ -7,28 +7,42 @@ public class PlayerMovement : MonoBehaviour
     // player speed variable
     public float speed = 10.0f;
 
+    private Rigidbody2D rb;
+    private Vector2 moveInput;
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.D))
+        moveInput.x = Input.GetAxisRaw("Horizontal");
+        moveInput.y = Input.GetAxisRaw("Vertical");
+
+        moveInput.Normalize();
+
+        rb.velocity = moveInput * speed;
+        /*if (Input.GetKey(KeyCode.D))
         {
         Vector2 right = new Vector2 (1,0);
-        transform.Translate(right * speed * Time.deltaTime);
+        rb.velocity(right * speed);
+        
         }
         if (Input.GetKey(KeyCode.A))
         {
         Vector2 left = new Vector2 (-1,0);
-        transform.Translate(left * speed * Time.deltaTime);
+        rb.velocity(right * speed);
         }
         if (Input.GetKey(KeyCode.W))
         {
         Vector2 right = new Vector2 (0,1);
-        transform.Translate(right * speed * Time.deltaTime);
+        rb.velocity(right * speed);
         }
         if (Input.GetKey(KeyCode.S))
         {
         Vector2 left = new Vector2 (0,-1);
-        transform.Translate(left * speed * Time.deltaTime);
-        }
+        rb.velocity(right * speed);
+        }*/
     }
 }
