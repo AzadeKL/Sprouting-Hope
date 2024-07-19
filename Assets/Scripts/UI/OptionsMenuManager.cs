@@ -103,7 +103,7 @@ public class OptionsMenuManager : MonoBehaviour
 
     public void BackButton()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
 
     public void ResetGameState()

@@ -1,16 +1,21 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField]
+    private List<SceneField> notAllowedScenes;
+
+
+    [SerializeField]
     private AudioClip select_clip;
 
     [SerializeField]
     private AudioClip back_clip;
 
-    [SerializeField]
-    private GameEvent sceneIsChaning;
+    //[SerializeField]
+    //private GameEvent sceneIsChaning;
 
     [SerializeField]
     private GameObject pauseMenuUI;
@@ -20,11 +25,11 @@ public class PauseMenu : MonoBehaviour
 
     private bool isPaused = false;
 
-    public delegate void TogglePause();
-    public static TogglePause togglePause;
+    //public delegate void TogglePause();
+    //public static TogglePause togglePause;
     private static PauseMenu instance;
 
-
+    private bool notAllowed = true;
 
     private void Awake()
     {
@@ -42,18 +47,54 @@ public class PauseMenu : MonoBehaviour
 
 
     }
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
     private void Start()
     {
         // InGameDebugObject.SetActive(false);
     }
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        notAllowed = false;
 
-    private void OnEnable()
-    {
-        togglePause += HandlePause;
+        foreach (var sceneField in notAllowedScenes)
+        {
+            notAllowed = sceneField.SceneName.Equals(scene.name);
+            if (notAllowed == true) break;
+        }
+
+        if (notAllowed == true)
+        {
+            Resume();
+        }
     }
-    private void OnDisable()
+
+    //private void OnEnable()
+    //{
+    //    togglePause += HandlePause;
+    //}
+    //private void OnDisable()
+    //{
+    //    togglePause -= HandlePause;
+    //}
+
+    private void Update()
     {
-        togglePause -= HandlePause;
+        if (notAllowed == true) return;
+
+
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+            HandlePause();
+        }
     }
     public void HandlePause()
     {
@@ -82,13 +123,13 @@ public class PauseMenu : MonoBehaviour
     public void LoadLevelWithSceneField(SceneField level)
     {
         Resume();
-        sceneIsChaning.TriggerEvent();
+        // sceneIsChaning.TriggerEvent();
         SceneManager.LoadScene(level);
     }
     public void LoadLevel(int level)
     {
         Resume();
-        sceneIsChaning.TriggerEvent();
+        // sceneIsChaning.TriggerEvent();
         SceneManager.LoadScene(level);
     }
 
@@ -96,7 +137,7 @@ public class PauseMenu : MonoBehaviour
     {
 
         Resume();
-        sceneIsChaning.TriggerEvent();
+        //sceneIsChaning.TriggerEvent();
         SceneManager.LoadScene(0);
 
     }
