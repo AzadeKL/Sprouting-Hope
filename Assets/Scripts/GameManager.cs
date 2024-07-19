@@ -1,15 +1,16 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class GameManager : MonoBehaviour
 {
-    
+
     [SerializeField] private Tilemap grassMap;
     [SerializeField] private Tilemap farmLand;
     [SerializeField] private Tilemap farmPlants;
     [SerializeField] private Tilemap buildings;
+
+    [SerializeField] private SeedFactory seedFactory;
 
     public Tile sprite;
     public List<TileBase> buildingSprites;
@@ -20,7 +21,7 @@ public class GameManager : MonoBehaviour
 
     private Dictionary<Vector3Int, int> tileState = new Dictionary<Vector3Int, int>();
 
-    
+
     private Vector3Int[] neighborPositions =
     {
         Vector3Int.up,
@@ -29,6 +30,12 @@ public class GameManager : MonoBehaviour
         Vector3Int.down
     };
 
+
+    private void Awake()
+    {
+        if (seedFactory == null) { seedFactory = GetComponent<SeedFactory>(); }
+
+    }
 
     // redundant/buggy code, will delete soon
     /*private void Awake()
@@ -109,16 +116,17 @@ public class GameManager : MonoBehaviour
             Vector3Int gridPosition = farmLand.WorldToCell(player.transform.position);
             TileBase clickedTile = farmLand.GetTile(gridPosition);
             // if farmland, check what tool was used
-            if (clickedTile) switch(player.GetComponent<PlayerInventory>().hotBar[player.GetComponent<PlayerInventory>().handIndex])
-            {
-                // if hoe equipped, till soil
-                case "hoe":
+            if (clickedTile) switch (player.GetComponent<PlayerInventory>().hotBar[player.GetComponent<PlayerInventory>().handIndex])
+                {
+                    // if hoe equipped, till soil
+                    case "hoe":
                     ChangeSoil(gridPosition, 1);
                     farmLand.SetColor(gridPosition, new Color(0.6f, 0.4f, 0f));
-                    Debug.Log("Dirt space set to " +  tileState[gridPosition] + ", tilled");
+                    Debug.Log("Dirt space set to " + tileState[gridPosition] + ", tilled");
+                    seedFactory.CreateSeed(player.transform.position);
                     break;
-                // if wheat seeds equipped, plant wheat seedling
-                case "wheat seeds":
+                    // if wheat seeds equipped, plant wheat seedling
+                    case "wheat seeds":
                     if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1)
                     {
                         farmPlants.SetTile(gridPosition, sprite);
@@ -126,17 +134,20 @@ public class GameManager : MonoBehaviour
                         Debug.Log("Planted wheat seeds");
                     }
                     break;
-                // if watering can equipped, water soil for faster growth
-                case "watering can":
+                    // if watering can equipped, water soil for faster growth
+                    case "watering can":
                     if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1)
                     {
                         ChangeSoil(gridPosition, 2);
                         farmLand.SetColor(gridPosition, new Color(0.4f, 0.2f, 0f));
-                        Debug.Log("Dirt space set to " +  tileState[gridPosition] + ", watered");
+                        Debug.Log("Dirt space set to " + tileState[gridPosition] + ", watered");
                     }
                     break;
-            }
+                }
         }
     }
+
+
+
 
 }

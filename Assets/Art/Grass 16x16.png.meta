@@ -1417,7 +1417,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Grass 16x16_61
+      name: Grass 16x16_Seed
       rect:
         serializedVersion: 2
         x: 144
@@ -1673,7 +1673,6 @@ TextureImporter:
       Grass 16x16_59: 487748660
       Grass 16x16_6: -753712170
       Grass 16x16_60: 1096542950
-      Grass 16x16_61: -605042942
       Grass 16x16_62: -548857261
       Grass 16x16_63: -649119412
       Grass 16x16_64: 118056057
@@ -1697,6 +1696,7 @@ TextureImporter:
       Grass 16x16_Middle_1: -636012327
       Grass 16x16_Middle_2: -914952645
       Grass 16x16_Middle_3: -2010051532
+      Grass 16x16_Seed: -605042942
       Grass 16x16_Single_3Way_0: 584831452
       Grass 16x16_Single_3Way_1: -119220292
       Grass 16x16_Single_3Way_2: 450286221
