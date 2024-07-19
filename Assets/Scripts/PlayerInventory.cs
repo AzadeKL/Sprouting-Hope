@@ -23,30 +23,33 @@ public class PlayerInventory : MonoBehaviour
 
     void Awake()
     {
-        hotBar = new List<string>{"","","","",""};
-        hotBar[0] = "hoe";
-        hotBar[1] = "watering can";
-        hotBar[2] = "wheat seeds";
+        // set up starting inventory
+        hotBar = new List<string>{"hoe","watering can","wheat seeds","",""};
 
     }
 
     void Update()
     {
+        // enable/disable inventory window
         if (Input.GetKeyUp(KeyCode.Tab))
         {
             inventoryUI.SetActive(!inventoryUI.activeSelf);
         }
+
+        // scroll wheel down the hotbar
         if (Input.GetAxis("Mouse ScrollWheel") > 0)
         {
             if (handIndex == 0) handIndex = 4;
             else handIndex--;
             Debug.Log(handIndex);
         }
+        // scroll wheel up the hotbar
         if (Input.GetAxis("Mouse ScrollWheel") < 0)
         {
             handIndex = (handIndex + 1) % 5;
             Debug.Log(handIndex);
         }
+        // number keys for specific hotbar slots
         if (Input.GetKeyUp(KeyCode.Alpha1))
         {
             handIndex = 0;

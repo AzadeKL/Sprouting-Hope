@@ -6,6 +6,7 @@ using UnityEngine.Tilemaps;
 public class GameManager : MonoBehaviour
 {
     
+    [SerializeField] private Tilemap grassMap;
     [SerializeField] private Tilemap farmLand;
     [SerializeField] private Tilemap farmPlants;
     [SerializeField] private Tilemap buildings;
@@ -15,10 +16,9 @@ public class GameManager : MonoBehaviour
     public GameObject player;
 
 
-    [SerializeField] private List<TileData> tileDatas;
+    //[SerializeField] private List<TileData> tileDatas;
 
-    private Dictionary<TileBase, TileData> dataFromTiles;
-    private Dictionary<TileBase, int> tileState;
+    private Dictionary<Vector3Int, int> tileState = new Dictionary<Vector3Int, int>();
 
     
     private Vector3Int[] neighborPositions =
@@ -30,19 +30,34 @@ public class GameManager : MonoBehaviour
     };
 
 
-    private void Awake()
+    // redundant/buggy code, will delete soon
+    /*private void Awake()
     {
-        dataFromTiles = new Dictionary<TileBase, TileData>();
-        tileState = new Dictionary<TileBase, int>();
+        //dataFromTiles = new Dictionary<TileBase, TileData>();
+        //tileState = new Dictionary<Transform, int>();
 
         foreach (var tileData in tileDatas)
         {
-            foreach (var tile in tileData.tiles)
+            foreach (var tile in tileData.transform)
             {
                 dataFromTiles.Add(tile, tileData);
-                tileState.Add(tile, tileData.dirtState);
+                tileState.Add(tile, 0);
             }
         }
+
+        foreach (var tile in farmLand.GetTilesBlock(farmLand.cellBounds))
+        {
+            if (tile) tileState.Add(tile.GetInstanceID(), 0);
+        }
+        Debug.Log(grassMap.localBounds);
+    }*/
+
+    // function called when a tool or general change to the soil's state happens
+    private void ChangeSoil(Vector3Int gridPosition, int state)
+    {
+        // if tile is called for the first time, add to list and give appropriate state
+        if (!tileState.ContainsKey(gridPosition)) tileState.Add(gridPosition, state);
+        else tileState[gridPosition] = state;
     }
 
     private void Update()
@@ -68,7 +83,7 @@ public class GameManager : MonoBehaviour
         }*/
 
 
-
+        // interact with building or other interactable object
         if (Input.GetKeyUp(KeyCode.F))
         {
             Vector3Int gridPosition = buildings.WorldToCell(player.transform.position);
@@ -98,29 +113,29 @@ public class GameManager : MonoBehaviour
             {
                 // if hoe equipped, till soil
                 case "hoe":
-                    tileState[clickedTile] = 1;
+                    ChangeSoil(gridPosition, 1);
                     farmLand.SetColor(gridPosition, new Color(0.6f, 0.4f, 0f));
-                    Debug.Log("Dirt space set to " +  tileState[clickedTile] + ", tilled");
+                    Debug.Log("Dirt space set to " +  tileState[gridPosition] + ", tilled");
                     break;
-                // if wheat seeds equipped plant seedling
+                // if wheat seeds equipped, plant wheat seedling
                 case "wheat seeds":
-                    if (tileState[clickedTile] >= 1)
+                    if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1)
                     {
                         farmPlants.SetTile(gridPosition, sprite);
                         //plantTile.GetTileData.sprite = sprite;
                         Debug.Log("Planted wheat seeds");
                     }
                     break;
+                // if watering can equipped, water soil for faster growth
                 case "watering can":
-                    if (tileState[clickedTile] >= 1)
+                    if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1)
                     {
-                        tileState[clickedTile] = 2;
+                        ChangeSoil(gridPosition, 2);
                         farmLand.SetColor(gridPosition, new Color(0.4f, 0.2f, 0f));
-                        Debug.Log("Dirt space set to " +  tileState[clickedTile] + ", watered");
+                        Debug.Log("Dirt space set to " +  tileState[gridPosition] + ", watered");
                     }
                     break;
             }
-            
         }
     }
 
