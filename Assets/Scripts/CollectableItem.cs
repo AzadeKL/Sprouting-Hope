@@ -14,8 +14,12 @@ public class CollectableItem : MonoBehaviour
 
     private bool collected = false;
 
+
+    private PlayerInventory player;
+
     private void Start()
     {
+        player = GameObject.Find("Player").GetComponent<PlayerInventory>();
         transform.localScale = Vector3.zero;
         transform.DOScale(Vector3.one, 0.1f);
         transform.DOBlendableMoveBy(Random.insideUnitSphere * spawnJumpMultiplier, 1f);
@@ -36,6 +40,12 @@ public class CollectableItem : MonoBehaviour
     private void Update()
     {
         lifeTime += Time.deltaTime;
+        if (transform.localScale == Vector3.zero && collected)
+        {
+            Debug.Log("collected");
+            player.AddToInventory(this.tag);
+            Destroy(this.gameObject);
+        }
     }
 
 

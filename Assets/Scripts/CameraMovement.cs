@@ -11,10 +11,10 @@ public class CameraMovement : MonoBehaviour
     [Space]
     [Header("Distance from center allowed")]
     // distance from the center of the screen [X] to allow camera to follow player
-    [SerializeField] float ClampX = 5.5f;
+    //[SerializeField] float ClampX = 5.5f;
 
     // distance from the center of the screen [Y] to allow camera to follow player
-    [SerializeField] float ClampY = 3.5f;
+    //[SerializeField] float ClampY = 3.5f;
 
     
     [SerializeField] private Tilemap grassMap;

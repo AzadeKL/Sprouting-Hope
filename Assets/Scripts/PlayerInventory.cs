@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class PlayerInventory : MonoBehaviour
 {
@@ -18,14 +20,43 @@ public class PlayerInventory : MonoBehaviour
     public List<string> hotBar;
 
     // inventory
-    public List<GameObject> inventory;
+    public Dictionary<string, int> inventory = new Dictionary<string, int>();
+    [SerializeField] private GameObject inventoryGrid;
+    [SerializeField] private GameObject inventoryIcon;
 
+    private List<GameObject> inventoryIcons = new List<GameObject>();
+
+
+    public void AddToInventory(string Item)
+    {
+        Debug.Log(Item);
+        if (inventory.ContainsKey(Item)) 
+        {
+            inventory[Item] = inventory[Item] + 1;
+            foreach (var icon in inventoryIcons)
+            {
+                if (icon.GetComponent<InventoryIcon>().item == Item)
+                {
+                    icon.GetComponent<InventoryIcon>().UpdateQuantity(inventory[Item]);
+                    break;
+                }
+            }
+        }
+        else 
+        {
+            inventory.Add(Item, 1);
+            GameObject newIcon = Instantiate(inventoryIcon, inventoryGrid.transform);
+            newIcon.GetComponent<InventoryIcon>().SetIcon(Item);
+            newIcon.GetComponent<InventoryIcon>().UpdateQuantity(inventory[Item]);
+            inventoryIcons.Add(newIcon);
+        }
+        Debug.Log(Item + ", " + inventory[Item]);
+    }
 
     void Awake()
     {
         // set up starting inventory
         hotBar = new List<string>{"hoe","watering can","wheat seeds","",""};
-
     }
 
     void Update()
