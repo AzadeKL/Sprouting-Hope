@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -47,12 +45,12 @@ namespace UserInterfaceGridLayout
             // If the fit type is Width or FixedColumns, calculate the number of rows based on the number of columns and children
             if (fitType == FitType.Width || fitType == FitType.FixedColumns)
             {
-                rows = Mathf.CeilToInt(transform.childCount / (float)columns);
+                rows = Mathf.CeilToInt(transform.childCount / (float) columns);
             }
             // If the fit type is Height or FixedRows, calculate the number of columns based on the number of rows and children
             if (fitType == FitType.Height || fitType == FitType.FixedRows)
             {
-                columns = Mathf.CeilToInt(transform.childCount / (float)rows);
+                columns = Mathf.CeilToInt(transform.childCount / (float) rows);
             }
 
             // Calculate the parent's width and height, subtracting the padding
@@ -60,8 +58,8 @@ namespace UserInterfaceGridLayout
             float parentHeight = rectTransform.rect.height - padding.top - padding.bottom;
 
             // Calculate the cell's width and height based on the parent's dimensions, the number of rows and columns, the spacing, and the padding
-            float cellWidth = parentWidth / (float)columns - ((spacing.x / (float)columns) * (columns - 1));
-            float cellHeight = parentHeight / (float)rows - ((spacing.y / (float)rows) * (rows - 1));
+            float cellWidth = parentWidth / (float) columns - ((spacing.x / (float) columns) * (columns - 1));
+            float cellHeight = parentHeight / (float) rows - ((spacing.y / (float) rows) * (rows - 1));
 
             // If fitX or fitY is true, set the cell's width or height to the calculated width or height
             cellSize.x = fitX ? cellWidth : cellSize.x;
@@ -82,8 +80,8 @@ namespace UserInterfaceGridLayout
             float extraHeight = rectTransform.rect.height - totalHeight - padding.top - padding.bottom;
 
             // Calculate the starting position of the grid based on the child alignment
-            float startX = padding.left + extraWidth * ((int)childAlignment % 3) * 0.5f;
-            float startY = padding.top + extraHeight * ((int)childAlignment / 3) * 0.5f;
+            float startX = padding.left + extraWidth * ((int) childAlignment % 3) * 0.5f;
+            float startY = padding.top + extraHeight * ((int) childAlignment / 3) * 0.5f;
 
             // Loop through each child and set its position and size
             int columnCount = 0;
@@ -115,6 +113,11 @@ namespace UserInterfaceGridLayout
 
         public override void SetLayoutVertical()
         {
+        }
+
+        public void SetComponentDirty()
+        {
+            SetDirty();
         }
     }
 }

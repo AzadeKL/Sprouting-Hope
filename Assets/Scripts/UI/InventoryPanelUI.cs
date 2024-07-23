@@ -1,7 +1,9 @@
 using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UserInterfaceGridLayout;
 
 public class InventoryPanelUI : MonoBehaviour
 {
@@ -13,33 +15,37 @@ public class InventoryPanelUI : MonoBehaviour
     {
         buttonsRectTr = new();
 
-    }
-
-    private void Start()
-    {
         tabPanels = new();
         //var panels = transform.GetChild(1).GetComponentsInChildren<Transform>();
         foreach (Transform tr in transform.GetChild(1))
         {
             tabPanels.Add(tr);
         }
+        foreach (Transform tr in transform.GetChild(0))
+        {
+            buttonsRectTr.Add(tr.GetComponentInChildren<Button>().GetComponent<RectTransform>());
+        }
+    }
+
+    private void Start()
+    {
+
     }
 
     private void OnEnable()
     {
         foreach (Transform tr in transform.GetChild(0))
         {
-            buttonsRectTr.Add(tr.GetComponentInChildren<Button>().GetComponent<RectTransform>());
             tr.GetComponentInChildren<Button>().onClick.AddListener(() => ButtonClicks(tr.GetComponentInChildren<Button>()));
         }
+        ResetVisuals();
     }
 
     private void OnDisable()
     {
-        var buttons = transform.GetChild(0).GetChild(0).gameObject.GetComponentsInChildren<Button>();
-        foreach (var button in buttons)
+        foreach (Transform tr in transform.GetChild(0))
         {
-            button.onClick.RemoveAllListeners();
+            tr.GetComponentInChildren<Button>().onClick.RemoveAllListeners();
         }
     }
 
@@ -50,7 +56,6 @@ public class InventoryPanelUI : MonoBehaviour
         foreach (var tab in tabPanels)
         {
             tab.gameObject.SetActive(false);
-            // tab.GetComponent<RectTransform>().DOAnchorPosY
         }
         foreach (var rectTransform in buttonsRectTr)
         {
@@ -58,6 +63,42 @@ public class InventoryPanelUI : MonoBehaviour
         }
         tabPanels[index].gameObject.SetActive(true);
         buttonsRectTr[index].DOAnchorPosY(0, 1f).SetEase(Ease.OutCubic);
+        InsideTabAnimations(tabPanels[index].GetComponent<FlexibleGridLayout>());
+    }
+
+
+    private void InsideTabAnimations(FlexibleGridLayout flexibleGridLayout)
+    {
+        StartCoroutine(InsideTabAnimationsCorutine(flexibleGridLayout));
+    }
+
+    IEnumerator InsideTabAnimationsCorutine(FlexibleGridLayout flexibleGridLayout)
+    {
+        float timeLimit = 0.3f;
+        var startVec = Vector2.one * 40;
+        var endVec = Vector2.one * 10;
+
+        for (var timePassed = 0f; timePassed < timeLimit; timePassed += Time.deltaTime)
+        {
+            var factor = timePassed / timeLimit;
+            var result = Vector2.Lerp(startVec, endVec, factor);
+
+            flexibleGridLayout.spacing = result;
+            flexibleGridLayout.SetComponentDirty();
+            yield return null;
+        }
+
+        flexibleGridLayout.spacing = endVec;
+        flexibleGridLayout.SetComponentDirty();
+    }
+
+    private void ResetVisuals()
+    {
+        foreach (var tabPanel in tabPanels)
+        {
+            tabPanel.GetComponent<FlexibleGridLayout>().spacing = Vector2.one * 10;
+        }
+        // buttonsRectTr[0].GetComponent<Button>().onClick.Invoke();
     }
 
 }
