@@ -7737,6 +7737,11 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &1182112702 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8847086407098192193, guid: ff0bb2ebff9c36b45ba820ed5995fef3, type: 3}
+  m_PrefabInstance: {fileID: 4282386496411591670}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1449948595
 GameObject:
   m_ObjectHideFlags: 0
@@ -10560,7 +10565,7 @@ MonoBehaviour:
   inventoryUI: {fileID: 1579636895}
   handIndex: 0
   hotBar: []
-  inventoryGrid: {fileID: 0}
+  inventoryGrid: {fileID: 1182112702}
   inventoryIcon: {fileID: 2652448401726263400, guid: c21f85f511d219b44a7bde40ecc9e3ea, type: 3}
 --- !u!1001 &4282386496411591670
 PrefabInstance:

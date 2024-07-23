@@ -1,8 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
 public class PlayerInventory : MonoBehaviour
 {
@@ -30,7 +27,7 @@ public class PlayerInventory : MonoBehaviour
     public void AddToInventory(string Item)
     {
         Debug.Log(Item);
-        if (inventory.ContainsKey(Item)) 
+        if (inventory.ContainsKey(Item))
         {
             inventory[Item] = inventory[Item] + 1;
             foreach (var icon in inventoryIcons)
@@ -42,10 +39,11 @@ public class PlayerInventory : MonoBehaviour
                 }
             }
         }
-        else 
+        else
         {
             inventory.Add(Item, 1);
-            GameObject newIcon = Instantiate(inventoryIcon, inventoryGrid.transform);
+            GameObject newIcon = Instantiate(inventoryIcon, inventoryGrid.transform.GetChild(0).transform);
+            StretchAndFill(newIcon.GetComponent<RectTransform>());
             newIcon.GetComponent<InventoryIcon>().SetIcon(Item);
             newIcon.GetComponent<InventoryIcon>().UpdateQuantity(inventory[Item]);
             inventoryIcons.Add(newIcon);
@@ -56,7 +54,7 @@ public class PlayerInventory : MonoBehaviour
     void Awake()
     {
         // set up starting inventory
-        hotBar = new List<string>{"hoe","watering can","wheat seeds","",""};
+        hotBar = new List<string> { "hoe", "watering can", "wheat seeds", "", "" };
     }
 
     void Update()
@@ -101,5 +99,23 @@ public class PlayerInventory : MonoBehaviour
         {
             handIndex = 4;
         }
+    }
+
+
+    public void StretchAndFill(RectTransform rectTransform)
+    {
+        if (rectTransform == null)
+        {
+            Debug.LogError("RectTransform is null!");
+            return;
+        }
+
+        // Set anchors to stretch in all directions
+        rectTransform.anchorMin = new Vector2(0, 0); // Bottom-left corner
+        rectTransform.anchorMax = new Vector2(1, 1); // Top-right corner
+
+        // Reset offsets
+        rectTransform.offsetMin = Vector2.zero;
+        rectTransform.offsetMax = Vector2.zero;
     }
 }
