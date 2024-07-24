@@ -81,10 +81,13 @@ public class GameManager : MonoBehaviour
                 {
                     // if hoe equipped, till soil
                     case "Hoe":
-                    ChangeSoil(gridPosition, 1);
-                    farmLand.SetColor(gridPosition, new Color(0.6f, 0.4f, 0f));
-                    Debug.Log("Dirt space set to " + tileState[gridPosition] + ", tilled");
-                    seedFactory.CreateSeed(player.transform.position);
+                    if (tileState[gridPosition] < 1)
+                    {
+                        ChangeSoil(gridPosition, 1);
+                        farmLand.SetColor(gridPosition, new Color(0.6f, 0.4f, 0f));
+                        Debug.Log("Dirt space set to " + tileState[gridPosition] + ", tilled");
+                        seedFactory.CreateSeed(player.transform.position);
+                    }
                     break;
                     // if wheat seeds equipped, plant wheat seedling
                     case "Wheat Seeds":
