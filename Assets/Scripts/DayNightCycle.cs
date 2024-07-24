@@ -13,6 +13,8 @@ public class DayNightCycle : MonoBehaviour
     [Range(0f, 60f)]
     [SerializeField] private float cycleStartTime;
 
+    [SerializeField] private FloatReference time24HFormat;
+
     private float cycleTimer;
 
     void Start()
@@ -28,6 +30,7 @@ public class DayNightCycle : MonoBehaviour
     {
         cycleTimer += Time.deltaTime;
         float cycleProgress = cycleTimer / dayDuration;
+        time24HFormat.Value = cycleProgress * 24;
         float lightIntensity;
         Color lightColor;
 
