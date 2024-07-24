@@ -37,28 +37,6 @@ public class GameManager : MonoBehaviour
 
     }
 
-    // redundant/buggy code, will delete soon
-    /*private void Awake()
-    {
-        //dataFromTiles = new Dictionary<TileBase, TileData>();
-        //tileState = new Dictionary<Transform, int>();
-
-        foreach (var tileData in tileDatas)
-        {
-            foreach (var tile in tileData.transform)
-            {
-                dataFromTiles.Add(tile, tileData);
-                tileState.Add(tile, 0);
-            }
-        }
-
-        foreach (var tile in farmLand.GetTilesBlock(farmLand.cellBounds))
-        {
-            if (tile) tileState.Add(tile.GetInstanceID(), 0);
-        }
-        Debug.Log(grassMap.localBounds);
-    }*/
-
     // function called when a tool or general change to the soil's state happens
     private void ChangeSoil(Vector3Int gridPosition, int state)
     {
@@ -69,25 +47,6 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        /*
-        // TEMP equip hoe
-        if (Input.GetKeyUp(KeyCode.E))
-        {
-            player.GetComponent<PlayerInventory>().hand = "hoe";
-            Debug.Log("Now equipped " + player.GetComponent<PlayerInventory>().hand);
-        }
-        // TEMP equip wheat seeds
-        if (Input.GetKeyUp(KeyCode.R))
-        {
-            player.GetComponent<PlayerInventory>().hand = "wheat seeds";
-            Debug.Log("Now equipped " + player.GetComponent<PlayerInventory>().hand);
-        }
-        // TEMP equip watering can
-        if (Input.GetKeyUp(KeyCode.Q))
-        {
-            player.GetComponent<PlayerInventory>().hand = "watering can";
-            Debug.Log("Now equipped " + player.GetComponent<PlayerInventory>().hand);
-        }*/
 
 
         // interact with building or other interactable object
@@ -112,30 +71,33 @@ public class GameManager : MonoBehaviour
         // left click to interact with tool to tile
         if (Input.GetMouseButtonUp(0))
         {
-            // get tile player is standing on
-            Vector3Int gridPosition = farmLand.WorldToCell(player.transform.position);
-            TileBase clickedTile = farmLand.GetTile(gridPosition);
-            // if farmland, check what tool was used
-            if (clickedTile) switch (player.GetComponent<PlayerInventory>().hotBar[player.GetComponent<PlayerInventory>().handIndex])
+            if (!player.GetComponent<PlayerInventory>().inventoryUI.activeSelf)
+            {
+                // get tile player is standing on
+                Vector3Int gridPosition = farmLand.WorldToCell(player.transform.position);
+                TileBase clickedTile = farmLand.GetTile(gridPosition);
+                // if farmland, check what tool was used
+                if (clickedTile) switch (player.GetComponent<PlayerInventory>().inventoryIndex[player.GetComponent<PlayerInventory>().handIndex])
                 {
                     // if hoe equipped, till soil
-                    case "hoe":
+                    case "Hoe":
                     ChangeSoil(gridPosition, 1);
                     farmLand.SetColor(gridPosition, new Color(0.6f, 0.4f, 0f));
                     Debug.Log("Dirt space set to " + tileState[gridPosition] + ", tilled");
                     seedFactory.CreateSeed(player.transform.position);
                     break;
                     // if wheat seeds equipped, plant wheat seedling
-                    case "wheat seeds":
-                    if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1)
+                    case "Wheat Seeds":
+                    if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1 && !farmPlants.HasTile(gridPosition))
                     {
                         farmPlants.SetTile(gridPosition, sprite);
+                        player.GetComponent<PlayerInventory>().RemoveFromInventory("Wheat Seeds");
                         //plantTile.GetTileData.sprite = sprite;
                         Debug.Log("Planted wheat seeds");
                     }
                     break;
                     // if watering can equipped, water soil for faster growth
-                    case "watering can":
+                    case "Watering Can":
                     if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1)
                     {
                         ChangeSoil(gridPosition, 2);
@@ -144,6 +106,7 @@ public class GameManager : MonoBehaviour
                     }
                     break;
                 }
+            }
         }
     }
 

@@ -1,60 +1,101 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerInventory : MonoBehaviour
 {
 
-    // TEMP string for hand
-    public string hand = "hoe";
-
-
-    [SerializeField] private GameObject inventoryUI;
+    public GameObject inventoryUI;
 
     // index variable labeling what is currently equipped to hand
-    public int handIndex = 0;
+    public int handIndex = -1;
 
     // hotbar that can scroll through
-    public List<string> hotBar;
+    public List<string> inventoryIndex;
 
     // inventory
     public Dictionary<string, int> inventory = new Dictionary<string, int>();
+    private Dictionary<string, GameObject> inventoryIcons = new Dictionary<string, GameObject>();
+
+
+
     [SerializeField] private GameObject inventoryGrid;
     [SerializeField] private GameObject inventoryIcon;
+    [SerializeField] private GameObject handIcon;
 
-    private List<GameObject> inventoryIcons = new List<GameObject>();
 
 
     public void AddToInventory(string Item)
     {
-        Debug.Log(Item);
+        //Debug.Log(Item);
         if (inventory.ContainsKey(Item))
         {
-            inventory[Item] = inventory[Item] + 1;
-            foreach (var icon in inventoryIcons)
-            {
-                if (icon.GetComponent<InventoryIcon>().item == Item)
-                {
-                    icon.GetComponent<InventoryIcon>().UpdateQuantity(inventory[Item]);
-                    break;
-                }
-            }
+            inventory[Item]++;
+            inventoryIcons[Item].GetComponent<InventoryIcon>().UpdateQuantity(inventory[Item]);
         }
         else
         {
             inventory.Add(Item, 1);
-            GameObject newIcon = Instantiate(inventoryIcon, inventoryGrid.transform.GetChild(0).transform);
+            inventoryIndex.Add(Item);
+            GameObject newIcon = Instantiate(inventoryIcon, inventoryGrid.transform.GetChild(inventoryIndex.Count - 1).transform);
             StretchAndFill(newIcon.GetComponent<RectTransform>());
             newIcon.GetComponent<InventoryIcon>().SetIcon(Item);
             newIcon.GetComponent<InventoryIcon>().UpdateQuantity(inventory[Item]);
-            inventoryIcons.Add(newIcon);
+            inventoryIcons.Add(Item, newIcon);
         }
-        Debug.Log(Item + ", " + inventory[Item]);
+        //Debug.Log(Item + ", " + inventory[Item]);
+    }
+
+    public void RemoveFromInventory(string Item)
+    {
+        if (inventory.ContainsKey(Item))
+        {
+            inventory[Item]--;
+            
+            inventoryIcons[Item].GetComponent<InventoryIcon>().UpdateQuantity(inventory[Item]);
+            if (inventory[Item] == 0)
+            {
+                if (handIndex == inventoryIndex.IndexOf(Item))
+                {
+                    if (handIndex == 0) 
+                    {
+                        handIndex = -1;
+                        ChangeHand("");
+                    }
+                    //else ChangeHand(inventoryIndex[inventoryIndex.IndexOf(Item) - 1]);
+                    else ChangeHand("");
+                }
+                GameObject icon = inventoryIcons[Item];
+                inventoryIcons.Remove(Item);
+                GameObject parent = icon.transform.parent.gameObject;
+                Destroy(icon);
+                Instantiate(parent, parent.transform.parent);
+                Destroy(parent);
+                inventory.Remove(Item);
+                inventoryIndex.Remove(Item);
+            }
+        }
+    }
+
+    public void ChangeHand(string Item)
+    {
+        if (Item == "")
+        {
+            handIcon.GetComponent<Image>().enabled = false;
+        }
+        else
+        {
+            handIcon.GetComponent<Image>().enabled = true;
+            handIcon.GetComponent<Image>().sprite = inventoryIcons[Item].GetComponent<Image>().sprite;
+        }
     }
 
     void Awake()
     {
         // set up starting inventory
-        hotBar = new List<string> { "hoe", "watering can", "wheat seeds", "", "" };
+        AddToInventory("Hoe");
+        AddToInventory("Wheat Seeds");
+        AddToInventory("Watering Can");
     }
 
     void Update()
@@ -65,17 +106,18 @@ public class PlayerInventory : MonoBehaviour
             inventoryUI.SetActive(!inventoryUI.activeSelf);
         }
 
+        /*
         // scroll wheel down the hotbar
         if (Input.GetAxis("Mouse ScrollWheel") > 0)
         {
-            if (handIndex == 0) handIndex = 4;
+            if (handIndex == 0) handIndex = inventory.Count - 1;
             else handIndex--;
             Debug.Log(handIndex);
         }
         // scroll wheel up the hotbar
         if (Input.GetAxis("Mouse ScrollWheel") < 0)
         {
-            handIndex = (handIndex + 1) % 5;
+            handIndex = (handIndex + 1) % inventory.Count;
             Debug.Log(handIndex);
         }
         // number keys for specific hotbar slots
@@ -98,7 +140,7 @@ public class PlayerInventory : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Alpha5))
         {
             handIndex = 4;
-        }
+        }*/
     }
 
 
