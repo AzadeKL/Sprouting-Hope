@@ -92,7 +92,6 @@ public class GameManager : MonoBehaviour
                     {
                         farmPlants.SetTile(gridPosition, sprite);
                         player.GetComponent<PlayerInventory>().RemoveFromInventory("Wheat Seeds");
-                        //plantTile.GetTileData.sprite = sprite;
                         Debug.Log("Planted wheat seeds");
                     }
                     break;

@@ -46,15 +46,20 @@ public class PlayerInventory : MonoBehaviour
         //Debug.Log(Item + ", " + inventory[Item]);
     }
 
+    // remove one of said item from the inventory, if last item was removed, remove the spot from the grid
     public void RemoveFromInventory(string Item)
     {
+        // failsafe check in case inventory doesn't have requested item
         if (inventory.ContainsKey(Item))
         {
+            // subtract quantity of item by 1
             inventory[Item]--;
-            
             inventoryIcons[Item].GetComponent<InventoryIcon>().UpdateQuantity(inventory[Item]);
+
+            // if item slot is empty, remove from the dicts and lists and ui panel
             if (inventory[Item] == 0)
             {
+                // update hand icon in case holding last item used (like using last seed)
                 if (handIndex == inventoryIndex.IndexOf(Item))
                 {
                     if (handIndex == 0) 
@@ -62,8 +67,7 @@ public class PlayerInventory : MonoBehaviour
                         handIndex = -1;
                         ChangeHand("");
                     }
-                    //else ChangeHand(inventoryIndex[inventoryIndex.IndexOf(Item) - 1]);
-                    else ChangeHand("");
+                    else ChangeHand(inventoryIndex[inventoryIndex.IndexOf(Item) - 1]);
                 }
                 GameObject icon = inventoryIcons[Item];
                 inventoryIcons.Remove(Item);
@@ -79,10 +83,12 @@ public class PlayerInventory : MonoBehaviour
 
     public void ChangeHand(string Item)
     {
+        // if nothing in hand, do not show image
         if (Item == "")
         {
             handIcon.GetComponent<Image>().enabled = false;
         }
+        // change hand icon to item icon to display what is currently in hand
         else
         {
             handIcon.GetComponent<Image>().enabled = true;
