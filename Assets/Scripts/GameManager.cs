@@ -81,7 +81,7 @@ public class GameManager : MonoBehaviour
                 {
                     // if hoe equipped, till soil
                     case "Hoe":
-                    if (tileState[gridPosition] < 1)
+                    if (!tileState.ContainsKey(gridPosition) || tileState[gridPosition] < 1)
                     {
                         ChangeSoil(gridPosition, 1);
                         farmLand.SetColor(gridPosition, new Color(0.6f, 0.4f, 0f));
