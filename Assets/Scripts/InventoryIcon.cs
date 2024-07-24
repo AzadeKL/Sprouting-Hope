@@ -30,6 +30,12 @@ public class InventoryIcon : MonoBehaviour
             case "Wheat Seeds":
                 GetComponent<Image>().sprite = imageicons[0];
                 break;
+            case "Hoe":
+                GetComponent<Image>().sprite = imageicons[1];
+                break;
+            case "Watering Can":
+                GetComponent<Image>().sprite = imageicons[2];
+                break;
             default:
                 GetComponent<Image>().sprite = imageicons[0];
                 break;
