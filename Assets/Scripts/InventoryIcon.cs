@@ -35,18 +35,24 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
         item = tag;
         switch (tag)
         {
-            case "Wheat Seeds":
-            GetComponent<Image>().sprite = imageicons[0];
-            break;
             case "Hoe":
-            GetComponent<Image>().sprite = imageicons[1];
-            break;
+                GetComponent<Image>().sprite = imageicons[0];
+                break;
             case "Watering Can":
-            GetComponent<Image>().sprite = imageicons[2];
-            break;
+                GetComponent<Image>().sprite = imageicons[1];
+                break;
+            case "Wheat Seeds":
+                GetComponent<Image>().sprite = imageicons[2];
+                break;
+            case "Tomato Seeds":
+                GetComponent<Image>().sprite = imageicons[3];
+                break;
+            case "Lentils Seeds":
+                GetComponent<Image>().sprite = imageicons[4];
+                break;
             default:
-            GetComponent<Image>().sprite = imageicons[0];
-            break;
+                GetComponent<Image>().sprite = imageicons[0];
+                break;
         }
     }
 
