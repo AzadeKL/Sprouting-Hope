@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8452154618046965567}
   - component: {fileID: -4075785430003217690}
   - component: {fileID: 1947463414828090767}
+  - component: {fileID: 2255924371800138249}
   m_Layer: 5
   m_Name: InventoryIcon
   m_TagString: Untagged
@@ -96,6 +97,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: f17cc4e3a8b0de84f8bca622a583ef2b, type: 3}
   quantity: {fileID: 9133616027069098356}
   item: 
+  lastParent: {fileID: 0}
 --- !u!114 &1947463414828090767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,6 +154,35 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2255924371800138249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2652448401726263400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 3
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: -4075785430003217690}
+          m_TargetAssemblyTypeName: InventoryIcon, Assembly-CSharp
+          m_MethodName: ChangeParentColor
+          m_Mode: 4
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0.4
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &3451272304370583976
 GameObject:
   m_ObjectHideFlags: 0

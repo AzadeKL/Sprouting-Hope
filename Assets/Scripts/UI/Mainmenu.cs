@@ -1,9 +1,18 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 public class Mainmenu : MonoBehaviour
 {
+    [SerializeField]
+    private Color StartColor;
+    [SerializeField]
+    private Color EndColor;
+
+    [SerializeField]
+    private Image mainmenuButtonImage;
+
     [SerializeField]
     private AudioClip selectClip;
 
@@ -24,6 +33,8 @@ public class Mainmenu : MonoBehaviour
 
     private GameObject lastSelectable;
 
+    private Tween greenFlashTweeen;
+
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -35,6 +46,9 @@ public class Mainmenu : MonoBehaviour
 
         }
         lastSelectable = eventSystem.firstSelectedGameObject;
+
+
+        greenFlashTweeen = mainmenuButtonImage.DOColor(EndColor, 0.4f).SetLoops(-1, LoopType.Yoyo).SetDelay(2f);
     }
 
     private void Update()
@@ -98,5 +112,11 @@ public class Mainmenu : MonoBehaviour
         Application.Quit();
     }
 
+    public void MainmenuButtonAnim()
+    {
+        greenFlashTweeen.Kill();
+        mainmenuButtonImage.color = StartColor;
+        transform.DOScale(Vector3.one * 2, 2f).SetEase(Ease.OutElastic);
+    }
 
 }

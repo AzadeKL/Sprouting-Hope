@@ -60,7 +60,7 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
     public void OnBeginDrag(PointerEventData eventData)
     {
         lastParent = transform.parent;
-        transform.parent = rectTransform.root;
+        transform.SetParent(rectTransform.root, true);
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -80,12 +80,20 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
             }
         }
 
-        transform.parent = lastParent;
+        transform.SetParent(lastParent, true);
         rectTransform.localPosition = Vector3.zero;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         transform.position = eventData.position;
+    }
+
+    public void ChangeParentColor(float colorAlpha)
+    {
+        return;
+        var oldColor = lastParent.GetComponent<Image>().color;
+        oldColor.a = colorAlpha;
+        lastParent.GetComponent<Image>().color = oldColor;
     }
 }
