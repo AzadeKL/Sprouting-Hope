@@ -1929,9 +1929,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0.046979867
+    y: 0
     width: 1
-    height: 0.90604025
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
@@ -2192,6 +2192,10 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 1b746dbb982bd2248b1207004338056f, type: 2}
+  dayCounter:
+    UseConstant: 0
+    ConstantValue: 1
+    Variable: {fileID: 11400000, guid: e581feeb5e30f264bb8c83950014bf56, type: 2}
   gameManager: {fileID: 548942054}
 --- !u!1 &681399952
 GameObject:
@@ -10554,6 +10558,7 @@ GameObject:
   - component: {fileID: 1822348385}
   - component: {fileID: 1822348386}
   - component: {fileID: 1822348387}
+  - component: {fileID: 1822348388}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -10732,6 +10737,22 @@ MonoBehaviour:
   inventoryGrid: {fileID: 1182112702}
   inventoryIcon: {fileID: 2652448401726263400, guid: c21f85f511d219b44a7bde40ecc9e3ea, type: 3}
   handIcon: {fileID: 1848548496}
+  playerTool: {fileID: 1822348388}
+--- !u!114 &1822348388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1822348381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a71ff64b73ccad6478e90d8a8478d6a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  visualParent: {fileID: 860216138}
+  visual: {fileID: 499169318}
+  direction: {x: 0, y: 0, z: 0}
 --- !u!1 &1848548496
 GameObject:
   m_ObjectHideFlags: 0
@@ -13933,10 +13954,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1449948599}
     m_Modifications:
-    - target: {fileID: 3419828092798232523, guid: c6871c91753919f48b6ab94a7b555945, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -10
-      objectReference: {fileID: 0}
     - target: {fileID: 7576277868026007724, guid: c6871c91753919f48b6ab94a7b555945, type: 3}
       propertyPath: m_Pivot.x
       value: 1

@@ -65,7 +65,12 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 1b746dbb982bd2248b1207004338056f, type: 2}
-  _textMeshPro: {fileID: 372107022640211808}
+  dayCounter:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: e581feeb5e30f264bb8c83950014bf56, type: 2}
+  _textMeshProDayCounter: {fileID: 2414298567607019805}
+  _textMeshProTimer: {fileID: 372107022640211808}
 --- !u!114 &4953354953321316189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -295,6 +300,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d84cf3c3da9b3b43aa5854c0a1950e3, type: 3}
+--- !u!114 &2414298567607019805 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3984158405478240207, guid: 5d84cf3c3da9b3b43aa5854c0a1950e3, type: 3}
+  m_PrefabInstance: {fileID: 1642649706672269010}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &9139810671945473466 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7502148521818848104, guid: 5d84cf3c3da9b3b43aa5854c0a1950e3, type: 3}
@@ -374,7 +390,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8817547823850047894, guid: cf6ec81e02fc2e4458f4156322c89ae6, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: -10
       objectReference: {fileID: 0}
     - target: {fileID: 8817547823850047894, guid: cf6ec81e02fc2e4458f4156322c89ae6, type: 3}
       propertyPath: m_AnchoredPosition.y

@@ -53,41 +53,41 @@ public class GameManager : MonoBehaviour
     public void UpdateCrops(string crop)
     {
         List<Vector3Int> keys;
-        switch(crop)
+        switch (crop)
         {
             case "Wheat":
-                Debug.Log("Wheat is growing!");
-                keys = new List<Vector3Int>(wheatPlants.Keys);
-                for (int i = 0; i < wheatPlants.Count; i++)
-                {
-                    Vector3Int gridPosition = keys[i];
-                    wheatPlants[gridPosition]++;
-                    if (wheatPlants[gridPosition] > 2) wheatPlants[gridPosition] = 2;
-                    farmPlants.SetTile(gridPosition, wheat[wheatPlants[gridPosition]]);
-                }
-                break;
+            Debug.Log("Wheat is growing!");
+            keys = new List<Vector3Int>(wheatPlants.Keys);
+            for (int i = 0; i < wheatPlants.Count; i++)
+            {
+                Vector3Int gridPosition = keys[i];
+                wheatPlants[gridPosition]++;
+                if (wheatPlants[gridPosition] > 2) wheatPlants[gridPosition] = 2;
+                farmPlants.SetTile(gridPosition, wheat[wheatPlants[gridPosition]]);
+            }
+            break;
             case "Tomato":
-                Debug.Log("Tomatoes are growing!");
-                keys = new List<Vector3Int>(tomatoPlants.Keys);
-                for (int i = 0; i < tomatoPlants.Count; i++)
-                {
-                    Vector3Int gridPosition = keys[i];
-                    tomatoPlants[gridPosition]++;
-                    if (tomatoPlants[gridPosition] > 2) tomatoPlants[gridPosition] = 2;
-                    farmPlants.SetTile(gridPosition, tomato[tomatoPlants[gridPosition]]);
-                }
-                break;
+            Debug.Log("Tomatoes are growing!");
+            keys = new List<Vector3Int>(tomatoPlants.Keys);
+            for (int i = 0; i < tomatoPlants.Count; i++)
+            {
+                Vector3Int gridPosition = keys[i];
+                tomatoPlants[gridPosition]++;
+                if (tomatoPlants[gridPosition] > 2) tomatoPlants[gridPosition] = 2;
+                farmPlants.SetTile(gridPosition, tomato[tomatoPlants[gridPosition]]);
+            }
+            break;
             case "Lentils":
-                Debug.Log("Lentils are growing!");
-                keys = new List<Vector3Int>(lentilPlants.Keys);
-                for (int i = 0; i < lentilPlants.Count; i++)
-                {
-                    Vector3Int gridPosition = keys[i];
-                    lentilPlants[gridPosition]++;
-                    if (lentilPlants[gridPosition] > 2) lentilPlants[gridPosition] = 2;
-                    farmPlants.SetTile(gridPosition, lentil[lentilPlants[gridPosition]]);
-                }
-                break;
+            Debug.Log("Lentils are growing!");
+            keys = new List<Vector3Int>(lentilPlants.Keys);
+            for (int i = 0; i < lentilPlants.Count; i++)
+            {
+                Vector3Int gridPosition = keys[i];
+                lentilPlants[gridPosition]++;
+                if (lentilPlants[gridPosition] > 2) lentilPlants[gridPosition] = 2;
+                farmPlants.SetTile(gridPosition, lentil[lentilPlants[gridPosition]]);
+            }
+            break;
         }
     }
 
@@ -142,13 +142,19 @@ public class GameManager : MonoBehaviour
             if (!player.GetComponent<PlayerInventory>().inventoryUI.activeSelf)
             {
                 // get tile player is standing on
-                Vector3Int gridPosition = farmLand.WorldToCell(player.transform.position);
+                //Vector3Int gridPosition = farmLand.WorldToCell(player.transform.position + ((player.GetComponent<PlayerTool>().direction.normalized) * 2.5f));
+                Vector3 mousePosition = Input.mousePosition;
+                mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
+                mousePosition.z = 0;
+                var result = mousePosition - player.transform.position;
+                result.Normalize();
+                Vector3Int gridPosition = farmLand.WorldToCell(player.transform.position + (result * 2.5f));
                 TileBase clickedTile = farmLand.GetTile(gridPosition);
                 // if farmland, check what tool was used
                 if (clickedTile) switch (player.GetComponent<PlayerInventory>().inventoryIndex[player.GetComponent<PlayerInventory>().handIndex])
-                {
-                    // if hoe equipped, till soil
-                    case "Hoe":
+                    {
+                        // if hoe equipped, till soil
+                        case "Hoe":
                         if (!tileState.ContainsKey(gridPosition) || tileState[gridPosition] < 1)
                         {
                             ChangeSoil(gridPosition, 1);
@@ -162,8 +168,8 @@ public class GameManager : MonoBehaviour
                             HarvestCrop(gridPosition);
                         }
                         break;
-                    // if watering can equipped, water soil for faster growth
-                    case "Watering Can":
+                        // if watering can equipped, water soil for faster growth
+                        case "Watering Can":
                         if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1)
                         {
                             ChangeSoil(gridPosition, 2);
@@ -171,8 +177,8 @@ public class GameManager : MonoBehaviour
                             Debug.Log("Dirt space set to " + tileState[gridPosition] + ", watered");
                         }
                         break;
-                    // if wheat seeds equipped, plant wheat seedling
-                    case "Wheat Seeds":
+                        // if wheat seeds equipped, plant wheat seedling
+                        case "Wheat Seeds":
                         if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1 && !farmPlants.HasTile(gridPosition))
                         {
                             farmPlants.SetTile(gridPosition, wheat[0]);
@@ -181,8 +187,8 @@ public class GameManager : MonoBehaviour
                             Debug.Log("Planted wheat seeds");
                         }
                         break;
-                    // if tomato seeds equipped, plant tomato seedling
-                    case "Tomato Seeds":
+                        // if tomato seeds equipped, plant tomato seedling
+                        case "Tomato Seeds":
                         if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1 && !farmPlants.HasTile(gridPosition))
                         {
                             farmPlants.SetTile(gridPosition, tomato[0]);
@@ -191,8 +197,8 @@ public class GameManager : MonoBehaviour
                             Debug.Log("Planted tomato seeds");
                         }
                         break;
-                    // if tomato seeds equipped, plant tomato seedling
-                    case "Lentils Seeds":
+                        // if tomato seeds equipped, plant tomato seedling
+                        case "Lentils Seeds":
                         if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1 && !farmPlants.HasTile(gridPosition))
                         {
                             farmPlants.SetTile(gridPosition, lentil[0]);
@@ -201,7 +207,7 @@ public class GameManager : MonoBehaviour
                             Debug.Log("Planted lentils seeds");
                         }
                         break;
-                }
+                    }
             }
         }
     }

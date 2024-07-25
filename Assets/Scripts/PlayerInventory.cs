@@ -22,6 +22,7 @@ public class PlayerInventory : MonoBehaviour
     [SerializeField] private GameObject inventoryGrid;
     [SerializeField] private GameObject inventoryIcon;
     [SerializeField] private GameObject handIcon;
+    [SerializeField] private PlayerTool playerTool;
 
 
 
@@ -62,7 +63,7 @@ public class PlayerInventory : MonoBehaviour
                 // update hand icon in case holding last item used (like using last seed)
                 if (handIndex == inventoryIndex.IndexOf(Item))
                 {
-                    if (handIndex == 0) 
+                    if (handIndex == 0)
                     {
                         handIndex = -1;
                         ChangeHand("");
@@ -93,6 +94,7 @@ public class PlayerInventory : MonoBehaviour
         {
             handIcon.GetComponent<Image>().enabled = true;
             handIcon.GetComponent<Image>().sprite = inventoryIcons[Item].GetComponent<Image>().sprite;
+            playerTool.visual.sprite = inventoryIcons[Item].GetComponent<Image>().sprite;
         }
     }
 
