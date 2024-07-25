@@ -2040,7 +2040,18 @@ MonoBehaviour:
   farmPlants: {fileID: 909364654}
   buildings: {fileID: 47967197}
   seedFactory: {fileID: 548942056}
-  sprite: {fileID: 11400000, guid: 60b7dd6b4c06593429b7c19d9b835575, type: 2}
+  wheat:
+  - {fileID: 11400000, guid: db4ee335381aca743a8e99acadee46b0, type: 2}
+  - {fileID: 11400000, guid: d2e3ecc9563ace54493b188b4753a462, type: 2}
+  - {fileID: 11400000, guid: a35efe357e1c42a4a9a857a56d34574e, type: 2}
+  tomato:
+  - {fileID: 11400000, guid: 8105efa24acf7fa488fd2f3199880ae7, type: 2}
+  - {fileID: 11400000, guid: d6f54f13244871b40808c96222b3c128, type: 2}
+  - {fileID: 11400000, guid: 016fca049d47dc34793712e786305ff3, type: 2}
+  lentil:
+  - {fileID: 11400000, guid: a8208d6f707e44040ac0262d6e6d7a13, type: 2}
+  - {fileID: 11400000, guid: 88126277d1fb08345a91932c9b2dffe4, type: 2}
+  - {fileID: 11400000, guid: 7ed98a2a84df5f54495e57664424839b, type: 2}
   buildingSprites:
   - {fileID: 11400000, guid: fad2615ee9fe3c9489a8692baac7bf2b, type: 2}
   - {fileID: 11400000, guid: 95bb66950611af94db000f9bd28d1c45, type: 2}
@@ -2181,6 +2192,7 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 1b746dbb982bd2248b1207004338056f, type: 2}
+  gameManager: {fileID: 548942054}
 --- !u!1 &681399952
 GameObject:
   m_ObjectHideFlags: 0

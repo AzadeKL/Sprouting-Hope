@@ -67,7 +67,7 @@ public class PlayerInventory : MonoBehaviour
                         handIndex = -1;
                         ChangeHand("");
                     }
-                    else ChangeHand(inventoryIndex[inventoryIndex.IndexOf(Item) - 1]);
+                    else ChangeHand(inventoryIndex[inventoryIndex.IndexOf(Item)]);
                 }
                 GameObject icon = inventoryIcons[Item];
                 inventoryIcons.Remove(Item);

@@ -15,6 +15,9 @@ public class DayNightCycle : MonoBehaviour
 
     [SerializeField] private FloatReference time24HFormat;
 
+
+    [SerializeField] private GameManager gameManager;
+
     private float cycleTimer;
 
     void Start()
@@ -51,6 +54,9 @@ public class DayNightCycle : MonoBehaviour
         if (cycleProgress >= 1f)
         {
             cycleTimer = 0f;
+
+            // TEMP change planted crops state at start of each day
+            gameManager.UpdateCrops("Wheat");
         }
     }
 }
