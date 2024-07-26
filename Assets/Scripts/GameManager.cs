@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Tilemap buildings;
 
     [SerializeField] private SeedFactory seedFactory;
+    public GameObject player;
 
     public List<Tile> wheat;
     private Dictionary<Vector3Int, int> wheatPlants = new Dictionary<Vector3Int, int>();
@@ -18,8 +19,13 @@ public class GameManager : MonoBehaviour
     private Dictionary<Vector3Int, int> tomatoPlants = new Dictionary<Vector3Int, int>();
     public List<Tile> lentil;
     private Dictionary<Vector3Int, int> lentilPlants = new Dictionary<Vector3Int, int>();
-    public List<TileBase> buildingSprites;
-    public GameObject player;
+
+    [Space]
+
+    public List<TileBase> restaurant;
+    public List<TileBase> house;
+    public List<TileBase> silo;
+    public List<TileBase> chickenCoop;
 
 
     //[SerializeField] private List<TileData> tileDatas;
@@ -128,9 +134,24 @@ public class GameManager : MonoBehaviour
             {
                 if (buildings.HasTile(gridPosition + neighborPosition))
                 {
-                    if (buildingSprites.Contains(buildings.GetTile(gridPosition + neighborPosition)))
+                    if (restaurant.Contains(buildings.GetTile(gridPosition + neighborPosition)))
                     {
-                        Debug.Log("Building Detected!");
+                        Debug.Log("Interacting with Restaurant!");
+                        break;
+                    }
+                    else if (chickenCoop.Contains(buildings.GetTile(gridPosition + neighborPosition)))
+                    {
+                        Debug.Log("Interacting with Chicken Coop!");
+                        break;
+                    }
+                    else if (house.Contains(buildings.GetTile(gridPosition + neighborPosition)))
+                    {
+                        Debug.Log("Interacting with Farmhouse!");
+                        break;
+                    }
+                    else if (silo.Contains(buildings.GetTile(gridPosition + neighborPosition)))
+                    {
+                        Debug.Log("Interacting with Silo!");
                         break;
                     }
                 }
