@@ -97,19 +97,22 @@ public class GameManager : MonoBehaviour
         {
             farmPlants.SetTile(gridPosition, null);
             wheatPlants.Remove(gridPosition);
+            seedFactory.CreateCrop(gridPosition, "Wheat");
             Debug.Log("Harvested Wheat");
         }
         else if (tomatoPlants.ContainsKey(gridPosition))
         {
             farmPlants.SetTile(gridPosition, null);
             tomatoPlants.Remove(gridPosition);
-            Debug.Log("Harvested Wheat");
+            seedFactory.CreateCrop(gridPosition, "Tomato");
+            Debug.Log("Harvested Tomato");
         }
         else if (lentilPlants.ContainsKey(gridPosition))
         {
             farmPlants.SetTile(gridPosition, null);
             lentilPlants.Remove(gridPosition);
-            Debug.Log("Harvested Wheat");
+            seedFactory.CreateCrop(gridPosition, "Lentil");
+            Debug.Log("Harvested Lentils");
         }
     }
 

@@ -112,6 +112,7 @@ public class PlayerInventory : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Tab))
         {
             inventoryUI.SetActive(!inventoryUI.activeSelf);
+            if (!inventoryUI.activeSelf) inventoryUI.transform.parent.GetChild(1).gameObject.SetActive(false);
         }
 
         /*

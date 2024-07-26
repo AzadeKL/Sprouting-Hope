@@ -44,6 +44,8 @@ public class DayNightCycle : MonoBehaviour
         {
             lightIntensity = Mathf.Lerp(nightIntensity, dayIntensity, cycleProgress * 2);
             lightColor = Color.Lerp(nightColor, dayColor, cycleProgress * 2);
+            // TEMP change planted crops state at start of each day
+            gameManager.UpdateCrops("Wheat");
         }
         else
         {
@@ -58,8 +60,6 @@ public class DayNightCycle : MonoBehaviour
         {
             cycleTimer = 0f;
             dayCounter.Value++;
-            // TEMP change planted crops state at start of each day
-            gameManager.UpdateCrops("Wheat");
         }
     }
 }
