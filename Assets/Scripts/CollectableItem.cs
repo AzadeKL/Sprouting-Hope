@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CollectableItem : MonoBehaviour
 {
-
+    [SerializeField] private float deathTime = 10f;
     [SerializeField] private float animationTime = 0.2f;
     [SerializeField] private float waitForToRipe = 2f;
     [SerializeField] private Ease animationEase = Ease.InBounce;
@@ -44,6 +44,10 @@ public class CollectableItem : MonoBehaviour
         {
             Debug.Log("collected");
             player.AddToInventory(this.tag);
+            Destroy(this.gameObject);
+        }
+        if (lifeTime > deathTime)
+        {
             Destroy(this.gameObject);
         }
     }

@@ -162,11 +162,13 @@ public class PlayerInventory : MonoBehaviour
         }
 
         // Set anchors to stretch in all directions
-        rectTransform.anchorMin = new Vector2(0, 0); // Bottom-left corner
-        rectTransform.anchorMax = new Vector2(1, 1); // Top-right corner
+        rectTransform.anchorMin = new Vector2(0.5f, 0.5f); // Bottom-left corner
+        rectTransform.anchorMax = new Vector2(0.5f, 0.5f); // Top-right corner      
 
         // Reset offsets
         rectTransform.offsetMin = Vector2.zero;
         rectTransform.offsetMax = Vector2.zero;
+
+        rectTransform.sizeDelta = new Vector2(100, 200);
     }
 }

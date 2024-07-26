@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6881154667367254214}
   - component: {fileID: 2914920405416367053}
   - component: {fileID: 1773137469289901199}
+  - component: {fileID: 2097206411282813806}
   m_Layer: 5
   m_Name: Gold Panel
   m_TagString: Untagged
@@ -76,6 +77,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2097206411282813806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7377125103636913620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a957743e15be1d4eb4912927c8af512, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textMeshProUGUI: {fileID: 8968509851680389002}
+  money:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: c316890eecf249f479e4f990d7a37c56, type: 2}
 --- !u!1 &8445483828716288155
 GameObject:
   m_ObjectHideFlags: 0

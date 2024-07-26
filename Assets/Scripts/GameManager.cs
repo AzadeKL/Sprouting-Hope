@@ -1,17 +1,27 @@
+using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField]
+    private float farmingrange = 1f;
 
+    [Header("Tilemap")]
     [SerializeField] private Tilemap grassMap;
     [SerializeField] private Tilemap farmLand;
     [SerializeField] private Tilemap farmPlants;
     [SerializeField] private Tilemap buildings;
 
+    [Space]
     [SerializeField] private SeedFactory seedFactory;
+    [Space]
+    [Header("Player")]
     public GameObject player;
+    public Transform playerCenter;
+    [SerializeField] private Transform outliner;
+    [SerializeField] private float itemRange = 3f;
 
     public List<Tile> wheat;
     private Dictionary<Vector3Int, int> wheatPlants = new Dictionary<Vector3Int, int>();
@@ -28,6 +38,10 @@ public class GameManager : MonoBehaviour
     public List<TileBase> chickenCoop;
     public List<TileBase> storage;
 
+    [SerializeField] private GameObject EggPrefab;
+    [SerializeField] private int eggCount = 5;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private FloatReference money;
 
     //[SerializeField] private List<TileData> tileDatas;
 
@@ -41,7 +55,7 @@ public class GameManager : MonoBehaviour
         Vector3Int.right,
         Vector3Int.down
     };
-
+    private bool disableTool = false;
 
     private void Awake()
     {
@@ -60,6 +74,9 @@ public class GameManager : MonoBehaviour
     public void UpdateCrops(string crop)
     {
         List<Vector3Int> keys;
+        eggCount = Mathf.Min(eggCount + 5, 10);
+        buildings.transform.DOScale(Vector3.one * 1.05f, 0.3f).SetLoops(2, LoopType.Yoyo);
+
         switch (crop)
         {
             case "Wheat":
@@ -126,6 +143,24 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
 
+        Vector3 mousepos = Input.mousePosition;
+        mousepos = Camera.main.ScreenToWorldPoint(mousepos);
+        var tilePos = farmLand.WorldToCell(mousepos);
+        var hoveredTile = farmLand.GetTile(tilePos);
+        // Debugger.Log(hoveredTile.name, Debugger.PriorityLevel.Low);
+        if ((tilePos - playerCenter.position).sqrMagnitude < itemRange && hoveredTile != null)
+        {
+            outliner.transform.position = tilePos;
+            disableTool = false;
+            outliner.gameObject.SetActive(true);
+        }
+        else
+        {
+            outliner.gameObject.SetActive(false);
+            disableTool = true;
+        }
+
+
 
         // interact with building or other interactable object
         if (Input.GetKeyUp(KeyCode.F))
@@ -138,11 +173,38 @@ public class GameManager : MonoBehaviour
                     if (restaurant.Contains(buildings.GetTile(gridPosition + neighborPosition)))
                     {
                         Debug.Log("Interacting with Restaurant!");
+                        if (player.GetComponent<PlayerInventory>().inventory.TryGetValue("Egg", out int eggCount))
+                        {
+                            if (eggCount > 0)
+                            {
+                                player.GetComponent<PlayerInventory>().RemoveFromInventory("Egg");
+                                money.Value += 25f;
+                            }
+                            else
+                            {
+                                audioSource.Play();
+                            }
+                        }
+                        else
+                        {
+                            audioSource.Play();
+                        }
+
                         break;
                     }
                     else if (chickenCoop.Contains(buildings.GetTile(gridPosition + neighborPosition)))
                     {
                         Debug.Log("Interacting with Chicken Coop!");
+                        if (eggCount > 0)
+                        {
+                            Instantiate(EggPrefab, playerCenter.position, Quaternion.identity);
+                            eggCount--;
+                        }
+                        else
+                        {
+                            audioSource.Play();
+                        }
+
                         break;
                     }
                     else if (house.Contains(buildings.GetTile(gridPosition + neighborPosition)))
@@ -167,7 +229,7 @@ public class GameManager : MonoBehaviour
 
 
         // left click to interact with tool to tile
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0) && disableTool == false)
         {
             if (!player.GetComponent<PlayerInventory>().inventoryUI.activeSelf)
             {
@@ -176,9 +238,13 @@ public class GameManager : MonoBehaviour
                 Vector3 mousePosition = Input.mousePosition;
                 mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
                 mousePosition.z = 0;
-                var result = mousePosition - player.transform.position;
+                var playerpos = playerCenter.position;
+                playerpos.z = 0;
+                var result = mousePosition - playerpos;
                 result.Normalize();
-                Vector3Int gridPosition = farmLand.WorldToCell(player.transform.position + (result * 2.5f));
+                Debugger.Log(result + " mouse direction normalized", Debugger.PriorityLevel.Medium);
+                //Vector3Int gridPosition = farmLand.WorldToCell(playerpos + (result * farmingrange));
+                Vector3Int gridPosition = farmLand.WorldToCell(tilePos);
                 TileBase clickedTile = farmLand.GetTile(gridPosition);
                 // if farmland, check what tool was used
                 if (clickedTile) switch (player.GetComponent<PlayerInventory>().inventoryIndex[player.GetComponent<PlayerInventory>().handIndex])

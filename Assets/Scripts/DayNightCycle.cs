@@ -19,6 +19,8 @@ public class DayNightCycle : MonoBehaviour
 
     [SerializeField] private GameManager gameManager;
 
+    [SerializeField] private GameEvent dayChange;
+
     private float cycleTimer;
 
 
@@ -40,12 +42,13 @@ public class DayNightCycle : MonoBehaviour
         float lightIntensity;
         Color lightColor;
 
+
+
         if (cycleProgress < 0.5f)
         {
             lightIntensity = Mathf.Lerp(nightIntensity, dayIntensity, cycleProgress * 2);
             lightColor = Color.Lerp(nightColor, dayColor, cycleProgress * 2);
-            // TEMP change planted crops state at start of each day
-            gameManager.UpdateCrops("Wheat");
+
         }
         else
         {
@@ -60,6 +63,7 @@ public class DayNightCycle : MonoBehaviour
         {
             cycleTimer = 0f;
             dayCounter.Value++;
+            gameManager.UpdateCrops("Wheat");
         }
     }
 }
