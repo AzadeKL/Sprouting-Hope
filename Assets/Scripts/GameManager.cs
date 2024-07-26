@@ -24,8 +24,9 @@ public class GameManager : MonoBehaviour
 
     public List<TileBase> restaurant;
     public List<TileBase> house;
-    public List<TileBase> silo;
+    public List<TileBase> pigPen;
     public List<TileBase> chickenCoop;
+    public List<TileBase> storage;
 
 
     //[SerializeField] private List<TileData> tileDatas;
@@ -149,9 +150,14 @@ public class GameManager : MonoBehaviour
                         Debug.Log("Interacting with Farmhouse!");
                         break;
                     }
-                    else if (silo.Contains(buildings.GetTile(gridPosition + neighborPosition)))
+                    else if (pigPen.Contains(buildings.GetTile(gridPosition + neighborPosition)))
                     {
-                        Debug.Log("Interacting with Silo!");
+                        Debug.Log("Interacting with Pig Pen!");
+                        break;
+                    }
+                    else if (storage.Contains(buildings.GetTile(gridPosition + neighborPosition)))
+                    {
+                        Debug.Log("Interacting with Storage!");
                         break;
                     }
                 }
