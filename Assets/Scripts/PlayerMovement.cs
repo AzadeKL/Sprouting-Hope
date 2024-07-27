@@ -10,6 +10,8 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 moveInput;
 
+    public bool menuUp = false;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -17,12 +19,18 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        moveInput.x = Input.GetAxisRaw("Horizontal");
-        moveInput.y = Input.GetAxisRaw("Vertical");
+        if (!menuUp)
+        {
+            moveInput.x = Input.GetAxisRaw("Horizontal");
+            moveInput.y = Input.GetAxisRaw("Vertical");
 
-        moveInput.Normalize();
+            moveInput.Normalize();
 
-        rb.velocity = moveInput * speed;
+            rb.velocity = moveInput * speed;
+        }
+
+
+        
         /*if (Input.GetKey(KeyCode.D))
         {
         Vector2 right = new Vector2 (1,0);

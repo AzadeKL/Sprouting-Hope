@@ -5,7 +5,6 @@ using UnityEngine.UI;
 public class PlayerInventory : MonoBehaviour
 {
 
-    public GameObject inventoryUI;
 
     // index variable labeling what is currently equipped to hand
     public int handIndex = -1;
@@ -17,7 +16,8 @@ public class PlayerInventory : MonoBehaviour
     public Dictionary<string, int> inventory = new Dictionary<string, int>();
     private Dictionary<string, GameObject> inventoryIcons = new Dictionary<string, GameObject>();
 
-
+    // sell mode for when at restaurant
+    public bool sellMode = false;
 
     [SerializeField] private GameObject inventoryGrid;
     [SerializeField] private GameObject inventoryIcon;
@@ -68,13 +68,13 @@ public class PlayerInventory : MonoBehaviour
                         handIndex = -1;
                         ChangeHand("");
                     }
-                    else ChangeHand(inventoryIndex[inventoryIndex.IndexOf(Item)]);
+                    else ChangeHand(inventoryIndex[inventoryIndex.IndexOf(Item) - 1]);
                 }
                 GameObject icon = inventoryIcons[Item];
                 inventoryIcons.Remove(Item);
                 GameObject parent = icon.transform.parent.gameObject;
-                Destroy(icon);
-                Instantiate(parent, parent.transform.parent);
+                GameObject newParent = Instantiate(parent, parent.transform.parent);
+                Destroy(newParent.transform.GetChild(0).gameObject);
                 Destroy(parent);
                 inventory.Remove(Item);
                 inventoryIndex.Remove(Item);
@@ -108,12 +108,6 @@ public class PlayerInventory : MonoBehaviour
 
     void Update()
     {
-        // enable/disable inventory window
-        if (Input.GetKeyUp(KeyCode.Tab))
-        {
-            inventoryUI.SetActive(!inventoryUI.activeSelf);
-            if (!inventoryUI.activeSelf) inventoryUI.transform.parent.GetChild(1).gameObject.SetActive(false);
-        }
 
         /*
         // scroll wheel down the hotbar

@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     [Space]
     [Header("Player")]
     public GameObject player;
+    public GameObject inventoryUI;
     public Transform playerCenter;
     [SerializeField] private Transform outliner;
     [SerializeField] private float itemRange = 3f;
@@ -34,9 +35,13 @@ public class GameManager : MonoBehaviour
 
     public List<TileBase> restaurant;
     public List<TileBase> house;
+    [SerializeField] private GameObject houseUI;
     public List<TileBase> pigPen;
+    [SerializeField] private GameObject pigPenUI;
     public List<TileBase> chickenCoop;
+    [SerializeField] private GameObject chickenCoopUI;
     public List<TileBase> storage;
+    [SerializeField] private GameObject storageUI;
 
     [SerializeField] private GameObject EggPrefab;
     [SerializeField] private int eggCount = 5;
@@ -160,7 +165,8 @@ public class GameManager : MonoBehaviour
             disableTool = true;
         }
 
-
+        if (houseUI.activeSelf || chickenCoopUI.activeSelf || inventoryUI.activeSelf || storageUI.activeSelf || pigPenUI.activeSelf) player.GetComponent<PlayerMovement>().menuUp = true;
+        else player.GetComponent<PlayerMovement>().menuUp = false;
 
         // interact with building or other interactable object
         if (Input.GetKeyUp(KeyCode.F))
@@ -173,7 +179,11 @@ public class GameManager : MonoBehaviour
                     if (restaurant.Contains(buildings.GetTile(gridPosition + neighborPosition)))
                     {
                         Debug.Log("Interacting with Restaurant!");
-                        if (player.GetComponent<PlayerInventory>().inventory.TryGetValue("Egg", out int eggCount))
+
+                        inventoryUI.SetActive(true);
+                        player.GetComponent<PlayerInventory>().sellMode = true;
+
+                        /*if (player.GetComponent<PlayerInventory>().inventory.TryGetValue("Egg", out int eggCount))
                         {
                             if (eggCount > 0)
                             {
@@ -188,14 +198,17 @@ public class GameManager : MonoBehaviour
                         else
                         {
                             audioSource.Play();
-                        }
+                        }*/
 
                         break;
                     }
                     else if (chickenCoop.Contains(buildings.GetTile(gridPosition + neighborPosition)))
                     {
                         Debug.Log("Interacting with Chicken Coop!");
-                        if (eggCount > 0)
+
+                        chickenCoopUI.SetActive(true);
+                        inventoryUI.SetActive(true);
+                        /*if (eggCount > 0)
                         {
                             Instantiate(EggPrefab, playerCenter.position, Quaternion.identity);
                             eggCount--;
@@ -203,23 +216,30 @@ public class GameManager : MonoBehaviour
                         else
                         {
                             audioSource.Play();
-                        }
+                        }*/
 
                         break;
                     }
                     else if (house.Contains(buildings.GetTile(gridPosition + neighborPosition)))
                     {
                         Debug.Log("Interacting with Farmhouse!");
+
+                        houseUI.SetActive(true);
                         break;
                     }
                     else if (pigPen.Contains(buildings.GetTile(gridPosition + neighborPosition)))
                     {
                         Debug.Log("Interacting with Pig Pen!");
+
+                        pigPenUI.SetActive(true);
+                        inventoryUI.SetActive(true);
                         break;
                     }
                     else if (storage.Contains(buildings.GetTile(gridPosition + neighborPosition)))
                     {
                         Debug.Log("Interacting with Storage!");
+
+                        storageUI.SetActive(true);
                         break;
                     }
                 }
@@ -227,11 +247,44 @@ public class GameManager : MonoBehaviour
         }
 
 
+        // esc key to either close existing windows or open pause menu
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+            if (player.GetComponent<PlayerMovement>().menuUp)
+            {
+                inventoryUI.SetActive(false);
+                pigPenUI.SetActive(false);
+                houseUI.SetActive(false);
+                storageUI.SetActive(false);
+                chickenCoopUI.SetActive(false);
+                player.GetComponent<PlayerInventory>().sellMode = false;
+            }
+            else
+            {
+                // open/close pause menu here
+            }
+        }
+        // enable/disable inventory window only
+        if (Input.GetKeyUp(KeyCode.Tab))
+        {
+            if (!player.GetComponent<PlayerMovement>().menuUp) inventoryUI.SetActive(true);
+            else 
+            {
+                inventoryUI.SetActive(false);
+                pigPenUI.SetActive(false);
+                houseUI.SetActive(false);
+                storageUI.SetActive(false);
+                chickenCoopUI.SetActive(false);
+                player.GetComponent<PlayerInventory>().sellMode = false;
+            }
+            if (!inventoryUI.activeSelf) inventoryUI.transform.parent.GetChild(4).gameObject.SetActive(false);
+        }
+
 
         // left click to interact with tool to tile
         if (Input.GetMouseButtonUp(0) && disableTool == false)
         {
-            if (!player.GetComponent<PlayerInventory>().inventoryUI.activeSelf)
+            if (!inventoryUI.activeSelf)
             {
                 // get tile player is standing on
                 //Vector3Int gridPosition = farmLand.WorldToCell(player.transform.position + ((player.GetComponent<PlayerTool>().direction.normalized) * 2.5f));

@@ -21,7 +21,7 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
 
     private void Awake()
     {
-        toolTip = GameObject.Find("UI").transform.GetChild(1).gameObject;
+        toolTip = GameObject.Find("UI").transform.GetChild(4).gameObject;
         player = GameObject.Find("Player");
         rectTransform = transform.GetComponent<RectTransform>();
         canvas = rectTransform.root.GetComponent<Canvas>();
@@ -48,35 +48,44 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
         switch (tag)
         {
             case "Hoe":
-            GetComponent<Image>().sprite = imageicons[0];
-            break;
+                GetComponent<Image>().sprite = imageicons[0];
+                break;
             case "Watering Can":
-            GetComponent<Image>().sprite = imageicons[1];
-            break;
+                GetComponent<Image>().sprite = imageicons[1];
+                break;
             case "Wheat Seeds":
-            GetComponent<Image>().sprite = imageicons[5];
-            break;
+                GetComponent<Image>().sprite = imageicons[5];
+                break;
             case "Tomato Seeds":
-            GetComponent<Image>().sprite = imageicons[6];
-            break;
+                GetComponent<Image>().sprite = imageicons[6];
+                break;
             case "Lentils Seeds":
-            GetComponent<Image>().sprite = imageicons[7];
-            break;
+                GetComponent<Image>().sprite = imageicons[7];
+                break;
             case "Wheat":
-            GetComponent<Image>().sprite = imageicons[2];
-            break;
+                GetComponent<Image>().sprite = imageicons[2];
+                break;
             case "Tomato":
-            GetComponent<Image>().sprite = imageicons[3];
-            break;
+                GetComponent<Image>().sprite = imageicons[3];
+                break;
             case "Lentil":
-            GetComponent<Image>().sprite = imageicons[4];
-            break;
+                GetComponent<Image>().sprite = imageicons[4];
+                break;
             case "Egg":
-            GetComponent<Image>().sprite = imageicons[8];
-            break;
+                GetComponent<Image>().sprite = imageicons[8];
+                break;
+            case "Chicken":
+                GetComponent<Image>().sprite = imageicons[9];
+                break;
+            case "Pig":
+                GetComponent<Image>().sprite = imageicons[10];
+                break;
+            case "Cow":
+                GetComponent<Image>().sprite = imageicons[11];
+                break;
             default:
-            GetComponent<Image>().sprite = imageicons[0];
-            break;
+                GetComponent<Image>().sprite = imageicons[0];
+                break;
         }
     }
 
@@ -96,8 +105,19 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
     public void Clicked()
     {
         Debug.Log("clicked " + item);
-        player.GetComponent<PlayerInventory>().handIndex = player.GetComponent<PlayerInventory>().inventoryIndex.IndexOf(item);
-        player.GetComponent<PlayerInventory>().ChangeHand(item);
+        // put selected item in hand
+        if (!player.GetComponent<PlayerInventory>().sellMode)
+        {
+            player.GetComponent<PlayerInventory>().handIndex = player.GetComponent<PlayerInventory>().inventoryIndex.IndexOf(item);
+            player.GetComponent<PlayerInventory>().ChangeHand(item);
+        }
+        // if on sell mode, sell non-tool item
+        else if (imageicons.IndexOf(GetComponent<Image>().sprite) > 1)
+        {
+            player.GetComponent<PlayerInventory>().RemoveFromInventory(item);
+            Debug.Log(item + " was sold for $$$");
+            // item sold
+        }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
