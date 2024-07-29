@@ -47,41 +47,59 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
         item = tag;
         switch (tag)
         {
-            case "Hoe":
+            case "Rusty Hoe":
                 GetComponent<Image>().sprite = imageicons[0];
                 break;
-            case "Watering Can":
+            case "Bronze Hoe":
                 GetComponent<Image>().sprite = imageicons[1];
                 break;
-            case "Wheat Seeds":
-                GetComponent<Image>().sprite = imageicons[5];
-                break;
-            case "Tomato Seeds":
-                GetComponent<Image>().sprite = imageicons[6];
-                break;
-            case "Lentils Seeds":
-                GetComponent<Image>().sprite = imageicons[7];
-                break;
-            case "Wheat":
+            case "Silver Hoe":
                 GetComponent<Image>().sprite = imageicons[2];
                 break;
-            case "Tomato":
+            case "Gold Hoe":
                 GetComponent<Image>().sprite = imageicons[3];
                 break;
-            case "Lentil":
+            case "Rusty Watering Can":
                 GetComponent<Image>().sprite = imageicons[4];
                 break;
-            case "Egg":
+            case "Bronze Watering Can":
+                GetComponent<Image>().sprite = imageicons[5];
+                break;
+            case "Silver Watering Can":
+                GetComponent<Image>().sprite = imageicons[6];
+                break;
+            case "Gold Watering Can":
+                GetComponent<Image>().sprite = imageicons[7];
+                break;
+            case "Wheat Seeds":
                 GetComponent<Image>().sprite = imageicons[8];
                 break;
-            case "Chicken":
+            case "Tomato Seeds":
                 GetComponent<Image>().sprite = imageicons[9];
                 break;
-            case "Pig":
+            case "Lentils Seeds":
                 GetComponent<Image>().sprite = imageicons[10];
                 break;
-            case "Cow":
+            case "Wheat":
                 GetComponent<Image>().sprite = imageicons[11];
+                break;
+            case "Tomato":
+                GetComponent<Image>().sprite = imageicons[12];
+                break;
+            case "Lentil":
+                GetComponent<Image>().sprite = imageicons[13];
+                break;
+            case "Egg":
+                GetComponent<Image>().sprite = imageicons[14];
+                break;
+            case "Chicken":
+                GetComponent<Image>().sprite = imageicons[15];
+                break;
+            case "Pig":
+                GetComponent<Image>().sprite = imageicons[16];
+                break;
+            case "Cow":
+                GetComponent<Image>().sprite = imageicons[17];
                 break;
             default:
                 GetComponent<Image>().sprite = imageicons[0];

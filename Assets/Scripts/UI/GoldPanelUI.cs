@@ -6,17 +6,12 @@ public class GoldPanelUI : MonoBehaviour
     private TMPro.TextMeshProUGUI textMeshProUGUI;
 
     [SerializeField]
-    private FloatReference money;
+    private PlayerInventory player;
 
-
-    void Start()
-    {
-
-    }
 
     // Update is called once per frame
     void Update()
     {
-        textMeshProUGUI.text = "Gold: " + money.Value.ToString("F0");
+        textMeshProUGUI.text = "Gold: $" + player.money.ToString();
     }
 }

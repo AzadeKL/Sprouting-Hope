@@ -19,6 +19,8 @@ public class PlayerInventory : MonoBehaviour
     // sell mode for when at restaurant
     public bool sellMode = false;
 
+    public int money = 500;
+
     [SerializeField] private GameObject inventoryGrid;
     [SerializeField] private GameObject inventoryIcon;
     [SerializeField] private GameObject handIcon;
@@ -101,7 +103,7 @@ public class PlayerInventory : MonoBehaviour
     void Awake()
     {
         // set up starting inventory
-        AddToInventory("Hoe");
+        AddToInventory("Rusty Hoe");
         AddToInventory("Wheat Seeds");
         AddToInventory("Watering Can");
     }
