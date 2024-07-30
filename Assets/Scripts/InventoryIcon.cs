@@ -11,6 +11,7 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
     public TextMeshProUGUI quantity;
 
     public string item;
+    public int sellValue;
     private GameObject player;
     private GameObject toolTip;
 
@@ -73,33 +74,43 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
                 break;
             case "Wheat Seeds":
                 GetComponent<Image>().sprite = imageicons[8];
+                sellValue = 1;
                 break;
             case "Tomato Seeds":
                 GetComponent<Image>().sprite = imageicons[9];
+                sellValue = 5;
                 break;
             case "Lentils Seeds":
                 GetComponent<Image>().sprite = imageicons[10];
+                sellValue = 8;
                 break;
             case "Wheat":
                 GetComponent<Image>().sprite = imageicons[11];
+                sellValue = 100;
                 break;
             case "Tomato":
                 GetComponent<Image>().sprite = imageicons[12];
+                sellValue = 100;
                 break;
             case "Lentil":
                 GetComponent<Image>().sprite = imageicons[13];
+                sellValue = 150;
                 break;
             case "Egg":
                 GetComponent<Image>().sprite = imageicons[14];
+                sellValue = 200;
                 break;
             case "Chicken":
                 GetComponent<Image>().sprite = imageicons[15];
+                sellValue = 500;
                 break;
             case "Pig":
                 GetComponent<Image>().sprite = imageicons[16];
+                sellValue = 700;
                 break;
             case "Cow":
                 GetComponent<Image>().sprite = imageicons[17];
+                sellValue = 1000;
                 break;
             default:
                 GetComponent<Image>().sprite = imageicons[0];
@@ -130,11 +141,11 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
             player.GetComponent<PlayerInventory>().ChangeHand(item);
         }
         // if on sell mode, sell non-tool item
-        else if (imageicons.IndexOf(GetComponent<Image>().sprite) > 1)
+        else if (imageicons.IndexOf(GetComponent<Image>().sprite) > 7)
         {
             player.GetComponent<PlayerInventory>().RemoveFromInventory(item);
-            Debug.Log(item + " was sold for $$$");
-            // item sold
+            Debug.Log(item + " was sold for $" + sellValue);
+            player.GetComponent<PlayerInventory>().money += sellValue;
         }
     }
 

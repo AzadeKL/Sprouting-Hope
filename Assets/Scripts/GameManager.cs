@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Tilemaps;
 
 public class GameManager : MonoBehaviour
@@ -20,6 +21,8 @@ public class GameManager : MonoBehaviour
     [Header("Player")]
     public GameObject player;
     public GameObject inventoryUI;
+    [SerializeField] Color normalInventory;
+    [SerializeField] Color sellInventory;
     public Transform playerCenter;
     [SerializeField] private Transform outliner;
     [SerializeField] private float itemRange = 3f;
@@ -85,38 +88,38 @@ public class GameManager : MonoBehaviour
         switch (crop)
         {
             case "Wheat":
-            Debug.Log("Wheat is growing!");
-            keys = new List<Vector3Int>(wheatPlants.Keys);
-            for (int i = 0; i < wheatPlants.Count; i++)
-            {
-                Vector3Int gridPosition = keys[i];
-                wheatPlants[gridPosition]++;
-                if (wheatPlants[gridPosition] > 2) wheatPlants[gridPosition] = 2;
-                farmPlants.SetTile(gridPosition, wheat[wheatPlants[gridPosition]]);
-            }
-            break;
+                Debug.Log("Wheat is growing!");
+                keys = new List<Vector3Int>(wheatPlants.Keys);
+                for (int i = 0; i < wheatPlants.Count; i++)
+                {
+                    Vector3Int gridPosition = keys[i];
+                    wheatPlants[gridPosition]++;
+                    if (wheatPlants[gridPosition] > 2) wheatPlants[gridPosition] = 2;
+                    farmPlants.SetTile(gridPosition, wheat[wheatPlants[gridPosition]]);
+                }
+                break;
             case "Tomato":
-            Debug.Log("Tomatoes are growing!");
-            keys = new List<Vector3Int>(tomatoPlants.Keys);
-            for (int i = 0; i < tomatoPlants.Count; i++)
-            {
-                Vector3Int gridPosition = keys[i];
-                tomatoPlants[gridPosition]++;
-                if (tomatoPlants[gridPosition] > 2) tomatoPlants[gridPosition] = 2;
-                farmPlants.SetTile(gridPosition, tomato[tomatoPlants[gridPosition]]);
-            }
-            break;
+                Debug.Log("Tomatoes are growing!");
+                keys = new List<Vector3Int>(tomatoPlants.Keys);
+                for (int i = 0; i < tomatoPlants.Count; i++)
+                {
+                    Vector3Int gridPosition = keys[i];
+                    tomatoPlants[gridPosition]++;
+                    if (tomatoPlants[gridPosition] > 2) tomatoPlants[gridPosition] = 2;
+                    farmPlants.SetTile(gridPosition, tomato[tomatoPlants[gridPosition]]);
+                }
+                break;
             case "Lentils":
-            Debug.Log("Lentils are growing!");
-            keys = new List<Vector3Int>(lentilPlants.Keys);
-            for (int i = 0; i < lentilPlants.Count; i++)
-            {
-                Vector3Int gridPosition = keys[i];
-                lentilPlants[gridPosition]++;
-                if (lentilPlants[gridPosition] > 2) lentilPlants[gridPosition] = 2;
-                farmPlants.SetTile(gridPosition, lentil[lentilPlants[gridPosition]]);
-            }
-            break;
+                Debug.Log("Lentils are growing!");
+                keys = new List<Vector3Int>(lentilPlants.Keys);
+                for (int i = 0; i < lentilPlants.Count; i++)
+                {
+                    Vector3Int gridPosition = keys[i];
+                    lentilPlants[gridPosition]++;
+                    if (lentilPlants[gridPosition] > 2) lentilPlants[gridPosition] = 2;
+                    farmPlants.SetTile(gridPosition, lentil[lentilPlants[gridPosition]]);
+                }
+                break;
         }
     }
 
@@ -182,6 +185,7 @@ public class GameManager : MonoBehaviour
 
                         inventoryUI.SetActive(true);
                         player.GetComponent<PlayerInventory>().sellMode = true;
+                        inventoryUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().color = sellInventory;
 
                         /*if (player.GetComponent<PlayerInventory>().inventory.TryGetValue("Egg", out int eggCount))
                         {
@@ -258,6 +262,7 @@ public class GameManager : MonoBehaviour
                 storageUI.SetActive(false);
                 chickenCoopUI.SetActive(false);
                 player.GetComponent<PlayerInventory>().sellMode = false;
+                inventoryUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().color = normalInventory;
             }
             else
             {
@@ -276,6 +281,7 @@ public class GameManager : MonoBehaviour
                 storageUI.SetActive(false);
                 chickenCoopUI.SetActive(false);
                 player.GetComponent<PlayerInventory>().sellMode = false;
+                inventoryUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().color = normalInventory;
             }
             if (!inventoryUI.activeSelf) inventoryUI.transform.parent.GetChild(4).gameObject.SetActive(false);
         }
@@ -304,130 +310,130 @@ public class GameManager : MonoBehaviour
                     {
                         // if hoe equipped, till soil
                         case "Rusty Hoe":
-                        if (!tileState.ContainsKey(gridPosition) || tileState[gridPosition] < 1)
-                        {
-                            ChangeSoil(gridPosition, 1);
-                            farmLand.SetColor(gridPosition, new Color(0.6f, 0.4f, 0f));
-                            Debug.Log("Dirt space set to " + tileState[gridPosition] + ", tilled");
-                            seedFactory.CreateSeed(player.transform.position);
-                        }
-                        // TEMP hoe for now harvests plants
-                        else
-                        {
-                            HarvestCrop(gridPosition);
-                        }
-                        break;
+                            if (!tileState.ContainsKey(gridPosition) || tileState[gridPosition] < 1)
+                            {
+                                ChangeSoil(gridPosition, 1);
+                                farmLand.SetColor(gridPosition, new Color(0.6f, 0.4f, 0f));
+                                Debug.Log("Dirt space set to " + tileState[gridPosition] + ", tilled");
+                                seedFactory.CreateSeed(player.transform.position);
+                            }
+                            // TEMP hoe for now harvests plants
+                            else
+                            {
+                                HarvestCrop(gridPosition);
+                            }
+                            break;
                         // if hoe equipped, till soil
                         case "Bronze Hoe":
-                        if (!tileState.ContainsKey(gridPosition) || tileState[gridPosition] < 1)
-                        {
-                            ChangeSoil(gridPosition, 1);
-                            farmLand.SetColor(gridPosition, new Color(0.6f, 0.4f, 0f));
-                            Debug.Log("Dirt space set to " + tileState[gridPosition] + ", tilled");
-                            seedFactory.CreateSeed(player.transform.position);
-                        }
-                        // TEMP hoe for now harvests plants
-                        else
-                        {
-                            HarvestCrop(gridPosition);
-                        }
-                        break;
+                            if (!tileState.ContainsKey(gridPosition) || tileState[gridPosition] < 1)
+                            {
+                                ChangeSoil(gridPosition, 1);
+                                farmLand.SetColor(gridPosition, new Color(0.6f, 0.4f, 0f));
+                                Debug.Log("Dirt space set to " + tileState[gridPosition] + ", tilled");
+                                seedFactory.CreateSeed(player.transform.position);
+                            }
+                            // TEMP hoe for now harvests plants
+                            else
+                            {
+                                HarvestCrop(gridPosition);
+                            }
+                            break;
                         // if hoe equipped, till soil
                         case "Silver Hoe":
-                        if (!tileState.ContainsKey(gridPosition) || tileState[gridPosition] < 1)
-                        {
-                            ChangeSoil(gridPosition, 1);
-                            farmLand.SetColor(gridPosition, new Color(0.6f, 0.4f, 0f));
-                            Debug.Log("Dirt space set to " + tileState[gridPosition] + ", tilled");
-                            seedFactory.CreateSeed(player.transform.position);
-                        }
-                        // TEMP hoe for now harvests plants
-                        else
-                        {
-                            HarvestCrop(gridPosition);
-                        }
-                        break;
+                            if (!tileState.ContainsKey(gridPosition) || tileState[gridPosition] < 1)
+                            {
+                                ChangeSoil(gridPosition, 1);
+                                farmLand.SetColor(gridPosition, new Color(0.6f, 0.4f, 0f));
+                                Debug.Log("Dirt space set to " + tileState[gridPosition] + ", tilled");
+                                seedFactory.CreateSeed(player.transform.position);
+                            }
+                            // TEMP hoe for now harvests plants
+                            else
+                            {
+                                HarvestCrop(gridPosition);
+                            }
+                            break;
                         // if hoe equipped, till soil
                         case "Gold Hoe":
-                        if (!tileState.ContainsKey(gridPosition) || tileState[gridPosition] < 1)
-                        {
-                            ChangeSoil(gridPosition, 1);
-                            farmLand.SetColor(gridPosition, new Color(0.6f, 0.4f, 0f));
-                            Debug.Log("Dirt space set to " + tileState[gridPosition] + ", tilled");
-                            seedFactory.CreateSeed(player.transform.position);
-                        }
-                        // TEMP hoe for now harvests plants
-                        else
-                        {
-                            HarvestCrop(gridPosition);
-                        }
-                        break;
+                            if (!tileState.ContainsKey(gridPosition) || tileState[gridPosition] < 1)
+                            {
+                                ChangeSoil(gridPosition, 1);
+                                farmLand.SetColor(gridPosition, new Color(0.6f, 0.4f, 0f));
+                                Debug.Log("Dirt space set to " + tileState[gridPosition] + ", tilled");
+                                seedFactory.CreateSeed(player.transform.position);
+                            }
+                            // TEMP hoe for now harvests plants
+                            else
+                            {
+                                HarvestCrop(gridPosition);
+                            }
+                            break;
                         // if watering can equipped, water soil for faster growth
                         case "Rusty Watering Can":
-                        if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1)
-                        {
-                            ChangeSoil(gridPosition, 2);
-                            farmLand.SetColor(gridPosition, new Color(0.4f, 0.2f, 0f));
-                            Debug.Log("Dirt space set to " + tileState[gridPosition] + ", watered");
-                        }
-                        break;
+                            if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1)
+                            {
+                                ChangeSoil(gridPosition, 2);
+                                farmLand.SetColor(gridPosition, new Color(0.4f, 0.2f, 0f));
+                                Debug.Log("Dirt space set to " + tileState[gridPosition] + ", watered");
+                            }
+                            break;
                         // if watering can equipped, water soil for faster growth
                         case "Bronze Watering Can":
-                        if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1)
-                        {
-                            ChangeSoil(gridPosition, 2);
-                            farmLand.SetColor(gridPosition, new Color(0.4f, 0.2f, 0f));
-                            Debug.Log("Dirt space set to " + tileState[gridPosition] + ", watered");
-                        }
-                        break;
+                            if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1)
+                            {
+                                ChangeSoil(gridPosition, 2);
+                                farmLand.SetColor(gridPosition, new Color(0.4f, 0.2f, 0f));
+                                Debug.Log("Dirt space set to " + tileState[gridPosition] + ", watered");
+                            }
+                            break;
                         // if watering can equipped, water soil for faster growth
                         case "Silver Watering Can":
-                        if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1)
-                        {
-                            ChangeSoil(gridPosition, 2);
-                            farmLand.SetColor(gridPosition, new Color(0.4f, 0.2f, 0f));
-                            Debug.Log("Dirt space set to " + tileState[gridPosition] + ", watered");
-                        }
-                        break;
+                            if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1)
+                            {
+                                ChangeSoil(gridPosition, 2);
+                                farmLand.SetColor(gridPosition, new Color(0.4f, 0.2f, 0f));
+                                Debug.Log("Dirt space set to " + tileState[gridPosition] + ", watered");
+                            }
+                            break;
                         // if watering can equipped, water soil for faster growth
                         case "Gold Watering Can":
-                        if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1)
-                        {
-                            ChangeSoil(gridPosition, 2);
-                            farmLand.SetColor(gridPosition, new Color(0.4f, 0.2f, 0f));
-                            Debug.Log("Dirt space set to " + tileState[gridPosition] + ", watered");
-                        }
-                        break;
+                            if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1)
+                            {
+                                ChangeSoil(gridPosition, 2);
+                                farmLand.SetColor(gridPosition, new Color(0.4f, 0.2f, 0f));
+                                Debug.Log("Dirt space set to " + tileState[gridPosition] + ", watered");
+                            }
+                            break;
                         // if wheat seeds equipped, plant wheat seedling
                         case "Wheat Seeds":
-                        if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1 && !farmPlants.HasTile(gridPosition))
-                        {
-                            farmPlants.SetTile(gridPosition, wheat[0]);
-                            wheatPlants.Add(gridPosition, 0);
-                            player.GetComponent<PlayerInventory>().RemoveFromInventory("Wheat Seeds");
-                            Debug.Log("Planted wheat seeds");
-                        }
-                        break;
+                            if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1 && !farmPlants.HasTile(gridPosition))
+                            {
+                                farmPlants.SetTile(gridPosition, wheat[0]);
+                                wheatPlants.Add(gridPosition, 0);
+                                player.GetComponent<PlayerInventory>().RemoveFromInventory("Wheat Seeds");
+                                Debug.Log("Planted wheat seeds");
+                            }
+                            break;
                         // if tomato seeds equipped, plant tomato seedling
                         case "Tomato Seeds":
-                        if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1 && !farmPlants.HasTile(gridPosition))
-                        {
-                            farmPlants.SetTile(gridPosition, tomato[0]);
-                            tomatoPlants.Add(gridPosition, 0);
-                            player.GetComponent<PlayerInventory>().RemoveFromInventory("Tomato Seeds");
-                            Debug.Log("Planted tomato seeds");
-                        }
-                        break;
+                            if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1 && !farmPlants.HasTile(gridPosition))
+                            {
+                                farmPlants.SetTile(gridPosition, tomato[0]);
+                                tomatoPlants.Add(gridPosition, 0);
+                                player.GetComponent<PlayerInventory>().RemoveFromInventory("Tomato Seeds");
+                                Debug.Log("Planted tomato seeds");
+                            }
+                            break;
                         // if tomato seeds equipped, plant tomato seedling
                         case "Lentils Seeds":
-                        if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1 && !farmPlants.HasTile(gridPosition))
-                        {
-                            farmPlants.SetTile(gridPosition, lentil[0]);
-                            lentilPlants.Add(gridPosition, 0);
-                            player.GetComponent<PlayerInventory>().RemoveFromInventory("Lentils Seeds");
-                            Debug.Log("Planted lentils seeds");
-                        }
-                        break;
+                            if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1 && !farmPlants.HasTile(gridPosition))
+                            {
+                                farmPlants.SetTile(gridPosition, lentil[0]);
+                                lentilPlants.Add(gridPosition, 0);
+                                player.GetComponent<PlayerInventory>().RemoveFromInventory("Lentils Seeds");
+                                Debug.Log("Planted lentils seeds");
+                            }
+                            break;
                     }
             }
         }

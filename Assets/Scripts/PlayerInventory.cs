@@ -12,6 +12,10 @@ public class PlayerInventory : MonoBehaviour
     // hotbar that can scroll through
     public List<string> inventoryIndex;
 
+    // hotbar
+    public List<GameObject> hotbar;
+    public int hotbarIndex;
+
     // inventory
     public Dictionary<string, int> inventory = new Dictionary<string, int>();
     private Dictionary<string, GameObject> inventoryIcons = new Dictionary<string, GameObject>();
@@ -111,41 +115,55 @@ public class PlayerInventory : MonoBehaviour
     void Update()
     {
 
-        /*
+        
         // scroll wheel down the hotbar
         if (Input.GetAxis("Mouse ScrollWheel") > 0)
         {
-            if (handIndex == 0) handIndex = inventory.Count - 1;
-            else handIndex--;
-            Debug.Log(handIndex);
+            if (hotbarIndex == 0) hotbarIndex = hotbar.Count - 1;
+            else hotbarIndex--;
+            if (hotbar[hotbarIndex].transform.childCount == 0) ChangeHand("");
+            else ChangeHand(hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item);
+            Debug.Log(hotbarIndex);
         }
         // scroll wheel up the hotbar
         if (Input.GetAxis("Mouse ScrollWheel") < 0)
         {
-            handIndex = (handIndex + 1) % inventory.Count;
-            Debug.Log(handIndex);
+            hotbarIndex = (hotbarIndex + 1) % hotbar.Count;
+            if (hotbar[hotbarIndex].transform.childCount == 0) ChangeHand("");
+            else ChangeHand(hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item);
+            Debug.Log(hotbarIndex);
         }
         // number keys for specific hotbar slots
         if (Input.GetKeyUp(KeyCode.Alpha1))
         {
-            handIndex = 0;
+            hotbarIndex = 0;
+            if (hotbar[hotbarIndex].transform.childCount == 0) ChangeHand("");
+            else ChangeHand(hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item);
         }
         if (Input.GetKeyUp(KeyCode.Alpha2))
         {
-            handIndex = 1;
+            hotbarIndex = 1;
+            if (hotbar[hotbarIndex].transform.childCount == 0) ChangeHand("");
+            else ChangeHand(hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item);
         }
         if (Input.GetKeyUp(KeyCode.Alpha3))
         {
-            handIndex = 2;
+            hotbarIndex = 2;
+            if (hotbar[hotbarIndex].transform.childCount == 0) ChangeHand("");
+            else ChangeHand(hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item);
         }
         if (Input.GetKeyUp(KeyCode.Alpha4))
         {
-            handIndex = 3;
+            hotbarIndex = 3;
+            if (hotbar[hotbarIndex].transform.childCount == 0) ChangeHand("");
+            else ChangeHand(hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item);
         }
         if (Input.GetKeyUp(KeyCode.Alpha5))
         {
-            handIndex = 4;
-        }*/
+            hotbarIndex = 4;
+            if (hotbar[hotbarIndex].transform.childCount == 0) ChangeHand("");
+            else ChangeHand(hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item);
+        }
     }
 
 
