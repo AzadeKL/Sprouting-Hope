@@ -63,7 +63,7 @@ public class DayNightCycle : MonoBehaviour
         {
             cycleTimer = 0f;
             dayCounter.Value++;
-            gameManager.UpdateCrops("Wheat");
+            //gameManager.UpdateCrops("Wheat");
         }
     }
 }
