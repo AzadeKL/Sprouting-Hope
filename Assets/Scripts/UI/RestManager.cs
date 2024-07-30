@@ -17,7 +17,7 @@ public class RestManager : MonoBehaviour
     private float speed = 5;
     public void RestLogic()
     {
-        Time.timeScale = 5;
+        Time.timeScale = speed;
         StartCoroutine(Resting());
     }
 

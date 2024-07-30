@@ -93,10 +93,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adfe69f2e01f5cd4a8cfb37dcdab36a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upClip: {fileID: 0}
-  downClip: {fileID: 0}
+  StartColor: {r: 0, g: 0, b: 0, a: 0}
+  EndColor: {r: 0, g: 0, b: 0, a: 0}
+  mainmenuButtonImage: {fileID: 0}
+  selectClip: {fileID: 0}
+  backClip: {fileID: 0}
   optionsScene:
-    m_SceneAsset: {fileID: 102900000, guid: 160b10d83badfbf4f843b586fae327d0, type: 3}
+    m_SceneAsset: {fileID: 0}
     m_SceneName: OptionsMenu
   conButton: {fileID: 0}
   eventSystem: {fileID: 0}

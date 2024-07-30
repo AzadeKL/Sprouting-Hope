@@ -105,7 +105,7 @@ public class PlayerInventory : MonoBehaviour
         // set up starting inventory
         AddToInventory("Rusty Hoe");
         AddToInventory("Wheat Seeds");
-        AddToInventory("Watering Can");
+        AddToInventory("Rusty Watering Can");
     }
 
     void Update()
