@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using SaveSystem;
 public class Mainmenu : MonoBehaviour
 {
     [SerializeField]
@@ -39,7 +40,7 @@ public class Mainmenu : MonoBehaviour
     {
         audioSource = GetComponent<AudioSource>();
 
-        //conButton.interactable = !DataManager.instance.isNewGame();//NOT
+        conButton.interactable = SaveSystem.DataManager.instance.HasLoadedGameData();
         if (conButton.IsInteractable())
         {
             eventSystem.firstSelectedGameObject = conButton.gameObject;
@@ -87,13 +88,12 @@ public class Mainmenu : MonoBehaviour
 
     public void Continue()
     {
-        //var sceneTOLoad = DataManager.instance.GetLastScene();
-        // SceneManager.LoadScene(sceneTOLoad);
+        SceneManager.LoadScene(SaveSystem.DataManager.instance.GetLastSceneIndex());
     }
     // This method is called when the Play button is pressed
     public void PlayGame()
     {
-        // DataManager.instance.ResetGameState();
+        SaveSystem.DataManager.instance.ResetGameData();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
