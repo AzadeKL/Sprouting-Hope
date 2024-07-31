@@ -74,6 +74,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     };
     private bool disableTool = false;
 
+    private float itemRangeModifier = 0f;
     private void Awake()
     {
         if (seedFactory == null) { seedFactory = GetComponent<SeedFactory>(); }
@@ -225,7 +226,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         var tilePos = farmLand.WorldToCell(mousepos);
         var hoveredTile = farmLand.GetTile(tilePos);
         // Debugger.Log(hoveredTile.name, Debugger.PriorityLevel.Low);
-        if ((tilePos - playerCenter.position).sqrMagnitude < itemRange && hoveredTile != null)
+        if ((tilePos - playerCenter.position).sqrMagnitude < (itemRange + itemRangeModifier) && hoveredTile != null)
         {
             outliner.transform.position = tilePos;
             disableTool = false;
@@ -553,6 +554,29 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     private void EnablePauseMenu()
     {
         PauseMenu.instance.notAllowed = false;
+    }
+
+    public void HandleHandChange(GameObject item)
+    {
+        if (item == null)
+        {
+            itemRangeModifier = 0;
+        }
+        else
+        {
+            var tagName = item.tag;
+
+            var result = tagName switch
+            {
+                string a when a.Contains("Rusty") => 1f,
+                string b when b.Contains("Bronze") => 2f,
+                string b when b.Contains("Silver") => 5f,
+                string b when b.Contains("Gold") => 20f,
+                _ => 0f
+            };
+            itemRangeModifier = result;
+            Debugger.Log("Result of HandChange " + result, Debugger.PriorityLevel.High);
+        }
     }
 
 }

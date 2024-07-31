@@ -1,7 +1,7 @@
+using SaveSystem;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using SaveSystem;
 
 public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 {
@@ -31,6 +31,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
     [SerializeField] private GameObject handIcon;
     [SerializeField] private PlayerTool playerTool;
 
+    [SerializeField] private GameEvent handChanged;
 
     void Awake()
     {
@@ -59,26 +60,26 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             switch (parsed[0])
             {
                 case "handIndex":
-                    handIndex = int.Parse(parsed[1]);
-                    break;
+                handIndex = int.Parse(parsed[1]);
+                break;
                 case "hotbarIndex":
-                    hotbarIndex = int.Parse(parsed[1]);
-                    break;
+                hotbarIndex = int.Parse(parsed[1]);
+                break;
                 case "inventory":
-                    //inventory = new Dictionary<string, int>(parsed[1]);
-                    break;
+                //inventory = new Dictionary<string, int>(parsed[1]);
+                break;
                 case "inventoryIndex":
-                    //inventoryIndex = new List<string>(parsed[1]);
-                    break;
+                //inventoryIndex = new List<string>(parsed[1]);
+                break;
                 case "inventoryIcons":
-                    //foreach (string obj in parsed[1].keys) AddToInventory(obj);
-                    break;
+                //foreach (string obj in parsed[1].keys) AddToInventory(obj);
+                break;
                 case "money":
-                    money = int.Parse(parsed[1]);
-                    break;
+                money = int.Parse(parsed[1]);
+                break;
                 default:
-                    Debugger.Log("Invalid key for class (" + this.GetType().Name + "): " + key_value);
-                    break;
+                Debugger.Log("Invalid key for class (" + this.GetType().Name + "): " + key_value);
+                break;
 
             }
         }
@@ -156,6 +157,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 
     public void ChangeHand(string Item)
     {
+        GameObject result = null;
         // if nothing in hand, do not show image
         if (Item == "")
         {
@@ -167,14 +169,16 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             handIcon.GetComponent<Image>().enabled = true;
             handIcon.GetComponent<Image>().sprite = inventoryIcons[Item].GetComponent<Image>().sprite;
             playerTool.visual.sprite = inventoryIcons[Item].GetComponent<Image>().sprite;
+            result = inventoryIcons[Item];
         }
+        handChanged.TriggerEvent(result);
     }
 
 
     void Update()
     {
 
-        
+
         // scroll wheel down the hotbar
         if (Input.GetAxis("Mouse ScrollWheel") > 0)
         {
