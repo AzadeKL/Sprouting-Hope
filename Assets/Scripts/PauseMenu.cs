@@ -27,9 +27,9 @@ public class PauseMenu : MonoBehaviour
 
     //public delegate void TogglePause();
     //public static TogglePause togglePause;
-    private static PauseMenu instance;
+    public static PauseMenu instance;
 
-    private bool notAllowed = true;
+    public bool notAllowed = true;
 
     private void Awake()
     {
