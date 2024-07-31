@@ -8983,6 +8983,7 @@ GameObject:
   - component: {fileID: 548942054}
   - component: {fileID: 548942056}
   - component: {fileID: 548942057}
+  - component: {fileID: 548942058}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -9404,6 +9405,37 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &548942058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 548942053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e0c7ff70c23fc64a82bee5d8b88639b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEvent: {fileID: 11400000, guid: 38b3eee96365b2046ae19c4c54c014fc, type: 2}
+  onEventTriggered:
+    m_PersistentCalls:
+      m_Calls: []
+  onEventTriggeredWithParameter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 548942054}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: HandleHandChange
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!224 &583049842 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 373841461533369266, guid: 91f95978f20162e45893d20950b2cf5b, type: 3}
@@ -25910,6 +25942,7 @@ MonoBehaviour:
   inventoryIcon: {fileID: 2652448401726263400, guid: c21f85f511d219b44a7bde40ecc9e3ea, type: 3}
   handIcon: {fileID: 1848548496}
   playerTool: {fileID: 1822348388}
+  handChanged: {fileID: 11400000, guid: 38b3eee96365b2046ae19c4c54c014fc, type: 2}
 --- !u!114 &1822348388
 MonoBehaviour:
   m_ObjectHideFlags: 0

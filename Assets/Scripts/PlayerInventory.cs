@@ -190,7 +190,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
                 ChangeHand(hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item);
                 handIndex = inventoryIndex.IndexOf(hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item);
             }
-            Debug.Log(hotbarIndex);
+            //Debug.Log(hotbarIndex);
         }
         // scroll wheel up the hotbar
         if (Input.GetAxis("Mouse ScrollWheel") < 0)
@@ -202,7 +202,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
                 ChangeHand(hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item);
                 handIndex = inventoryIndex.IndexOf(hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item);
             }
-            Debug.Log(hotbarIndex);
+            //Debug.Log(hotbarIndex);
         }
         // number keys for specific hotbar slots
         if (Input.GetKeyUp(KeyCode.Alpha1))
