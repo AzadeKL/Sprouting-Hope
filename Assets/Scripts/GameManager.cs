@@ -564,10 +564,13 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         }
         else
         {
-            var tagName = item.tag;
+            //var tagName = item.tag;
 
-            Debugger.Log("Tag name im HandChange " + tagName, Debugger.PriorityLevel.High);
-            var result = tagName switch
+            //Debugger.Log("Tag name im HandChange " + tagName, Debugger.PriorityLevel.High);
+
+            var name = item.GetComponent<InventoryIcon>().item;
+            Debugger.Log("Name im HandChange " + name, Debugger.PriorityLevel.High);
+            var result = name switch
             {
                 string a when a.Contains("Rusty") => 1f,
                 string b when b.Contains("Bronze") => 2f,
