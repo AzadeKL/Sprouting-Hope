@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEditor.Progress;
+using SaveSystem;
+using System;
 
-public class PlayerInventory : MonoBehaviour
+public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 {
 
 
@@ -33,17 +35,69 @@ public class PlayerInventory : MonoBehaviour
     [SerializeField] private PlayerTool playerTool;
   
     [SerializeField] private GameEvent handChanged;
+    public void Save(GameData gameData)
+    {
+        var data = gameData.dayNightCycleData;
+        ISaveable.AddKey(data, "handItem", handItem);
+        ISaveable.AddKey(data, "money", money);
 
-    public void AddToInventory(string Item)
+        gameData.playerInventoryInventoryKeys = new List<string>();
+        gameData.playerInventoryInventoryValues = new List<int>();
+        foreach (var key_value in inventory)
+        {
+            gameData.playerInventoryInventoryKeys.Add(key_value.Key);
+            gameData.playerInventoryInventoryValues.Add(key_value.Value);
+        }
+    }
+
+    public bool Load(GameData gameData)
+    {
+        foreach (var key_value in gameData.dayNightCycleData)
+        {
+            var parsed = ISaveable.ParseKey(key_value);
+            switch (parsed[0])
+            {
+                case "handItem":
+                    handItem = parsed[1];
+                    break;
+                case "money":
+                    money = Convert.ToInt32(parsed[1]);
+                    break;
+                default:
+                    Debugger.Log("Invalid key for class (" + this.GetType().Name + "): " + key_value);
+                    break;
+            }
+        }
+
+        inventoryIndex = new List<string>();
+        inventory = new Dictionary<string, int>();
+        inventoryIcons = new Dictionary<string, GameObject>();
+        if (gameData.playerInventoryInventoryKeys.Count != gameData.playerInventoryInventoryValues.Count)
+        {
+            handItem = "";
+            return false;
+        }
+        for (var i = 0; i < gameData.playerInventoryInventoryKeys.Count; i++)
+        {
+            AddToInventory(gameData.playerInventoryInventoryKeys[i], gameData.playerInventoryInventoryValues[i]);
+        }
+
+        ChangeHandItem(handItem);
+
+        return true;
+    }
+
+    public void AddToInventory(string Item, int Count = 1)
     {
         //Debug.Log(Item);
         if (inventory.ContainsKey(Item))
         {
-            inventory[Item]++;
+            inventory[Item] += Count;
+            inventoryIcons[Item].GetComponent<InventoryIcon>().UpdateQuantity(inventory[Item]);
         }
         else
         {
-            inventory.Add(Item, 1);
+            inventory.Add(Item, Count);
             inventoryIndex.Add(Item);
             int i = 0;
             while (inventoryGrid.transform.GetChild(i).transform.childCount != 0) i++;
@@ -143,12 +197,15 @@ public void ChangeHandItemToPrevItem()
 
     void Awake()
     {
-        // set up starting inventory
-        AddToInventory("Rusty Hoe");
-        AddToInventory("Wheat Seeds");
-        AddToInventory("Rusty Watering Can");
+        if (!SaveSystem.DataManager.instance.Load(this))
+        {
+            // set up starting inventory
+            AddToInventory("Rusty Hoe");
+            AddToInventory("Wheat Seeds");
+            AddToInventory("Rusty Watering Can");
 
-        ChangeHandItem("Rusty Hoe");
+            ChangeHandItem("Rusty Hoe");
+        }
     }
 
     void Update()
