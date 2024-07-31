@@ -21,6 +21,8 @@ namespace SaveSystem
     {
         public string sceneName;
         public int sceneIndex;
+
+        public List<string> dayNightCycleData = new List<string>();
     }
     public interface ISaveable
     {

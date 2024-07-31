@@ -1,7 +1,11 @@
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using SaveSystem;
+using System;
+using static UnityEngine.Rendering.DebugUI;
+using Unity.Collections.LowLevel.Unsafe;
 
-public class DayNightCycle : MonoBehaviour
+public class DayNightCycle : MonoBehaviour, SaveSystem.ISaveable
 {
 
     [SerializeField] private Light2D globalLight;
@@ -23,6 +27,34 @@ public class DayNightCycle : MonoBehaviour
 
     private float cycleTimer;
 
+    public void Save(GameData gameData)
+    {
+        var data = gameData.dayNightCycleData;
+        ISaveable.AddKey(data, "cycleTimer", cycleTimer);
+        ISaveable.AddKey(data, "dayCounter", dayCounter.Value);
+    }
+
+    public bool Load(GameData gameData)
+    {
+        foreach (var key_value in gameData.dayNightCycleData)
+        {
+            var parsed = ISaveable.ParseKey(key_value);
+            switch (parsed[0])
+            {
+                case "cycleTimer":
+                    cycleTimer = (float)Convert.ToDouble(parsed[1]);
+                    break;
+                case "dayCounter":
+                    dayCounter.Value = (float)Convert.ToDouble(parsed[1]);
+                    break;
+                default:
+                    Debugger.Log("Invalid key for class (" + this.GetType().Name + "): " + key_value);
+                    break;
+
+            }
+        }
+        return true;
+    }
 
     void Start()
     {
@@ -32,6 +64,8 @@ public class DayNightCycle : MonoBehaviour
         }
         cycleTimer = cycleStartTime;
         dayCounter.Value = 1;
+
+        SaveSystem.DataManager.instance.Load(this);
     }
 
     void Update()
