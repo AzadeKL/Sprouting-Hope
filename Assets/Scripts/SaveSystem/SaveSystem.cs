@@ -23,6 +23,8 @@ namespace SaveSystem
         public int sceneIndex;
 
         public List<string> dayNightCycleData = new List<string>();
+        public List<string> playerInventoryData = new List<string>();
+        public List<string> gameManagerData = new List<string>();
     }
     public interface ISaveable
     {

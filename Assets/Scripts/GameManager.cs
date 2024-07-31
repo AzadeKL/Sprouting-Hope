@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.Tilemaps;
 using SaveSystem;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 {
     [SerializeField]
     private float farmingrange = 1f;
@@ -74,8 +74,8 @@ public class GameManager : MonoBehaviour
 
     public void Save(GameData gameData)
     {
-        var data = gameData.playerInventoryData;
-        ISaveable.AddKey(data, "farmLand", farmland);
+        var data = gameData.gameManagerData;
+        ISaveable.AddKey(data, "farmLand", farmLand);
         ISaveable.AddKey(data, "farmPlants", farmPlants);
         ISaveable.AddKey(data, "wheatPlants", wheatPlants);
         ISaveable.AddKey(data, "tomatoPlants", tomatoPlants);
@@ -88,37 +88,37 @@ public class GameManager : MonoBehaviour
 
     public bool Load(GameData gameData)
     {
-        foreach (var key_value in gameData.dayNightCycleData)
+        foreach (var key_value in gameData.gameManagerData)
         {
             var parsed = ISaveable.ParseKey(key_value);
             switch (parsed[0])
             {
                 case "farmland":
-                    farmLand = parsed[1];
+                    //farmLand = parsed[1];
                     break;
                 case "farmPlants":
-                    farmPlants = parsed[1];
+                    //farmPlants = parsed[1];
                     break;
                 case "wheatPlants":
-                    wheatPlants = new Dictionary<Vector3Int, int>(parsed[1]);
+                    //wheatPlants = new Dictionary<Vector3Int, int>(parsed[1]);
                     break;
                 case "tomatoPlants":
-                    tomatoPlants = new Dictionary<Vector3Int, int>(parsed[1]);
+                    //tomatoPlants = new Dictionary<Vector3Int, int>(parsed[1]);
                     break;
                 case "lentilPlants":
-                    lentilPlants = new Dictionary<Vector3Int, int>(parsed[1]);
+                    //lentilPlants = new Dictionary<Vector3Int, int>(parsed[1]);
                     break;
                 case "pigPenUI":
-                    pigPenUI = parsed[1];
+                    //pigPenUI = parsed[1];
                     break;
                 case "chickenCoopUI":
-                    chickenCoopUI = parsed[1];
+                    //chickenCoopUI = parsed[1];
                     break;
                 case "storageUI":
-                    storageUI = parsed[1];
+                    //storageUI = parsed[1];
                     break;
                 case "tileState":
-                    tileState = new Dictionary<Vector3Int, int>(parsed[1]);
+                    //tileState = new Dictionary<Vector3Int, int>(parsed[1]);
                     break;
                 default:
                     Debugger.Log("Invalid key for class (" + this.GetType().Name + "): " + key_value);
