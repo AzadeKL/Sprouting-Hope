@@ -29,6 +29,9 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     [SerializeField] private Transform outliner;
     [SerializeField] private float itemRange = 3f;
 
+    [SerializeField] private TileBase plowedField;
+    [SerializeField] private TileBase wateredField;
+
     public List<Tile> wheat;
     private Dictionary<Vector3Int, int> wheatPlants = new Dictionary<Vector3Int, int>();
     public List<Tile> tomato;
@@ -370,7 +373,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                             if (!tileState.ContainsKey(gridPosition) || tileState[gridPosition] < 1)
                             {
                                 ChangeSoil(gridPosition, 1);
-                                farmLand.SetColor(gridPosition, new Color(0.6f, 0.4f, 0f));
+                                farmLand.SetTile(gridPosition, plowedField);
                                 Debug.Log("Dirt space set to " + tileState[gridPosition] + ", tilled");
                                 seedFactory.CreateSeed(player.transform.position);
                             }
@@ -385,7 +388,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                             if (!tileState.ContainsKey(gridPosition) || tileState[gridPosition] < 1)
                             {
                                 ChangeSoil(gridPosition, 1);
-                                farmLand.SetColor(gridPosition, new Color(0.6f, 0.4f, 0f));
+                                farmLand.SetTile(gridPosition, plowedField);
                                 Debug.Log("Dirt space set to " + tileState[gridPosition] + ", tilled");
                                 seedFactory.CreateSeed(player.transform.position);
                             }
@@ -400,7 +403,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                             if (!tileState.ContainsKey(gridPosition) || tileState[gridPosition] < 1)
                             {
                                 ChangeSoil(gridPosition, 1);
-                                farmLand.SetColor(gridPosition, new Color(0.6f, 0.4f, 0f));
+                                farmLand.SetTile(gridPosition, plowedField);
                                 Debug.Log("Dirt space set to " + tileState[gridPosition] + ", tilled");
                                 seedFactory.CreateSeed(player.transform.position);
                             }
@@ -415,7 +418,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                             if (!tileState.ContainsKey(gridPosition) || tileState[gridPosition] < 1)
                             {
                                 ChangeSoil(gridPosition, 1);
-                                farmLand.SetColor(gridPosition, new Color(0.6f, 0.4f, 0f));
+                                farmLand.SetTile(gridPosition, plowedField);
                                 Debug.Log("Dirt space set to " + tileState[gridPosition] + ", tilled");
                                 seedFactory.CreateSeed(player.transform.position);
                             }
@@ -430,7 +433,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                             if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1)
                             {
                                 ChangeSoil(gridPosition, 2);
-                                farmLand.SetColor(gridPosition, new Color(0.4f, 0.2f, 0f));
+                                farmLand.SetTile(gridPosition, wateredField);
                                 Debug.Log("Dirt space set to " + tileState[gridPosition] + ", watered");
                             }
                             break;
@@ -439,7 +442,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                             if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1)
                             {
                                 ChangeSoil(gridPosition, 2);
-                                farmLand.SetColor(gridPosition, new Color(0.4f, 0.2f, 0f));
+                                farmLand.SetTile(gridPosition, wateredField);
                                 Debug.Log("Dirt space set to " + tileState[gridPosition] + ", watered");
                             }
                             break;
@@ -448,7 +451,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                             if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1)
                             {
                                 ChangeSoil(gridPosition, 2);
-                                farmLand.SetColor(gridPosition, new Color(0.4f, 0.2f, 0f));
+                                farmLand.SetTile(gridPosition, wateredField);
                                 Debug.Log("Dirt space set to " + tileState[gridPosition] + ", watered");
                             }
                             break;
@@ -457,7 +460,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                             if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1)
                             {
                                 ChangeSoil(gridPosition, 2);
-                                farmLand.SetColor(gridPosition, new Color(0.4f, 0.2f, 0f));
+                                farmLand.SetTile(gridPosition, wateredField);
                                 Debug.Log("Dirt space set to " + tileState[gridPosition] + ", watered");
                             }
                             break;
@@ -515,7 +518,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         if (tileState[gridPosition] != 2) yield return new WaitForSeconds(time / 2);
         UpdateCrops(gridPosition);
         ChangeSoil(gridPosition, 1);
-        farmLand.SetColor(gridPosition, new Color(0.6f, 0.4f, 0f));
+        farmLand.SetTile(gridPosition, plowedField);
     }
 
 }
