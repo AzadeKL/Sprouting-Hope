@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Tilemaps;
+using SaveSystem;
 
 public class GameManager : MonoBehaviour
 {
@@ -50,7 +51,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject EggPrefab;
     [SerializeField] private int eggCount = 5;
     [SerializeField] private AudioSource audioSource;
-    [SerializeField] private FloatReference money;
 
     //[SerializeField] private List<TileData> tileDatas;
 
@@ -71,6 +71,64 @@ public class GameManager : MonoBehaviour
         if (seedFactory == null) { seedFactory = GetComponent<SeedFactory>(); }
 
     }
+
+    public void Save(GameData gameData)
+    {
+        var data = gameData.playerInventoryData;
+        ISaveable.AddKey(data, "farmLand", farmland);
+        ISaveable.AddKey(data, "farmPlants", farmPlants);
+        ISaveable.AddKey(data, "wheatPlants", wheatPlants);
+        ISaveable.AddKey(data, "tomatoPlants", tomatoPlants);
+        ISaveable.AddKey(data, "lentilPlants", lentilPlants);
+        ISaveable.AddKey(data, "pigPenUI", pigPenUI);
+        ISaveable.AddKey(data, "chickenCoopUI", chickenCoopUI);
+        ISaveable.AddKey(data, "storageUI", storageUI);
+        ISaveable.AddKey(data, "tileState", tileState);
+    }
+
+    public bool Load(GameData gameData)
+    {
+        foreach (var key_value in gameData.dayNightCycleData)
+        {
+            var parsed = ISaveable.ParseKey(key_value);
+            switch (parsed[0])
+            {
+                case "farmland":
+                    farmLand = parsed[1];
+                    break;
+                case "farmPlants":
+                    farmPlants = parsed[1];
+                    break;
+                case "wheatPlants":
+                    wheatPlants = new Dictionary<Vector3Int, int>(parsed[1]);
+                    break;
+                case "tomatoPlants":
+                    tomatoPlants = new Dictionary<Vector3Int, int>(parsed[1]);
+                    break;
+                case "lentilPlants":
+                    lentilPlants = new Dictionary<Vector3Int, int>(parsed[1]);
+                    break;
+                case "pigPenUI":
+                    pigPenUI = parsed[1];
+                    break;
+                case "chickenCoopUI":
+                    chickenCoopUI = parsed[1];
+                    break;
+                case "storageUI":
+                    storageUI = parsed[1];
+                    break;
+                case "tileState":
+                    tileState = new Dictionary<Vector3Int, int>(parsed[1]);
+                    break;
+                default:
+                    Debugger.Log("Invalid key for class (" + this.GetType().Name + "): " + key_value);
+                    break;
+
+            }
+        }
+        return true;
+    }
+
 
     // function called when a tool or general change to the soil's state happens
     private void ChangeSoil(Vector3Int gridPosition, int state)
