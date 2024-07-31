@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
+public class PlayerInventory : MonoBehaviour
 {
 
 
@@ -30,61 +30,8 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
     [SerializeField] private GameObject inventoryIcon;
     [SerializeField] private GameObject handIcon;
     [SerializeField] private PlayerTool playerTool;
-
+  
     [SerializeField] private GameEvent handChanged;
-
-    void Awake()
-    {
-        // set up starting inventory
-        AddToInventory("Rusty Hoe");
-        AddToInventory("Wheat Seeds");
-        AddToInventory("Rusty Watering Can");
-        //SaveSystem.DataManager.instance.Load(this);
-    }
-    public void Save(GameData gameData)
-    {
-        var data = gameData.playerInventoryData;
-        ISaveable.AddKey(data, "handIndex", handIndex);
-        ISaveable.AddKey(data, "hotbarIndex", hotbarIndex);
-        ISaveable.AddKey(data, "inventory", inventory);
-        ISaveable.AddKey(data, "inventoryIndex", inventoryIndex);
-        ISaveable.AddKey(data, "inventoryIcons", inventoryIcons);
-        ISaveable.AddKey(data, "money", money);
-    }
-
-    public bool Load(GameData gameData)
-    {
-        foreach (var key_value in gameData.playerInventoryData)
-        {
-            var parsed = ISaveable.ParseKey(key_value);
-            switch (parsed[0])
-            {
-                case "handIndex":
-                handIndex = int.Parse(parsed[1]);
-                break;
-                case "hotbarIndex":
-                hotbarIndex = int.Parse(parsed[1]);
-                break;
-                case "inventory":
-                //inventory = new Dictionary<string, int>(parsed[1]);
-                break;
-                case "inventoryIndex":
-                //inventoryIndex = new List<string>(parsed[1]);
-                break;
-                case "inventoryIcons":
-                //foreach (string obj in parsed[1].keys) AddToInventory(obj);
-                break;
-                case "money":
-                money = int.Parse(parsed[1]);
-                break;
-                default:
-                Debugger.Log("Invalid key for class (" + this.GetType().Name + "): " + key_value);
-                break;
-
-            }
-        }
-        return true;
-    }
 
     public void AddToInventory(string Item)
     {
@@ -92,17 +39,6 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         if (inventory.ContainsKey(Item))
         {
             inventory[Item]++;
-            if (inventoryIcons.ContainsKey(Item)) inventoryIcons[Item].GetComponent<InventoryIcon>().UpdateQuantity(inventory[Item]);
-            else
-            {
-                int i = 0;
-                while (inventoryGrid.transform.GetChild(i).transform.childCount != 0) i++;
-                GameObject newIcon = Instantiate(inventoryIcon, inventoryGrid.transform.GetChild(i).transform);
-                StretchAndFill(newIcon.GetComponent<RectTransform>());
-                newIcon.GetComponent<InventoryIcon>().SetIcon(Item);
-                newIcon.GetComponent<InventoryIcon>().UpdateQuantity(inventory[Item]);
-                inventoryIcons.Add(Item, newIcon);
-            }
         }
         else
         {
@@ -174,6 +110,13 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         handChanged.TriggerEvent(result);
     }
 
+    void Awake()
+    {
+        // set up starting inventory
+        AddToInventory("Rusty Hoe");
+        AddToInventory("Wheat Seeds");
+        AddToInventory("Rusty Watering Can");
+    }
 
     void Update()
     {
