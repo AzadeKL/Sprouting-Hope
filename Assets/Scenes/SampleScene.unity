@@ -9015,6 +9015,7 @@ MonoBehaviour:
   playerCenter: {fileID: 1881004798}
   outliner: {fileID: 1652622013}
   itemRange: 70
+  defaultField: {fileID: 11400000, guid: 88f336c3f7b59e44394ae5a51ce55e5a, type: 2}
   plowedField: {fileID: 11400000, guid: 293bbb093b035f24c97181b7395e870c, type: 2}
   wateredField: {fileID: 11400000, guid: 8b4f9216a4d5dbc4c9d404d9f9f2490d, type: 2}
   wheat:
