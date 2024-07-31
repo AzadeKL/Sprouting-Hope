@@ -137,8 +137,7 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
         // put selected item in hand
         if (!player.GetComponent<PlayerInventory>().sellMode)
         {
-            player.GetComponent<PlayerInventory>().handIndex = player.GetComponent<PlayerInventory>().inventoryIndex.IndexOf(item);
-            player.GetComponent<PlayerInventory>().ChangeHand(item);
+            player.GetComponent<PlayerInventory>().ChangeHandItem(item);
         }
         // if on sell mode, sell non-tool item
         else if (imageicons.IndexOf(GetComponent<Image>().sprite) > 7)

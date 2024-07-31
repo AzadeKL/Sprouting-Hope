@@ -2,13 +2,14 @@ using SaveSystem;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 public class PlayerInventory : MonoBehaviour
 {
 
 
-    // index variable labeling what is currently equipped to hand
-    public int handIndex = -1;
+    // label of item is currently equipped to hand
+    public string handItem = "";
 
     // hotbar that can scroll through
     public List<string> inventoryIndex;
@@ -69,15 +70,8 @@ public class PlayerInventory : MonoBehaviour
             if (inventory[Item] == 0)
             {
                 // update hand icon in case holding last item used (like using last seed)
-                if (handIndex == inventoryIndex.IndexOf(Item))
-                {
-                    if (handIndex == 0)
-                    {
-                        handIndex = -1;
-                        ChangeHand("");
-                    }
-                    else ChangeHand(inventoryIndex[inventoryIndex.IndexOf(Item) - 1]);
-                }
+                ChangeHandItemToPrevItem();
+
                 inventoryGrid.transform.parent.parent.parent.GetChild(4).gameObject.SetActive(false);
                 GameObject icon = inventoryIcons[Item];
                 inventoryIcons.Remove(Item);
@@ -91,23 +85,60 @@ public class PlayerInventory : MonoBehaviour
         }
     }
 
-    public void ChangeHand(string Item)
+    public void ChangeHandItem(string Item)
     {
         GameObject result = null;
+        handItem = Item;
+
         // if nothing in hand, do not show image
         if (Item == "")
         {
             handIcon.GetComponent<Image>().enabled = false;
+            handChanged.TriggerEvent(null);
+            return;
         }
-        // change hand icon to item icon to display what is currently in hand
-        else
+
+        // if the item does not exist, clear the current item
+        if (!inventoryIcons.ContainsKey(handItem))
         {
-            handIcon.GetComponent<Image>().enabled = true;
-            handIcon.GetComponent<Image>().sprite = inventoryIcons[Item].GetComponent<Image>().sprite;
-            playerTool.visual.sprite = inventoryIcons[Item].GetComponent<Image>().sprite;
-            result = inventoryIcons[Item];
+            Debugger.Log("Invalid Hand Item: " + handItem);
+            ChangeHandItem("");
+            return;
         }
-        handChanged.TriggerEvent(result);
+
+        // change hand icon to item icon to display what is currently in hand
+        handIcon.GetComponent<Image>().enabled = true;
+        handIcon.GetComponent<Image>().sprite = inventoryIcons[handItem].GetComponent<Image>().sprite;
+        playerTool.visual.sprite = inventoryIcons[handItem].GetComponent<Image>().sprite;
+        handChanged.TriggerEvent(inventoryIcons[Item]);
+
+        for (int i = 0; i < hotbar.Count; ++i)
+        {
+            if (hotbar[i].transform.GetChild(0).GetComponent<InventoryIcon>().item == handItem)
+            {
+                hotbarIndex = i;
+                break;
+            }
+        }
+    }
+
+public void ChangeHandItemToPrevItem()
+    {
+        if (handItem == "") return;
+
+        string newItem = "";
+        int handItemIndex = (inventoryIndex.IndexOf(handItem) - 1 + inventoryIndex.Count) % inventoryIndex.Count;
+        if (handItem != inventoryIndex[handItemIndex]) newItem = inventoryIndex[handItemIndex];
+        ChangeHandItem(newItem);
+    }
+
+    private void UpdateHandItemFromHotbarIndex()
+    {
+        string newItem = "";
+        if ((hotbarIndex >= 0) && (hotbar[hotbarIndex].transform.childCount > 0)) newItem = hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item;
+
+        ChangeHandItem(newItem);
+        Debug.Log(hotbarIndex);
     }
 
     void Awake()
@@ -116,6 +147,8 @@ public class PlayerInventory : MonoBehaviour
         AddToInventory("Rusty Hoe");
         AddToInventory("Wheat Seeds");
         AddToInventory("Rusty Watering Can");
+
+        ChangeHandItem("Rusty Hoe");
     }
 
     void Update()
@@ -125,78 +158,40 @@ public class PlayerInventory : MonoBehaviour
         // scroll wheel down the hotbar
         if (Input.GetAxis("Mouse ScrollWheel") > 0)
         {
-            if (hotbarIndex == 0) hotbarIndex = hotbar.Count - 1;
-            else hotbarIndex--;
-            if (hotbar[hotbarIndex].transform.childCount == 0) ChangeHand("");
-            else
-            {
-                ChangeHand(hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item);
-                handIndex = inventoryIndex.IndexOf(hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item);
-            }
-            //Debug.Log(hotbarIndex);
+            hotbarIndex = (hotbarIndex - 1 + hotbar.Count) % hotbar.Count;
+            UpdateHandItemFromHotbarIndex();
         }
         // scroll wheel up the hotbar
         if (Input.GetAxis("Mouse ScrollWheel") < 0)
         {
             hotbarIndex = (hotbarIndex + 1) % hotbar.Count;
-            if (hotbar[hotbarIndex].transform.childCount == 0) ChangeHand("");
-            else
-            {
-                ChangeHand(hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item);
-                handIndex = inventoryIndex.IndexOf(hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item);
-            }
-            //Debug.Log(hotbarIndex);
+            UpdateHandItemFromHotbarIndex();
         }
         // number keys for specific hotbar slots
         if (Input.GetKeyUp(KeyCode.Alpha1))
         {
             hotbarIndex = 0;
-            if (hotbar[hotbarIndex].transform.childCount == 0) ChangeHand("");
-            else
-            {
-                ChangeHand(hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item);
-                handIndex = inventoryIndex.IndexOf(hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item);
-            }
+            UpdateHandItemFromHotbarIndex();
         }
         if (Input.GetKeyUp(KeyCode.Alpha2))
         {
             hotbarIndex = 1;
-            if (hotbar[hotbarIndex].transform.childCount == 0) ChangeHand("");
-            else
-            {
-                ChangeHand(hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item);
-                handIndex = inventoryIndex.IndexOf(hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item);
-            }
+            UpdateHandItemFromHotbarIndex();
         }
         if (Input.GetKeyUp(KeyCode.Alpha3))
         {
             hotbarIndex = 2;
-            if (hotbar[hotbarIndex].transform.childCount == 0) ChangeHand("");
-            else
-            {
-                ChangeHand(hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item);
-                handIndex = inventoryIndex.IndexOf(hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item);
-            }
+            UpdateHandItemFromHotbarIndex();
         }
         if (Input.GetKeyUp(KeyCode.Alpha4))
         {
             hotbarIndex = 3;
-            if (hotbar[hotbarIndex].transform.childCount == 0) ChangeHand("");
-            else
-            {
-                ChangeHand(hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item);
-                handIndex = inventoryIndex.IndexOf(hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item);
-            }
+            UpdateHandItemFromHotbarIndex();
         }
         if (Input.GetKeyUp(KeyCode.Alpha5))
         {
             hotbarIndex = 4;
-            if (hotbar[hotbarIndex].transform.childCount == 0) ChangeHand("");
-            else
-            {
-                ChangeHand(hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item);
-                handIndex = inventoryIndex.IndexOf(hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item);
-            }
+            UpdateHandItemFromHotbarIndex();
         }
     }
 

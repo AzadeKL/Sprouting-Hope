@@ -328,7 +328,7 @@ public class GameManager : MonoBehaviour
                 Vector3Int gridPosition = farmLand.WorldToCell(tilePos);
                 TileBase clickedTile = farmLand.GetTile(gridPosition);
                 // if farmland, check what tool was used
-                if (clickedTile) switch (player.GetComponent<PlayerInventory>().inventoryIndex[player.GetComponent<PlayerInventory>().handIndex])
+                if (clickedTile) switch (player.GetComponent<PlayerInventory>().handItem)
                     {
                         // if hoe equipped, till soil
                         case "Rusty Hoe":
