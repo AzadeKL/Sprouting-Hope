@@ -6,9 +6,19 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 using TMPro;
+using Unity.IO.LowLevel.Unsafe;
 
 public class GameManager : MonoBehaviour, SaveSystem.ISaveable
-{
+{    
+    // Enum for the field states
+    private enum DirtFieldState
+    {
+        Default,
+        Plowed,
+        Watered,
+        NumDirtFieldStates
+    }
+
     [SerializeField]
     private float farmingrange = 1f;
 
@@ -118,11 +128,16 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             string cropName = parsed[0];
             Vector3Int gridPosition = Vector3dIntFromString(parsed[1]);
             int growthState = Convert.ToInt32(parsed[2]);
-            PlowField(gridPosition, false);
+            SetDirtFieldState(gridPosition, DirtFieldState.Plowed);
             AddCrop(cropName, gridPosition, growthState);
         }
 
         return true;
+    }
+
+    private static bool IsDirtFieldState(int state)
+    {
+        return (state >= 0) && (state < (int)DirtFieldState.NumDirtFieldStates);
     }
 
     private static string GetSeedName(string cropName)
@@ -179,18 +194,34 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         return GetCropVarsForCropName(cropName, ref crop, ref cropPlants);
     }
 
-    private void SetDefaultField(Vector3Int gridPosition)
+    private void SetDirtFieldState(Vector3Int gridPosition, DirtFieldState dirtFieldState)
     {
-        farmLand.SetTile(gridPosition, defaultField);
-        ChangeSoil(gridPosition, 0);
-    }
-
-    private void ChangeSoil(Vector3Int gridPosition, int state)
-    {
-        //Debug.Log("Changing soil at position: " + gridPosition + ", growth: " + state);
-        // if tile is called for the first time, add to list and give appropriate state
-        if (!tileState.ContainsKey(gridPosition)) tileState.Add(gridPosition, state);
-        else tileState[gridPosition] = state;
+        TileBase fieldType = null;
+        switch (dirtFieldState)
+        {
+            case DirtFieldState.Default:
+                fieldType = defaultField;
+                break;
+            case DirtFieldState.Plowed:
+                fieldType = plowedField;
+                break;
+            case DirtFieldState.Watered:
+                fieldType = wateredField;
+                break;
+            default:
+                Debug.Log("Unrecognized dirt field state(" + dirtFieldState + ") at position: " + gridPosition);
+                return;
+        }
+        Debug.Log("Set dirt field state at position: " + gridPosition + ", dirtFieldState: " + dirtFieldState + " = " + (int)dirtFieldState);
+        if (!tileState.ContainsKey(gridPosition))
+        {
+            tileState.Add(gridPosition, (int)dirtFieldState);
+        }
+        else
+        {
+            tileState[gridPosition] = (int)dirtFieldState;
+        }
+        farmLand.SetTile(gridPosition, fieldType);
     }
 
     private void PlowOrHarvestField(Vector3Int gridPosition)
@@ -207,12 +238,10 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         }
     }
 
-    private void PlowField(Vector3Int gridPosition, bool createSeeds = true)
+    private void PlowField(Vector3Int gridPosition)
     {
-        ChangeSoil(gridPosition, 1);
-        farmLand.SetTile(gridPosition, plowedField);
-        Debug.Log("Dirt space set to " + tileState[gridPosition] + ", plowed");
-        if (createSeeds) seedFactory.CreateSeed(player.transform.position);
+        SetDirtFieldState(gridPosition, DirtFieldState.Plowed);
+        seedFactory.CreateSeed(player.transform.position);
     }
 
     private void WaterField(Vector3Int gridPosition)
@@ -223,9 +252,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             return;
         }
 
-        ChangeSoil(gridPosition, 2);
-        farmLand.SetTile(gridPosition, wateredField);
-        Debug.Log("Dirt space set to " + tileState[gridPosition] + ", watered");
+        SetDirtFieldState(gridPosition, DirtFieldState.Watered);
     }
 
     private void AddCrop(string cropName, Vector3Int gridPosition, int growthState = 0)
@@ -247,7 +274,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         if (!GetCropVarsForCropName(cropName, ref crop, ref cropPlants))
         {
             Debug.Log("Invalid crop(" + cropName + ") at position: " + gridPosition);
-            SetDefaultField(gridPosition);
+            SetDirtFieldState(gridPosition, DirtFieldState.Default);
             return;
         }
 
@@ -269,7 +296,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         if (!GetCropVarsAtGridPosition(gridPosition, ref cropName, ref crop, ref cropPlants))
         {
             Debug.Log("No crop to update at position: " + gridPosition);
-            SetDefaultField(gridPosition);
+            SetDirtFieldState(gridPosition, DirtFieldState.Default);
             return;
         }
 
@@ -574,8 +601,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         yield return new WaitForSeconds(time / 2);
         // otherwise wait the full cycle to grow
         if (tileState[gridPosition] != 2) yield return new WaitForSeconds(time / 2);
-        ChangeSoil(gridPosition, 1);
-        farmLand.SetTile(gridPosition, plowedField);
+        SetDirtFieldState(gridPosition, DirtFieldState.Plowed);
         UpdateCrops(gridPosition);
     }
 
