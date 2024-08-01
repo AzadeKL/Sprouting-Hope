@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -28,29 +26,9 @@ public class PlayerMovement : MonoBehaviour
 
             rb.velocity = moveInput * speed;
         }
-
-
-        
-        /*if (Input.GetKey(KeyCode.D))
+        else
         {
-        Vector2 right = new Vector2 (1,0);
-        rb.velocity(right * speed);
-        
+            rb.velocity = Vector2.zero;
         }
-        if (Input.GetKey(KeyCode.A))
-        {
-        Vector2 left = new Vector2 (-1,0);
-        rb.velocity(right * speed);
-        }
-        if (Input.GetKey(KeyCode.W))
-        {
-        Vector2 right = new Vector2 (0,1);
-        rb.velocity(right * speed);
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-        Vector2 left = new Vector2 (0,-1);
-        rb.velocity(right * speed);
-        }*/
     }
 }
