@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,6 +8,7 @@ public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 {
 
     public string item;
+    [Multiline]
     [SerializeField] private string upgradeEffect;
     [SerializeField] bool tool;
     public int cost;
@@ -29,7 +29,7 @@ public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         transform.GetChild(0).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "$" + cost.ToString();
     }
 
-    
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         //Debug.Log("hovering " + item);
@@ -52,7 +52,7 @@ public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             player.GetComponent<PlayerInventory>().money -= cost;
             player.GetComponent<PlayerInventory>().AddToInventory(item);
             // swap old item with better item?
-            if (tool) 
+            if (tool)
             {
                 Destroy(this.gameObject);
                 toolTip.SetActive(false);

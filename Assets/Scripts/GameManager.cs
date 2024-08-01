@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     [SerializeField] private Transform outliner;
     [SerializeField] private float itemRange = 3f;
     [SerializeField] private GameObject playerWorldCanvas;
+    [SerializeField] private Image playerActionImage;
 
     [Space]
     [Header("GroundTiles")]
@@ -77,6 +78,8 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     private bool disableTool = false;
 
     private float itemRangeModifier = 0f;
+    private float timer = 1f;
+    private float timerModifierPercentage = 0f;
     private void Awake()
     {
         if (seedFactory == null) { seedFactory = GetComponent<SeedFactory>(); }
@@ -464,8 +467,9 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         // left click to interact with tool to tile
         if (Input.GetMouseButton(0) && disableTool == false)
         {
-            if (!inventoryUI.activeSelf)
+            if (!inventoryUI.activeSelf && CheckTimer())
             {
+                timer = 0f;
                 // get tile player is standing on
                 //Vector3Int gridPosition = farmLand.WorldToCell(player.transform.position + ((player.GetComponent<PlayerTool>().direction.normalized) * 2.5f));
                 Vector3 mousePosition = Input.mousePosition;
@@ -506,6 +510,10 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                     }
             }
         }
+
+        playerActionImage.fillAmount = CalculateTime() / 1f;
+        playerActionImage.color = Color.Lerp(Color.white, Color.green, playerActionImage.fillAmount);
+        timer += Time.deltaTime;
     }
 
     private void CloseUIPanels()
@@ -542,11 +550,23 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         PauseMenu.instance.notAllowed = false;
     }
 
+
+    private bool CheckTimer()
+    {
+        return (CalculateTime() > 1f);
+    }
+
+    private float CalculateTime()
+    {
+        return timer + (1f * timerModifierPercentage);
+    }
+
     public void HandleHandChange(GameObject item)
     {
         if (item == null)
         {
             itemRangeModifier = 0;
+            timerModifierPercentage = 0f;
         }
         else
         {
@@ -561,6 +581,18 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                 _ => 0f
             };
             itemRangeModifier = result;
+
+            var timerModifier = name switch
+            {
+                string a when a.Contains("Rusty") => 0f,
+                string b when b.Contains("Bronze") => 0.2f,
+                string b when b.Contains("Silver") => 0.5f,
+                string b when b.Contains("Gold") => 1f,
+                _ => 0f
+            };
+            timerModifierPercentage = timerModifier;
+
+
             //Debugger.Log("Result of HandChange " + result, Debugger.PriorityLevel.High);
         }
     }
