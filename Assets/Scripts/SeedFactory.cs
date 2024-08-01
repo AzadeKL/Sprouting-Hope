@@ -78,8 +78,8 @@ public class SeedFactory : MonoBehaviour
             int result = name switch
             {
                 string a when a.Contains("Rusty") => 1,
-                string b when b.Contains("Bronze") => 2,
-                string b when b.Contains("Silver") => 3,
+                string b when b.Contains("Bronze") => 3,
+                string b when b.Contains("Silver") => 5,
                 string b when b.Contains("Gold") => 10,
                 _ => 0
             };

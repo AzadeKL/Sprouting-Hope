@@ -9312,7 +9312,7 @@ MonoBehaviour:
   - {fileID: 5737961341515924039, guid: f77e00d8cf6d69b44af7fde805b267ac, type: 3}
   - {fileID: 5737961341515924039, guid: 6658219fe027a0f48874123d6bc1cefd, type: 3}
   - {fileID: 5737961341515924039, guid: f442810ad7df8254cadf8a14fbaa6743, type: 3}
-  seedRandomSpawnUpperLimit: 3
+  seedRandomSpawnUpperLimit: 2
 --- !u!82 &548942057
 AudioSource:
   m_ObjectHideFlags: 0
