@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
+using TMPro;
 
 public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 {
@@ -52,6 +53,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     [Header("Main Objective")]
     public int mainProgress;
     [SerializeField] private int maxProgress;
+    [SerializeField] private Slider progressMeter;
 
     [Space]
     [Header("Buildings")]
@@ -90,7 +92,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     private void Awake()
     {
         if (seedFactory == null) { seedFactory = GetComponent<SeedFactory>(); }
-
+        progressMeter.maxValue = maxProgress;
 
     }
     private void Start()
@@ -138,21 +140,21 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         switch (cropName)
         {
             case "Wheat":
-            crop = wheat;
-            cropPlants = wheatPlants;
-            break;
+                crop = wheat;
+                cropPlants = wheatPlants;
+                break;
             case "Tomato":
-            crop = tomato;
-            cropPlants = tomatoPlants;
-            break;
+                crop = tomato;
+                cropPlants = tomatoPlants;
+                break;
             case "Lentil":
-            crop = lentil;
-            cropPlants = lentilPlants;
-            break;
+                crop = lentil;
+                cropPlants = lentilPlants;
+                break;
             default:
-            crop = null;
-            cropPlants = null;
-            break;
+                crop = null;
+                cropPlants = null;
+                break;
         }
 
         return crop != null;
@@ -301,6 +303,8 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
     private void Update()
     {
+        progressMeter.value = mainProgress;
+        progressMeter.gameObject.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = mainProgress.ToString() + "/" + maxProgress.ToString();
         // if progress meets requirement, win the game (prompt to return to menu or continue playing?)
         if (mainProgress >= maxProgress)
         {
@@ -522,21 +526,21 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                         case "Bronze Hoe":
                         case "Silver Hoe":
                         case "Gold Hoe":
-                        PlowOrHarvestField(gridPosition);
-                        break;
+                            PlowOrHarvestField(gridPosition);
+                            break;
                         // if watering can equipped, water soil for faster growth
                         case "Rusty Watering Can":
                         case "Bronze Watering Can":
                         case "Silver Watering Can":
                         case "Gold Watering Can":
-                        WaterField(gridPosition);
-                        break;
+                            WaterField(gridPosition);
+                            break;
                         // if seeds equipped, plant corresponding seedling
                         case "Wheat Seeds":
                         case "Tomato Seeds":
                         case "Lentils Seeds":
-                        AddCrop(GetCropName(handItem), gridPosition);
-                        break;
+                            AddCrop(GetCropName(handItem), gridPosition);
+                            break;
                     }
             }
         }

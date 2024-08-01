@@ -18,6 +18,7 @@ public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private GameObject player;
     private GameObject toolTip;
 
+    [SerializeField] private List<GameObject> prevUpgrades;
     private RectTransform rectTransform;
     public Transform lastParent;
     private Canvas canvas;
@@ -65,10 +66,18 @@ public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             // swap old item with better item?
             if (tool)
             {
+                foreach(GameObject oldItem in prevUpgrades)
+                {
+                    if (oldItem != null)
+                    {
+                        SaveSystem.DataManager.instance.AddDestroyedDestroyable(oldItem.GetComponent<UpgradeIcon>());
+                        Destroy(oldItem);
+                    }
+                }
                 Debug.Log("Destroying item: " + this.gameObject.name);
                 SaveSystem.DataManager.instance.AddDestroyedDestroyable(this);
-                Destroy(this.gameObject);
                 toolTip.SetActive(false);
+                Destroy(this.gameObject);
             }
         }
         else

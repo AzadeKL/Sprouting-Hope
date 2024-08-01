@@ -183,13 +183,13 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
             {
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
-                    Debug.Log(item + " was given away for " + (giveValue * int.Parse(quantity.text)) + "goodness points!");
+                    Debug.Log(item + " was given away for " + (giveValue * int.Parse(quantity.text)) + " goodness points!");
                     GameObject.Find("GameManager").GetComponent<GameManager>().mainProgress += (giveValue * int.Parse(quantity.text));
                     player.GetComponent<PlayerInventory>().RemoveFromInventory(item, int.Parse(quantity.text));
                 }
                 else
                 {
-                    Debug.Log(item + " was given away for " + giveValue + "goodness points!");
+                    Debug.Log(item + " was given away for " + giveValue + " goodness points!");
                     GameObject.Find("GameManager").GetComponent<GameManager>().mainProgress += giveValue;
                     player.GetComponent<PlayerInventory>().RemoveFromInventory(item);
                 }
