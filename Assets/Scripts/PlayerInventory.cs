@@ -1,10 +1,8 @@
 using SaveSystem;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
-using SaveSystem;
-using System;
 
 public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 {
@@ -60,14 +58,14 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             switch (parsed[0])
             {
                 case "handItem":
-                    handItem = parsed[1];
-                    break;
+                handItem = parsed[1];
+                break;
                 case "money":
-                    money = Convert.ToInt32(parsed[1]);
-                    break;
+                money = Convert.ToInt32(parsed[1]);
+                break;
                 default:
-                    Debugger.Log("Invalid key for class (" + this.GetType().Name + "): " + key_value);
-                    break;
+                Debugger.Log("Invalid key for class (" + this.GetType().Name + "): " + key_value);
+                break;
             }
         }
 
@@ -160,8 +158,8 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         {
             inventoryGrid.transform.parent.parent.parent.GetChild(4).gameObject.SetActive(false);
             GameObject icon = inventoryIcons[Item];
-            icon.GetComponent<InventoryIcon>().UpdateQuantity((int)Mathf.Ceil(inventory[Item] / 2f));
-            inventory[Item] = (int)Mathf.Floor(inventory[Item] / 2f);
+            icon.GetComponent<InventoryIcon>().UpdateQuantity((int) Mathf.Ceil(inventory[Item] / 2f));
+            inventory[Item] = (int) Mathf.Floor(inventory[Item] / 2f);
             inventoryIcons[Item] = Instantiate(inventoryIcon, icon.GetComponent<InventoryIcon>().lastParent);
             inventoryIcons[Item].GetComponent<InventoryIcon>().SetIcon(Item);
             inventoryIcons[Item].GetComponent<InventoryIcon>().UpdateQuantity(inventory[Item]);
@@ -170,13 +168,13 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 
     public void ChangeHandItem(string Item)
     {
-        GameObject result = null;
         handItem = Item;
 
         // if nothing in hand, do not show image
         if (Item == "")
         {
             handIcon.GetComponent<Image>().enabled = false;
+            playerTool.visual.enabled = false;
             handChanged.TriggerEvent(null);
             return;
         }
@@ -192,6 +190,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         // change hand icon to item icon to display what is currently in hand
         handIcon.GetComponent<Image>().enabled = true;
         handIcon.GetComponent<Image>().sprite = inventoryIcons[handItem].GetComponent<Image>().sprite;
+        playerTool.visual.enabled = true;
         playerTool.visual.sprite = inventoryIcons[handItem].GetComponent<Image>().sprite;
         handChanged.TriggerEvent(inventoryIcons[Item]);
 
@@ -221,12 +220,11 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         if ((hotbarIndex >= 0) && (hotbar[hotbarIndex].transform.childCount > 0)) newItem = hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item;
 
         ChangeHandItem(newItem);
-        //Debug.Log(hotbarIndex);
     }
 
-    void Awake()
+    void Start()
     {
-        if (!SaveSystem.DataManager.instance.Load(this))
+        if (SaveSystem.DataManager.instance.Load(this) == false)
         {
             // set up starting inventory
             AddToInventory("Rusty Hoe");
@@ -238,6 +236,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 
     }
 
+
     void Update()
     {
 
@@ -245,13 +244,13 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         // scroll wheel down the hotbar
         if (Input.GetAxis("Mouse ScrollWheel") > 0)
         {
-            hotbarIndex = (hotbarIndex - 1 + hotbar.Count) % hotbar.Count;
+            FindNextItem(-1);
             UpdateHandItemFromHotbarIndex();
         }
         // scroll wheel up the hotbar
         if (Input.GetAxis("Mouse ScrollWheel") < 0)
         {
-            hotbarIndex = (hotbarIndex + 1) % hotbar.Count;
+            FindNextItem(1);
             UpdateHandItemFromHotbarIndex();
         }
         // number keys for specific hotbar slots
@@ -300,5 +299,13 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         rectTransform.offsetMax = Vector2.zero;
 
         rectTransform.sizeDelta = new Vector2(100, 200);
+    }
+
+    private void FindNextItem(int direction, int tryCount = 0)
+    {
+        hotbarIndex = (hotbarIndex + direction + hotbar.Count) % hotbar.Count;
+        if (hotbar[hotbarIndex].transform.childCount > 0) return;
+        if (tryCount > hotbar.Count) return;
+        FindNextItem(direction, tryCount + 1);
     }
 }
