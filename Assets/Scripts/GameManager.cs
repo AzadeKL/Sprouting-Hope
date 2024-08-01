@@ -439,7 +439,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
 
         // left click to interact with tool to tile
-        if (Input.GetMouseButtonUp(0) && disableTool == false)
+        if (Input.GetMouseButton(0) && disableTool == false)
         {
             if (!inventoryUI.activeSelf)
             {
