@@ -37,7 +37,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
     [SerializeField] private GameEvent handChanged;
     public void Save(GameData gameData)
     {
-        var data = gameData.dayNightCycleData;
+        var data = gameData.playerInventoryData;
         ISaveable.AddKey(data, "handItem", handItem);
         ISaveable.AddKey(data, "money", money);
 
@@ -52,7 +52,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 
     public bool Load(GameData gameData)
     {
-        foreach (var key_value in gameData.dayNightCycleData)
+        foreach (var key_value in gameData.playerInventoryData)
         {
             var parsed = ISaveable.ParseKey(key_value);
             switch (parsed[0])
