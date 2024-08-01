@@ -82,12 +82,12 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
                 break;
             case "Tomato Seeds":
                 GetComponent<Image>().sprite = imageicons[9];
-                sellValue = 5;
+                sellValue = 1;
                 giveValue = 1;
                 break;
             case "Lentils Seeds":
                 GetComponent<Image>().sprite = imageicons[10];
-                sellValue = 8;
+                sellValue = 1;
                 giveValue = 1;
                 break;
             case "Wheat":

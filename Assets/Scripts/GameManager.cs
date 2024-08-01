@@ -564,7 +564,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     IEnumerator GrowTime(Vector3Int gridPosition)
     {
         float time = 10f;
-        // set grwoth time by plant type
+        // set growth time by plant type
         if (wheatPlants.ContainsKey(gridPosition)) time = 20f;
         else if (tomatoPlants.ContainsKey(gridPosition)) time = 20f;
         else if (lentilPlants.ContainsKey(gridPosition)) time = 15f;
