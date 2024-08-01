@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using Image = UnityEngine.UI.Image;
 
 
-public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerEnterHandler, IPointerExitHandler
+public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler
 {
     [SerializeField] private List<Sprite> imageicons;
     public TextMeshProUGUI quantity;
@@ -19,6 +19,8 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
     public Transform lastParent;
     private Canvas canvas;
 
+    private int dragged = -1;
+
 
     private void Awake()
     {
@@ -31,7 +33,7 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
     public void UpdateQuantity(int amount)
     {
         quantity.text = amount.ToString();
-        if (amount == 1)
+        if (amount <= 1)
         {
             quantity.gameObject.transform.parent.gameObject.GetComponent<Image>().enabled = false;
             quantity.enabled = false;
@@ -120,31 +122,47 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("hovering " + item);
-        toolTip.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item;
-        toolTip.SetActive(true);
+        if (player.GetComponent<PlayerInventory>().sellMode && sellValue > 0) toolTip.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item + "\n$" + sellValue;
+        else toolTip.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item;
+        if (dragged  < 0) toolTip.SetActive(true);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        Debug.Log("no longer hovering");
         toolTip.SetActive(false);
     }
 
-    public void Clicked()
+    public void OnPointerUp(PointerEventData eventData)
     {
-        Debug.Log("clicked " + item);
-        // put selected item in hand
-        if (!player.GetComponent<PlayerInventory>().sellMode)
+        // dragging with left, clicking with right to drop one
+        if (dragged == 0 && eventData.button == PointerEventData.InputButton.Right)
         {
-            player.GetComponent<PlayerInventory>().ChangeHandItem(item);
+            UpdateQuantity(int.Parse(quantity.text) - 1);
+            player.GetComponent<PlayerInventory>().AddToInventory(item);
+            if (int.Parse(quantity.text) <= 0) Destroy(this.gameObject);
         }
-        // if on sell mode, sell non-tool item
-        else if (imageicons.IndexOf(GetComponent<Image>().sprite) > 7)
+        // dragging with right, clicking with left to drop one
+        if (dragged == 1 && eventData.button == PointerEventData.InputButton.Left)
         {
-            player.GetComponent<PlayerInventory>().RemoveFromInventory(item);
-            Debug.Log(item + " was sold for $" + sellValue);
-            player.GetComponent<PlayerInventory>().money += sellValue;
+            UpdateQuantity(int.Parse(quantity.text) - 1);
+            player.GetComponent<PlayerInventory>().AddToInventory(item);
+            if (int.Parse(quantity.text) <= 0) Destroy(this.gameObject);
+        }
+        // clicking normally to select or sell item
+        else if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            // put selected item in hand
+            if (!player.GetComponent<PlayerInventory>().sellMode)
+            {
+                player.GetComponent<PlayerInventory>().ChangeHandItem(item);
+            }
+            // if on sell mode, sell non-tool item
+            else if (imageicons.IndexOf(GetComponent<Image>().sprite) > 7)
+            {
+                player.GetComponent<PlayerInventory>().RemoveFromInventory(item);
+                Debug.Log(item + " was sold for $" + sellValue);
+                player.GetComponent<PlayerInventory>().money += sellValue;
+            }
         }
     }
 
@@ -152,27 +170,53 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
     {
         lastParent = transform.parent;
         transform.SetParent(rectTransform.root, true);
+        // dragging with left click
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            player.GetComponent<PlayerInventory>().RemoveFromInventoryOnly(item, true);
+            dragged = 0;
+        }
+        // dragging with right click
+        else if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            player.GetComponent<PlayerInventory>().RemoveFromInventoryOnly(item, false);
+            dragged = 1;
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        List<RaycastResult> results = new List<RaycastResult>();
-        EventSystem.current.RaycastAll(eventData, results);
-        foreach (RaycastResult result in results)
+        dragged = -1;
+        // if item still exists in inventory (right click dragging), merge items back to one slot
+        if (player.GetComponent<PlayerInventory>().inventory.ContainsKey(item))
         {
-
-            if (result.gameObject != null && result.gameObject.GetComponent<RectTransform>() != null)
+            player.GetComponent<PlayerInventory>().AddToInventory(item, int.Parse(quantity.text));
+            Destroy(this.gameObject);
+        }
+        // put item in new slot and add to inventory dicts again
+        else
+        {
+            List<RaycastResult> results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(eventData, results);
+            foreach (RaycastResult result in results)
             {
-                //Debug.Log("UI Element clicked: " + result.gameObject.name);
-                if (result.gameObject.name.Contains("GridCell") && result.gameObject.transform.childCount == 0)
+
+                if (result.gameObject != null && result.gameObject.GetComponent<RectTransform>() != null)
                 {
-                    lastParent = result.gameObject.transform;
+                    //Debug.Log("UI Element clicked: " + result.gameObject.name);
+                    if (result.gameObject.name.Contains("GridCell") && result.gameObject.transform.childCount == 0)
+                    {
+                        lastParent = result.gameObject.transform;
+                    }
                 }
             }
+            transform.SetParent(lastParent, true);
+            rectTransform.localPosition = Vector3.zero;
+            player.GetComponent<PlayerInventory>().inventory.Add(item, int.Parse(quantity.text));
+            player.GetComponent<PlayerInventory>().inventoryIndex.Add(item);
+            player.GetComponent<PlayerInventory>().inventoryIcons.Add(item, this.gameObject);
         }
 
-        transform.SetParent(lastParent, true);
-        rectTransform.localPosition = Vector3.zero;
     }
 
     public void OnDrag(PointerEventData eventData)

@@ -533,7 +533,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             //Debugger.Log("Tag name im HandChange " + tagName, Debugger.PriorityLevel.High);
 
             var name = item.GetComponent<InventoryIcon>().item;
-            Debugger.Log("Name im HandChange " + name, Debugger.PriorityLevel.High);
+            //Debugger.Log("Name im HandChange " + name, Debugger.PriorityLevel.High);
             var result = name switch
             {
                 string a when a.Contains("Rusty") => 1f,
@@ -543,7 +543,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                 _ => 0f
             };
             itemRangeModifier = result;
-            Debugger.Log("Result of HandChange " + result, Debugger.PriorityLevel.High);
+            //Debugger.Log("Result of HandChange " + result, Debugger.PriorityLevel.High);
         }
     }
 
