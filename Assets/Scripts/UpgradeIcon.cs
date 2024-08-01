@@ -1,10 +1,13 @@
+using SaveSystem;
+using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Image = UnityEngine.UI.Image;
 
 
-public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDestroyable
 {
 
     public string item;
@@ -19,6 +22,10 @@ public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public Transform lastParent;
     private Canvas canvas;
 
+    public string GenerateDestroyedId()
+    {
+        return SaveSystem.IDestroyable.GetGameObjectPathWId(gameObject, item);
+    }
 
     private void Awake()
     {
@@ -27,8 +34,12 @@ public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         rectTransform = transform.GetComponent<RectTransform>();
         canvas = rectTransform.root.GetComponent<Canvas>();
         transform.GetChild(0).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "$" + cost.ToString();
-    }
 
+        if (SaveSystem.DataManager.instance.IsDestroyedDestroyable(this))
+        {
+            Destroy(gameObject);
+        }
+    }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -54,6 +65,8 @@ public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             // swap old item with better item?
             if (tool)
             {
+                Debug.Log("Destroying item: " + this.gameObject.name);
+                SaveSystem.DataManager.instance.AddDestroyedDestroyable(this);
                 Destroy(this.gameObject);
                 toolTip.SetActive(false);
             }
