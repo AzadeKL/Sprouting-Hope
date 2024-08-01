@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections.LowLevel.Unsafe;
+using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
@@ -10,7 +11,7 @@ using static UnityEditor.Timeline.Actions.MenuPriority;
 using static UnityEngine.Experimental.Rendering.Universal.PixelPerfectCamera;
 using static UnityEngine.Rendering.DebugUI;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 {
     [SerializeField]
     private float farmingrange = 1f;
@@ -84,6 +85,35 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         if (seedFactory == null) { seedFactory = GetComponent<SeedFactory>(); }
+
+        SaveSystem.DataManager.instance.Load(this);
+    }
+    public void Save(GameData gameData)
+    {
+        Func<Vector3Int, string> Vector3dIntToString = (v) => { return string.Join(',', v.x, v.y, v.z); };
+        Func<string, KeyValuePair<Vector3Int, int>, string> PlantToEntry = (plantName, point) => string.Join(":", plantName, Vector3dIntToString(point.Key), point.Value);
+
+        foreach (var key_value in wheatPlants) gameData.gameManagerPlants.Add(PlantToEntry("Wheat", key_value));
+        foreach (var key_value in tomatoPlants) gameData.gameManagerPlants.Add(PlantToEntry("Tomato", key_value));
+        foreach (var key_value in lentilPlants) gameData.gameManagerPlants.Add(PlantToEntry("Lentil", key_value));
+    }
+    public bool Load(GameData gameData)
+    {
+        Func<string, Vector3Int> Vector3dIntFromString = (str) => { var tmp = str.Split(','); return new Vector3Int(Convert.ToInt32(tmp[0]), Convert.ToInt32(tmp[1]), Convert.ToInt32(tmp[2])); };
+
+        Debug.Log("gameData.gameManagerPlants.Count: " + gameData.gameManagerPlants.Count);
+
+        foreach (var entry in gameData.gameManagerPlants)
+        {
+            var parsed = entry.Split(':');
+            string cropName = parsed[0];
+            Vector3Int gridPosition = Vector3dIntFromString(parsed[1]);
+            int growthState = Convert.ToInt32(parsed[2]);
+            PlowField(gridPosition, false);
+            AddCrop(cropName, gridPosition, growthState);
+        }
+
+        return true;
     }
 
     private static string GetSeedName(string cropName)

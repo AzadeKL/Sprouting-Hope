@@ -27,6 +27,8 @@ namespace SaveSystem
         public List<string> playerInventoryData = new List<string>();
         public List<string> playerInventoryInventoryKeys = new List<string>();
         public List<int> playerInventoryInventoryValues = new List<int>();
+
+        public List<string> gameManagerPlants = new List<string>();
     }
     public interface ISaveable
     {
