@@ -23,8 +23,7 @@ public class SeedFactory : MonoBehaviour
 
         for (int i = 0; i < seedCount; i++)
         {
-            var seedTypeIndex = Random.Range(0, seeds.Count);
-            Instantiate(seeds[seedTypeIndex], pos, Quaternion.identity);
+            Instantiate(seeds[0], pos, Quaternion.identity);
         }
 
     }
@@ -38,29 +37,37 @@ public class SeedFactory : MonoBehaviour
         switch (crop)
         {
             case "Wheat":
-            cropCount = Random.Range(1, 2 + itemModifier);
+                cropCount = Random.Range(1, 2 + itemModifier);
 
-            for (int i = 0; i < cropCount; i++)
-            {
-                Instantiate(crops[0], pos, Quaternion.identity);
-            }
-            break;
+                for (int i = 0; i < cropCount; i++)
+                {
+                    Instantiate(crops[0], pos, Quaternion.identity);
+                }
+                break;
             case "Tomato":
-            cropCount = Random.Range(2, 4 + itemModifier);
+                cropCount = Random.Range(2, 4 + itemModifier);
 
-            for (int i = 0; i < cropCount; i++)
-            {
-                Instantiate(crops[1], pos, Quaternion.identity);
-            }
-            break;
-            case "Lentil":
-            cropCount = Random.Range(1, 3 + itemModifier);
+                for (int i = 0; i < cropCount; i++)
+                {
+                    Instantiate(crops[1], pos, Quaternion.identity);
+                }
+                // return seed from harvest
+                Instantiate(seeds[1], pos, Quaternion.identity);
+                // 1 in 100 chance to get another seed
+                if (Random.Range(0, 100) < 1) Instantiate(seeds[1], pos, Quaternion.identity);
+                break;
+            case "Lentils":
+                cropCount = Random.Range(1, 3 + itemModifier);
 
-            for (int i = 0; i < cropCount; i++)
-            {
-                Instantiate(crops[2], pos, Quaternion.identity);
-            }
-            break;
+                for (int i = 0; i < cropCount; i++)
+                {
+                    Instantiate(crops[2], pos, Quaternion.identity);
+                }
+                // return seed from harvest
+                Instantiate(seeds[2], pos, Quaternion.identity);
+                // 1 in 100 chance to get another seed
+                if (Random.Range(0, 100) < 1) Instantiate(seeds[1], pos, Quaternion.identity);
+                break;
         }
 
     }

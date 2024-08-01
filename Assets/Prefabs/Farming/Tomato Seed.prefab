@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 3957493114213307045}
   - component: {fileID: 5410392387909594678}
   m_Layer: 0
-  m_Name: Seed
-  m_TagString: Wheat Seeds
+  m_Name: Tomato Seed
+  m_TagString: Tomato Seeds
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -159,8 +159,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 3
-  m_Sprite: {fileID: -605042942, guid: 78a8e83dd4882b440a5bc9d303f11bcd, type: 3}
-  m_Color: {r: 0.735849, g: 0.61516, b: 0.107600555, a: 1}
+  m_Sprite: {fileID: 21300000, guid: db049b07f3541794cadb789cebbb6e29, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

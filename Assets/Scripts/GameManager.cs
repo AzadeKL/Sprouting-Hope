@@ -147,7 +147,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                 crop = tomato;
                 cropPlants = tomatoPlants;
                 break;
-            case "Lentil":
+            case "Lentils":
                 crop = lentil;
                 cropPlants = lentilPlants;
                 break;

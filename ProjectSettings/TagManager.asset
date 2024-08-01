@@ -9,6 +9,8 @@ TagManager:
   - Tomato
   - Lentil
   - Egg
+  - Tomato Seeds
+  - Lentils Seeds
   layers:
   - Default
   - TransparentFX
