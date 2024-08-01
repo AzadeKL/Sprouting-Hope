@@ -9275,6 +9275,10 @@ MonoBehaviour:
   EggPrefab: {fileID: 7847931061640037683, guid: d15a10863bf4099409e37adf57a5c918, type: 3}
   eggCount: 5
   audioSource: {fileID: 548942057}
+  money:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
 --- !u!4 &548942055
 Transform:
   m_ObjectHideFlags: 0
@@ -9308,7 +9312,7 @@ MonoBehaviour:
   - {fileID: 5737961341515924039, guid: f77e00d8cf6d69b44af7fde805b267ac, type: 3}
   - {fileID: 5737961341515924039, guid: 6658219fe027a0f48874123d6bc1cefd, type: 3}
   - {fileID: 5737961341515924039, guid: f442810ad7df8254cadf8a14fbaa6743, type: 3}
-  seedRandomSpawnUpperLimit: 10
+  seedRandomSpawnUpperLimit: 3
 --- !u!82 &548942057
 AudioSource:
   m_ObjectHideFlags: 0
@@ -9426,6 +9430,18 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 548942054}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: HandleHandChange
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 548942056}
+        m_TargetAssemblyTypeName: SeedFactory, Assembly-CSharp
         m_MethodName: HandleHandChange
         m_Mode: 0
         m_Arguments:
@@ -25927,7 +25943,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9badfc77234d2d8488e39afbf4fb87ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  handIndex: 0
+  handItem: 
   inventoryIndex: []
   hotbar:
   - {fileID: 1966816147}
