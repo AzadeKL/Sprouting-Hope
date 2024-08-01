@@ -101,8 +101,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     {
         Func<string, Vector3Int> Vector3dIntFromString = (str) => { var tmp = str.Split(','); return new Vector3Int(Convert.ToInt32(tmp[0]), Convert.ToInt32(tmp[1]), Convert.ToInt32(tmp[2])); };
 
-        Debug.Log("gameData.gameManagerPlants.Count: " + gameData.gameManagerPlants.Count);
-
         foreach (var entry in gameData.gameManagerPlants)
         {
             var parsed = entry.Split(':');
@@ -243,7 +241,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         }
 
         farmPlants.SetTile(gridPosition, crop[growthState]);
-        cropPlants.Add(gridPosition, 0);
+        cropPlants.Add(gridPosition, growthState);
         string seedName = GetSeedName(cropName);
         player.GetComponent<PlayerInventory>().RemoveFromInventory(seedName);
         StartCoroutine(GrowTime(gridPosition));
@@ -265,8 +263,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         }
 
         Debug.Log(cropName + " is growing!");
-        cropPlants[gridPosition]++;
-        if (cropPlants[gridPosition] > 2) cropPlants[gridPosition] = 2;
+        if (cropPlants[gridPosition] < 2) ++cropPlants[gridPosition];
         farmPlants.SetTile(gridPosition, crop[cropPlants[gridPosition]]);
         StartCoroutine(GrowTime(gridPosition));
     }
@@ -283,7 +280,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         }
         if (cropPlants[gridPosition] < 2)
         {
-            Debug.Log("Crop(" + cropName + " is too young to harvest at position: " + gridPosition);
+            Debug.Log("Crop(" + cropName + " is too young to harvest at position: " + gridPosition + " growth: " + cropPlants[gridPosition]);
             return;
         }
 
