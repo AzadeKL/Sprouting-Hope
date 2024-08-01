@@ -2,14 +2,9 @@ using SaveSystem;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Collections.LowLevel.Unsafe;
-using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
-using static UnityEditor.Timeline.Actions.MenuPriority;
-using static UnityEngine.Experimental.Rendering.Universal.PixelPerfectCamera;
-using static UnityEngine.Rendering.DebugUI;
 
 public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 {
@@ -86,6 +81,10 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     {
         if (seedFactory == null) { seedFactory = GetComponent<SeedFactory>(); }
 
+
+    }
+    private void Start()
+    {
         SaveSystem.DataManager.instance.Load(this);
     }
     public void Save(GameData gameData)
@@ -129,21 +128,21 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         switch (cropName)
         {
             case "Wheat":
-                crop = wheat;
-                cropPlants = wheatPlants;
-                break;
+            crop = wheat;
+            cropPlants = wheatPlants;
+            break;
             case "Tomato":
-                crop = tomato;
-                cropPlants = tomatoPlants;
-                break;
+            crop = tomato;
+            cropPlants = tomatoPlants;
+            break;
             case "Lentil":
-                crop = lentil;
-                cropPlants = lentilPlants;
-                break;
+            crop = lentil;
+            cropPlants = lentilPlants;
+            break;
             default:
-                crop = null;
-                cropPlants = null;
-                break;
+            crop = null;
+            cropPlants = null;
+            break;
         }
 
         return crop != null;
@@ -466,21 +465,21 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                         case "Bronze Hoe":
                         case "Silver Hoe":
                         case "Gold Hoe":
-                            PlowOrHarvestField(gridPosition);
-                            break;
+                        PlowOrHarvestField(gridPosition);
+                        break;
                         // if watering can equipped, water soil for faster growth
                         case "Rusty Watering Can":
                         case "Bronze Watering Can":
                         case "Silver Watering Can":
                         case "Gold Watering Can":
-                            WaterField(gridPosition);
-                            break;
+                        WaterField(gridPosition);
+                        break;
                         // if seeds equipped, plant corresponding seedling
                         case "Wheat Seeds":
                         case "Tomato Seeds":
                         case "Lentils Seeds":
-                            AddCrop(GetCropName(handItem), gridPosition);
-                            break;
+                        AddCrop(GetCropName(handItem), gridPosition);
+                        break;
                     }
             }
         }

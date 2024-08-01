@@ -1,10 +1,35 @@
 using SaveSystem;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
-using SaveSystem;
-using System;
+
+
+public struct InventoryItem
+{
+    public int count;
+    public string name;
+    public InventoryIcon InventoryIcon;
+
+    public InventoryItem(string name, int count, InventoryIcon icon)
+    {
+        this.count = count;
+        this.name = name;
+        this.InventoryIcon = icon;
+    }
+
+    public void AddItem(int count)
+    {
+        this.count += count;
+    }
+
+    public void RemoveItem(int count)
+    {
+        this.count -= count;
+        count = Math.Max(count, 0);
+    }
+}
 
 public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 {
@@ -21,8 +46,9 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
     public int hotbarIndex;
 
     // inventory
-    public Dictionary<string, int> inventory = new Dictionary<string, int>();
-    public Dictionary<string, GameObject> inventoryIcons = new Dictionary<string, GameObject>();
+    // private Dictionary<string, int> inventory = new Dictionary<string, int>();
+    public List<InventoryItem> inventory = new();
+    // public Dictionary<string, GameObject> inventoryIcons = new Dictionary<string, GameObject>();
 
     // sell mode for when at restaurant
     public bool sellMode = false;
@@ -47,8 +73,9 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         gameData.playerInventoryInventoryValues = new List<int>();
         foreach (var key_value in inventory)
         {
-            gameData.playerInventoryInventoryKeys.Add(key_value.Key);
-            gameData.playerInventoryInventoryValues.Add(key_value.Value);
+            //TODO
+            //gameData.playerInventoryInventoryKeys.Add(key_value.Key);
+            //gameData.playerInventoryInventoryValues.Add(key_value.Value);
         }
     }
 
@@ -60,20 +87,20 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             switch (parsed[0])
             {
                 case "handItem":
-                    handItem = parsed[1];
-                    break;
+                handItem = parsed[1];
+                break;
                 case "money":
-                    money = Convert.ToInt32(parsed[1]);
-                    break;
+                money = Convert.ToInt32(parsed[1]);
+                break;
                 default:
-                    Debugger.Log("Invalid key for class (" + this.GetType().Name + "): " + key_value);
-                    break;
+                Debugger.Log("Invalid key for class (" + this.GetType().Name + "): " + key_value);
+                break;
             }
         }
 
         inventoryIndex = new List<string>();
-        inventory = new Dictionary<string, int>();
-        inventoryIcons = new Dictionary<string, GameObject>();
+        inventory = new();
+        //inventoryIcons = new Dictionary<string, GameObject>();
         if (gameData.playerInventoryInventoryKeys.Count != gameData.playerInventoryInventoryValues.Count)
         {
             handItem = "";
@@ -92,50 +119,59 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
     public void AddToInventory(string Item, int Count = 1)
     {
         //Debug.Log(Item);
-        if (inventory.ContainsKey(Item))
+        if (InventoryContainsItem(Item))
         {
-            inventory[Item] += Count;
-            inventoryIcons[Item].GetComponent<InventoryIcon>().UpdateQuantity(inventory[Item]);
+            InventoryAddItem(Item, Count);
+            // InventoryItemGetIcon(Item).GetComponent<InventoryIcon>().UpdateQuantity(inventory[Item]);
         }
         else
         {
-            inventory.Add(Item, Count);
-            inventoryIndex.Add(Item);
             int i = 0;
+            //TODO This feels wrong
             while (inventoryGrid.transform.GetChild(i).transform.childCount != 0) i++;
-            GameObject newIcon = Instantiate(inventoryIcon, inventoryGrid.transform.GetChild(i).transform);
+            InventoryIcon newIcon = Instantiate(inventoryIcon, inventoryGrid.transform.GetChild(i).transform).GetComponent<InventoryIcon>();
+            var newItem = new InventoryItem(Item, Count, newIcon);
+            inventory.Add(newItem);
+
+            inventoryIndex.Add(Item);
+
+
+
+
             StretchAndFill(newIcon.GetComponent<RectTransform>());
-            newIcon.GetComponent<InventoryIcon>().SetIcon(Item);
-            newIcon.GetComponent<InventoryIcon>().UpdateQuantity(inventory[Item]);
-            inventoryIcons.Add(Item, newIcon);
+            newIcon.SetIcon(Item);
+            newIcon.UpdateQuantity(newItem.count);
+            //inventoryIcons.Add(Item, newIcon);
         }
         //Debug.Log(Item + ", " + inventory[Item]);
+    }
+
+    public void AddToInventory(InventoryIcon icon, string name, int Count = 1)
+    {
+        var newItem = new InventoryItem(name, Count, icon);
+        inventory.Add(newItem);
+
     }
 
     // remove one of said item from the inventory, if last item was removed, remove the spot from the grid
     public void RemoveFromInventory(string Item, int Count = 1)
     {
         // failsafe check in case inventory doesn't have requested item
-        if (inventory.ContainsKey(Item))
+        if (InventoryContainsItem(Item))
         {
-            // subtract quantity of item by 1
-            inventory[Item] -= Count;
-            inventoryIcons[Item].GetComponent<InventoryIcon>().UpdateQuantity(inventory[Item]);
+            InventoryRemoveItem(Item, Count);
 
-            // if item slot is empty, remove from the dicts and lists and ui panel
-            if (inventory[Item] == 0)
+            if (InventoryGetItemCount(Item) == 0)
             {
                 // update hand icon in case holding last item used (like using last seed)
                 ChangeHandItemToPrevItem();
 
                 inventoryGrid.transform.parent.parent.parent.GetChild(4).gameObject.SetActive(false);
-                GameObject icon = inventoryIcons[Item];
-                inventoryIcons.Remove(Item);
+
+                InventoryIcon icon = InventoryItemGetIcon(Item);
                 GameObject parent = icon.transform.parent.gameObject;
-                //GameObject newParent = Instantiate(parent, parent.transform.parent);
                 Destroy(parent.transform.GetChild(0).gameObject);
-                //Destroy(parent);
-                inventory.Remove(Item);
+                InventoryRemove(Item);
                 inventoryIndex.Remove(Item);
             }
         }
@@ -149,22 +185,21 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         {
             ChangeHandItemToPrevItem();
             inventoryGrid.transform.parent.parent.parent.GetChild(4).gameObject.SetActive(false);
-            GameObject icon = inventoryIcons[Item];
-            inventoryIcons.Remove(Item);
-            inventory.Remove(Item);
-            Debug.Log(inventory.ContainsKey(Item));
+            InventoryIcon icon = InventoryItemGetIcon(Item);
+            InventoryRemove(Item);
+            Debugger.Log(InventoryContainsItem(Item), Debugger.PriorityLevel.Medium);
             inventoryIndex.Remove(Item);
         }
         // right click take (bigger) half items from inventory
         else
         {
-            inventoryGrid.transform.parent.parent.parent.GetChild(4).gameObject.SetActive(false);
-            GameObject icon = inventoryIcons[Item];
-            icon.GetComponent<InventoryIcon>().UpdateQuantity((int)Mathf.Ceil(inventory[Item] / 2f));
-            inventory[Item] = (int)Mathf.Floor(inventory[Item] / 2f);
-            inventoryIcons[Item] = Instantiate(inventoryIcon, icon.GetComponent<InventoryIcon>().lastParent);
-            inventoryIcons[Item].GetComponent<InventoryIcon>().SetIcon(Item);
-            inventoryIcons[Item].GetComponent<InventoryIcon>().UpdateQuantity(inventory[Item]);
+            //inventoryGrid.transform.parent.parent.parent.GetChild(4).gameObject.SetActive(false);
+            //GameObject icon = inventoryIcons[Item];
+            //icon.GetComponent<InventoryIcon>().UpdateQuantity((int) Mathf.Ceil(inventory[Item] / 2f));
+            //inventory[Item] = (int) Mathf.Floor(inventory[Item] / 2f);
+            //inventoryIcons[Item] = Instantiate(inventoryIcon, icon.GetComponent<InventoryIcon>().lastParent);
+            //inventoryIcons[Item].GetComponent<InventoryIcon>().SetIcon(Item);
+            //inventoryIcons[Item].GetComponent<InventoryIcon>().UpdateQuantity(inventory[Item]);
         }
     }
 
@@ -182,7 +217,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         }
 
         // if the item does not exist, clear the current item
-        if (!inventoryIcons.ContainsKey(handItem))
+        if (InventoryContainsItem(handItem) == false)
         {
             //Debugger.Log("Invalid Hand Item: " + handItem);
             ChangeHandItem("");
@@ -191,9 +226,9 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 
         // change hand icon to item icon to display what is currently in hand
         handIcon.GetComponent<Image>().enabled = true;
-        handIcon.GetComponent<Image>().sprite = inventoryIcons[handItem].GetComponent<Image>().sprite;
-        playerTool.visual.sprite = inventoryIcons[handItem].GetComponent<Image>().sprite;
-        handChanged.TriggerEvent(inventoryIcons[Item]);
+        handIcon.GetComponent<Image>().sprite = InventoryItemGetIcon(handItem).GetComponent<Image>().sprite;
+        playerTool.visual.sprite = InventoryItemGetIcon(handItem).GetComponent<Image>().sprite;
+        handChanged.TriggerEvent(InventoryItemGetIcon(handItem).gameObject);
 
         for (int i = 0; i < hotbar.Count; ++i)
         {
@@ -226,7 +261,12 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 
     void Awake()
     {
-        if (!SaveSystem.DataManager.instance.Load(this))
+
+
+    }
+    private void Start()
+    {
+        if (SaveSystem.DataManager.instance.Load(this) == false)
         {
             // set up starting inventory
             AddToInventory("Rusty Hoe");
@@ -235,7 +275,6 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 
             ChangeHandItem("Rusty Hoe");
         }
-
     }
 
     void Update()
@@ -301,4 +340,41 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 
         rectTransform.sizeDelta = new Vector2(100, 200);
     }
+
+    public bool InventoryContainsItem(string item)
+    {
+        return inventory.Any(pair => pair.name == item);
+    }
+
+    private void InventoryRemove(string item)
+    {
+        var result = inventory.First(l => l.name == item);
+        inventory.Remove(result);
+        Destroy(result.InventoryIcon);
+    }
+    private void InventoryAddItem(string item, int count = 1)
+    {
+        var result = inventory.First(l => l.name == item);
+        result.AddItem(count);
+        result.InventoryIcon.UpdateQuantity(result.count);
+    }
+    private void InventoryRemoveItem(string item, int count = 1)
+    {
+        var result = inventory.First(l => l.name == item);
+        result.RemoveItem(count);
+        result.InventoryIcon.UpdateQuantity(result.count);
+    }
+
+    private int InventoryGetItemCount(string item)
+    {
+        var result = inventory.First(l => l.name == item);
+        return result.count;
+    }
+
+    private InventoryIcon InventoryItemGetIcon(string item)
+    {
+        var result = inventory.First(l => l.name == item);
+        return result.InventoryIcon;
+    }
+
 }

@@ -51,72 +51,72 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
         switch (tag)
         {
             case "Rusty Hoe":
-                GetComponent<Image>().sprite = imageicons[0];
-                break;
+            GetComponent<Image>().sprite = imageicons[0];
+            break;
             case "Bronze Hoe":
-                GetComponent<Image>().sprite = imageicons[1];
-                break;
+            GetComponent<Image>().sprite = imageicons[1];
+            break;
             case "Silver Hoe":
-                GetComponent<Image>().sprite = imageicons[2];
-                break;
+            GetComponent<Image>().sprite = imageicons[2];
+            break;
             case "Gold Hoe":
-                GetComponent<Image>().sprite = imageicons[3];
-                break;
+            GetComponent<Image>().sprite = imageicons[3];
+            break;
             case "Rusty Watering Can":
-                GetComponent<Image>().sprite = imageicons[4];
-                break;
+            GetComponent<Image>().sprite = imageicons[4];
+            break;
             case "Bronze Watering Can":
-                GetComponent<Image>().sprite = imageicons[5];
-                break;
+            GetComponent<Image>().sprite = imageicons[5];
+            break;
             case "Silver Watering Can":
-                GetComponent<Image>().sprite = imageicons[6];
-                break;
+            GetComponent<Image>().sprite = imageicons[6];
+            break;
             case "Gold Watering Can":
-                GetComponent<Image>().sprite = imageicons[7];
-                break;
+            GetComponent<Image>().sprite = imageicons[7];
+            break;
             case "Wheat Seeds":
-                GetComponent<Image>().sprite = imageicons[8];
-                sellValue = 1;
-                break;
+            GetComponent<Image>().sprite = imageicons[8];
+            sellValue = 1;
+            break;
             case "Tomato Seeds":
-                GetComponent<Image>().sprite = imageicons[9];
-                sellValue = 5;
-                break;
+            GetComponent<Image>().sprite = imageicons[9];
+            sellValue = 5;
+            break;
             case "Lentils Seeds":
-                GetComponent<Image>().sprite = imageicons[10];
-                sellValue = 8;
-                break;
+            GetComponent<Image>().sprite = imageicons[10];
+            sellValue = 8;
+            break;
             case "Wheat":
-                GetComponent<Image>().sprite = imageicons[11];
-                sellValue = 100;
-                break;
+            GetComponent<Image>().sprite = imageicons[11];
+            sellValue = 100;
+            break;
             case "Tomato":
-                GetComponent<Image>().sprite = imageicons[12];
-                sellValue = 100;
-                break;
+            GetComponent<Image>().sprite = imageicons[12];
+            sellValue = 100;
+            break;
             case "Lentil":
-                GetComponent<Image>().sprite = imageicons[13];
-                sellValue = 150;
-                break;
+            GetComponent<Image>().sprite = imageicons[13];
+            sellValue = 150;
+            break;
             case "Egg":
-                GetComponent<Image>().sprite = imageicons[14];
-                sellValue = 200;
-                break;
+            GetComponent<Image>().sprite = imageicons[14];
+            sellValue = 200;
+            break;
             case "Chicken":
-                GetComponent<Image>().sprite = imageicons[15];
-                sellValue = 500;
-                break;
+            GetComponent<Image>().sprite = imageicons[15];
+            sellValue = 500;
+            break;
             case "Pig":
-                GetComponent<Image>().sprite = imageicons[16];
-                sellValue = 700;
-                break;
+            GetComponent<Image>().sprite = imageicons[16];
+            sellValue = 700;
+            break;
             case "Cow":
-                GetComponent<Image>().sprite = imageicons[17];
-                sellValue = 1000;
-                break;
+            GetComponent<Image>().sprite = imageicons[17];
+            sellValue = 1000;
+            break;
             default:
-                GetComponent<Image>().sprite = imageicons[0];
-                break;
+            GetComponent<Image>().sprite = imageicons[0];
+            break;
         }
     }
 
@@ -124,7 +124,7 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
     {
         if (player.GetComponent<PlayerInventory>().sellMode && sellValue > 0) toolTip.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item + "\n$" + sellValue;
         else toolTip.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item;
-        if (dragged  < 0) toolTip.SetActive(true);
+        if (dragged < 0) toolTip.SetActive(true);
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -188,10 +188,10 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
     {
         dragged = -1;
         // if item still exists in inventory (right click dragging), merge items back to one slot
-        if (player.GetComponent<PlayerInventory>().inventory.ContainsKey(item))
+        if (player.GetComponent<PlayerInventory>().InventoryContainsItem(item))
         {
             player.GetComponent<PlayerInventory>().AddToInventory(item, int.Parse(quantity.text));
-            Destroy(this.gameObject);
+            //Destroy(this.gameObject);
         }
         // put item in new slot and add to inventory dicts again
         else
@@ -212,9 +212,12 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
             }
             transform.SetParent(lastParent, true);
             rectTransform.localPosition = Vector3.zero;
-            player.GetComponent<PlayerInventory>().inventory.Add(item, int.Parse(quantity.text));
+            //TODO
+            var playerInventory = player.GetComponent<PlayerInventory>();
+            playerInventory.AddToInventory(this, item, int.Parse(quantity.text));
+            //playerInventory.inventor.inventory.Add(item, int.Parse(quantity.text));
             player.GetComponent<PlayerInventory>().inventoryIndex.Add(item);
-            player.GetComponent<PlayerInventory>().inventoryIcons.Add(item, this.gameObject);
+            // player.GetComponent<PlayerInventory>().inventoryIcons.Add(item, this.gameObject);
         }
 
     }

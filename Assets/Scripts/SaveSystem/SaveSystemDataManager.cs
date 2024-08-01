@@ -1,19 +1,17 @@
-using DG.Tweening.Plugins.Core.PathCore;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using SaveSystem;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Data.Common;
 
 namespace SaveSystem
 {
     public class DataManager : MonoBehaviour
     {
+        [SerializeField]
+        private bool useSaveSystem = true;
+
         private GameData gameData;
 
         [SerializeField]
@@ -75,6 +73,7 @@ namespace SaveSystem
 
         public bool Load(ISaveable saveable)
         {
+            if (useSaveSystem == false) return false;
             //Debugger.Log("Loading class: " + saveable.GetType().Name);
             //Debugger.Log("instance.HasCurrentSceneData(): " + instance.HasCurrentSceneData());
             if (!instance.HasCurrentSceneData())
@@ -94,7 +93,7 @@ namespace SaveSystem
         public void SaveToFile()
         {
             if ((gameData != null) && (autoSaveFileManager != null))
-            { 
+            {
                 autoSaveFileManager.Save(gameData);
             }
         }
@@ -174,7 +173,7 @@ namespace SaveSystem
                     {
                         using (StreamReader reader = new StreamReader(stream))
 
-                        data = reader.ReadToEnd();
+                            data = reader.ReadToEnd();
                         gameData = JsonUtility.FromJson<GameData>(data);
                     }
                 }
