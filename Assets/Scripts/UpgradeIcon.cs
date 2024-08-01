@@ -9,6 +9,7 @@ public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 {
 
     public string item;
+    [SerializeField] private string upgradeEffect;
     [SerializeField] bool tool;
     public int cost;
     private GameObject player;
@@ -31,14 +32,15 @@ public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("hovering " + item);
-        toolTip.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item;
+        //Debug.Log("hovering " + item);
+        if (upgradeEffect != "") toolTip.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item + "\n" + upgradeEffect;
+        else toolTip.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item;
         toolTip.SetActive(true);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        Debug.Log("no longer hovering");
+        //Debug.Log("no longer hovering");
         toolTip.SetActive(false);
     }
 
