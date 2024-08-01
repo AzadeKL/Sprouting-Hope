@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.ExceptionServices;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
@@ -29,7 +30,10 @@ namespace SaveSystem
         public List<int> playerInventoryInventoryValues = new List<int>();
 
         public List<string> gameManagerPlants = new List<string>();
+
+        public List<string> destroyedObjectIds = new List<string>();
     }
+
     public interface ISaveable
     {
         // Copy data to gameData
@@ -52,6 +56,28 @@ namespace SaveSystem
         {
             //Debugger.Log("Parsed key: " + key_value);
             return key_value.Split(':', 2);
+        }
+    }
+    public interface IDestroyable
+    {
+        // Create an unique ID for the destroyed objects list
+        public string GenerateDestroyedId();
+
+        static public string GetGameObjectPath(GameObject gameObject)
+        {
+
+            string name = gameObject.name;
+            while (gameObject.transform.parent != null)
+            {
+                gameObject = gameObject.transform.parent.gameObject;
+                name = gameObject.name + "/" + name;
+            }
+            return name;
+        }
+
+        static public string GetGameObjectPathWId(GameObject gameObject, string id)
+        {
+            return string.Join(':', GetGameObjectPath(gameObject), id);
         }
     }
 }

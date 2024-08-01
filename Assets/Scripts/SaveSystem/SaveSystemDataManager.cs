@@ -116,6 +116,8 @@ namespace SaveSystem
             {
                 return false;
             }
+            List<string> destroyedObjectIds = null;
+            if (gameData != null) destroyedObjectIds = gameData.destroyedObjectIds;
             gameData = new GameData();
             gameData.sceneName = SceneManager.GetActiveScene().name;
             gameData.sceneIndex = SceneManager.GetActiveScene().buildIndex;
@@ -123,9 +125,19 @@ namespace SaveSystem
             {
                 obj.Save(gameData);
             }
+            if (destroyedObjectIds != null) gameData.destroyedObjectIds = destroyedObjectIds;
             return true;
         }
 
+        public void AddDestroyedDestroyable(IDestroyable destroyable)
+        {
+            gameData.destroyedObjectIds.Add(destroyable.GenerateDestroyedId());
+        }
+
+        public bool IsDestroyedDestroyable(IDestroyable destroyable)
+        {
+            return (gameData != null) && (gameData.destroyedObjectIds.Contains(destroyable.GenerateDestroyedId()));
+        }
 
         public class FileManager
         {
