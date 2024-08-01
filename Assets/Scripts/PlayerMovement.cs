@@ -10,6 +10,8 @@ public class PlayerMovement : MonoBehaviour
 
     public bool menuUp = false;
 
+    [SerializeField] private Animator animator;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -25,6 +27,16 @@ public class PlayerMovement : MonoBehaviour
             moveInput.Normalize();
 
             rb.velocity = moveInput * speed;
+            if (moveInput != Vector2.zero)
+            {
+                animator.SetBool("isWalking", true);
+                animator.SetFloat("XInput", moveInput.x);
+                animator.SetFloat("YInput", moveInput.y);
+            }
+            else
+            {
+                animator.SetBool("isWalking", false);
+            }
         }
         else
         {
