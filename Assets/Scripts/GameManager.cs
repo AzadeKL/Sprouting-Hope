@@ -1,9 +1,14 @@
 using SaveSystem;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
+using static UnityEditor.Timeline.Actions.MenuPriority;
+using static UnityEngine.Experimental.Rendering.Universal.PixelPerfectCamera;
+using static UnityEngine.Rendering.DebugUI;
 
 public class GameManager : MonoBehaviour
 {
@@ -79,85 +84,183 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         if (seedFactory == null) { seedFactory = GetComponent<SeedFactory>(); }
+    }
 
+    private static string GetSeedName(string cropName)
+    {
+        return cropName + " Seeds";
+    }
+
+    private static string GetCropName(string seedName)
+    {
+        return seedName.Substring(0, seedName.IndexOf(' '));
+    }
+
+    private bool GetCropVarsForCropName(string cropName, ref List<Tile> crop, ref Dictionary<Vector3Int, int> cropPlants)
+    {
+        switch (cropName)
+        {
+            case "Wheat":
+                crop = wheat;
+                cropPlants = wheatPlants;
+                break;
+            case "Tomato":
+                crop = tomato;
+                cropPlants = tomatoPlants;
+                break;
+            case "Lentil":
+                crop = lentil;
+                cropPlants = lentilPlants;
+                break;
+            default:
+                crop = null;
+                cropPlants = null;
+                break;
+        }
+
+        return crop != null;
+    }
+
+    private bool GetCropVarsAtGridPosition(Vector3Int gridPosition, ref string cropName, ref List<Tile> crop, ref Dictionary<Vector3Int, int> cropPlants)
+    {
+        cropName = "";
+        if (wheatPlants.ContainsKey(gridPosition))
+        {
+            cropName = "Wheat";
+        }
+        else if (tomatoPlants.ContainsKey(gridPosition))
+        {
+            cropName = "Tomato";
+        }
+        else if (lentilPlants.ContainsKey(gridPosition))
+        {
+            cropName = "Lentils";
+        }
+
+        return GetCropVarsForCropName(cropName, ref crop, ref cropPlants);
+    }
+
+    private void SetDefaultField(Vector3Int gridPosition)
+    {
+        farmLand.SetTile(gridPosition, defaultField);
+        ChangeSoil(gridPosition, 0);
     }
 
     private void ChangeSoil(Vector3Int gridPosition, int state)
     {
+        //Debug.Log("Changing soil at position: " + gridPosition + ", growth: " + state);
         // if tile is called for the first time, add to list and give appropriate state
         if (!tileState.ContainsKey(gridPosition)) tileState.Add(gridPosition, state);
         else tileState[gridPosition] = state;
     }
 
+    private void PlowOrHarvestField(Vector3Int gridPosition)
+    {
+        // If the space is unset, plow it
+        if (!tileState.ContainsKey(gridPosition) || tileState[gridPosition] < 1)
+        {
+            PlowField(gridPosition);
+        }
+        // If the space is set, harvest it
+        else
+        {
+            HarvestCrop(gridPosition);
+        }
+    }
+
+    private void PlowField(Vector3Int gridPosition, bool createSeeds = true)
+    {
+        ChangeSoil(gridPosition, 1);
+        farmLand.SetTile(gridPosition, plowedField);
+        Debug.Log("Dirt space set to " + tileState[gridPosition] + ", plowed");
+        if (createSeeds) seedFactory.CreateSeed(player.transform.position);
+    }
+
+    private void WaterField(Vector3Int gridPosition)
+    {
+        if (!tileState.ContainsKey(gridPosition) || (tileState[gridPosition] < 1))
+        {
+            Debug.Log("Failed to water crop - grid location not initialized: " + gridPosition);
+            return;
+        }
+
+        ChangeSoil(gridPosition, 2);
+        farmLand.SetTile(gridPosition, wateredField);
+        Debug.Log("Dirt space set to " + tileState[gridPosition] + ", watered");
+    }
+
+    private void AddCrop(string cropName, Vector3Int gridPosition, int growthState = 0)
+    {
+        Debug.Log("Adding crop(" + cropName + ") at position: " + gridPosition + ", growth: " + growthState);
+        if (!tileState.ContainsKey(gridPosition) || (tileState[gridPosition] < 1))
+        {
+            Debug.Log("Failed to add crop - grid location not initialized: " + gridPosition);
+            return;
+        }
+        if (farmPlants.HasTile(gridPosition))
+        {
+            Debug.Log("Failed to add cropt - grid location in use: " + gridPosition);
+            return;
+        }
+
+        List<Tile> crop = null;
+        Dictionary<Vector3Int, int> cropPlants = null;
+        if (!GetCropVarsForCropName(cropName, ref crop, ref cropPlants))
+        {
+            Debug.Log("Invalid crop(" + cropName + ") at position: " + gridPosition);
+            SetDefaultField(gridPosition);
+            return;
+        }
+
+        farmPlants.SetTile(gridPosition, crop[growthState]);
+        cropPlants.Add(gridPosition, 0);
+        string seedName = GetSeedName(cropName);
+        player.GetComponent<PlayerInventory>().RemoveFromInventory(seedName);
+        StartCoroutine(GrowTime(gridPosition));
+        Debug.Log("Planted " + seedName);
+    }
+
     public void UpdateCrops(Vector3Int gridPosition)
     {
-        List<Vector3Int> keys;
+        string cropName = "";
+        List<Tile> crop = null;
+        Dictionary<Vector3Int, int> cropPlants = null;
         eggCount = Mathf.Min(eggCount + 5, 10);
         //buildings.transform.DOScale(Vector3.one * 1.05f, 0.3f).SetLoops(2, LoopType.Yoyo);
-        string crop = "";
-        if (wheatPlants.ContainsKey(gridPosition))
+        if (!GetCropVarsAtGridPosition(gridPosition, ref cropName, ref crop, ref cropPlants))
         {
-            crop = "Wheat";
+            Debug.Log("No crop to update at position: " + gridPosition);
+            SetDefaultField(gridPosition);
+            return;
         }
-        else if (tomatoPlants.ContainsKey(gridPosition))
-        {
-            crop = "Tomato";
-        }
-        else if (lentilPlants.ContainsKey(gridPosition))
-        {
-            crop = "Lentils";
-        }
-        switch (crop)
-        {
-            case "Wheat":
-            Debug.Log("Wheat is growing!");
-            wheatPlants[gridPosition]++;
-            if (wheatPlants[gridPosition] > 2) wheatPlants[gridPosition] = 2;
-            farmPlants.SetTile(gridPosition, wheat[wheatPlants[gridPosition]]);
-            break;
-            case "Tomato":
-            Debug.Log("Tomatoes are growing!");
-            tomatoPlants[gridPosition]++;
-            if (tomatoPlants[gridPosition] > 2) tomatoPlants[gridPosition] = 2;
-            farmPlants.SetTile(gridPosition, tomato[tomatoPlants[gridPosition]]);
-            break;
-            case "Lentils":
-            Debug.Log("Lentils are growing!");
-            lentilPlants[gridPosition]++;
-            if (lentilPlants[gridPosition] > 2) lentilPlants[gridPosition] = 2;
-            farmPlants.SetTile(gridPosition, lentil[lentilPlants[gridPosition]]);
-            break;
-            default:
-            farmLand.SetTile(gridPosition, defaultField);
-            ChangeSoil(gridPosition, 0);
-            break;
-        }
-        if (crop != "") StartCoroutine(GrowTime(gridPosition));
+
+        Debug.Log(cropName + " is growing!");
+        cropPlants[gridPosition]++;
+        if (cropPlants[gridPosition] > 2) cropPlants[gridPosition] = 2;
+        farmPlants.SetTile(gridPosition, crop[cropPlants[gridPosition]]);
+        StartCoroutine(GrowTime(gridPosition));
     }
 
     private void HarvestCrop(Vector3Int gridPosition)
     {
-        if (wheatPlants.ContainsKey(gridPosition) && wheatPlants[gridPosition] == 2)
+        string cropName = "";
+        List<Tile> crop = null;
+        Dictionary<Vector3Int, int> cropPlants = null;
+        if (!GetCropVarsAtGridPosition(gridPosition, ref cropName, ref crop, ref cropPlants))
         {
-            farmPlants.SetTile(gridPosition, null);
-            wheatPlants.Remove(gridPosition);
-            seedFactory.CreateCrop(gridPosition, "Wheat");
-            Debug.Log("Harvested Wheat");
+            Debug.Log("No crop to harvest at position: " + gridPosition);
+            return;
         }
-        else if (tomatoPlants.ContainsKey(gridPosition))
+        if (cropPlants[gridPosition] < 2)
         {
-            farmPlants.SetTile(gridPosition, null);
-            tomatoPlants.Remove(gridPosition);
-            seedFactory.CreateCrop(gridPosition, "Tomato");
-            Debug.Log("Harvested Tomato");
+            Debug.Log("Crop(" + cropName + " is too young to harvest at position: " + gridPosition);
+            return;
         }
-        else if (lentilPlants.ContainsKey(gridPosition))
-        {
-            farmPlants.SetTile(gridPosition, null);
-            lentilPlants.Remove(gridPosition);
-            seedFactory.CreateCrop(gridPosition, "Lentil");
-            Debug.Log("Harvested Lentils");
-        }
+
+        farmPlants.SetTile(gridPosition, null);
+        cropPlants.Remove(gridPosition);
+        seedFactory.CreateCrop(gridPosition, cropName);
+        Debug.Log("Harvested " + cropName);
     }
 
     private void Update()
@@ -328,137 +431,29 @@ public class GameManager : MonoBehaviour
                 Vector3Int gridPosition = farmLand.WorldToCell(tilePos);
                 TileBase clickedTile = farmLand.GetTile(gridPosition);
                 // if farmland, check what tool was used
-                if (clickedTile) switch (player.GetComponent<PlayerInventory>().handItem)
+                string handItem = player.GetComponent<PlayerInventory>().handItem;
+                if (clickedTile) switch (handItem)
                     {
                         // if hoe equipped, till soil
                         case "Rusty Hoe":
-                        if (!tileState.ContainsKey(gridPosition) || tileState[gridPosition] < 1)
-                        {
-                            ChangeSoil(gridPosition, 1);
-                            farmLand.SetTile(gridPosition, plowedField);
-                            Debug.Log("Dirt space set to " + tileState[gridPosition] + ", tilled");
-                            seedFactory.CreateSeed(player.transform.position);
-                        }
-                        // TEMP hoe for now harvests plants
-                        else
-                        {
-                            HarvestCrop(gridPosition);
-                        }
-                        break;
-                        // if hoe equipped, till soil
                         case "Bronze Hoe":
-                        if (!tileState.ContainsKey(gridPosition) || tileState[gridPosition] < 1)
-                        {
-                            ChangeSoil(gridPosition, 1);
-                            farmLand.SetTile(gridPosition, plowedField);
-                            Debug.Log("Dirt space set to " + tileState[gridPosition] + ", tilled");
-                            seedFactory.CreateSeed(player.transform.position);
-                        }
-                        // TEMP hoe for now harvests plants
-                        else
-                        {
-                            HarvestCrop(gridPosition);
-                        }
-                        break;
-                        // if hoe equipped, till soil
                         case "Silver Hoe":
-                        if (!tileState.ContainsKey(gridPosition) || tileState[gridPosition] < 1)
-                        {
-                            ChangeSoil(gridPosition, 1);
-                            farmLand.SetTile(gridPosition, plowedField);
-                            Debug.Log("Dirt space set to " + tileState[gridPosition] + ", tilled");
-                            seedFactory.CreateSeed(player.transform.position);
-                        }
-                        // TEMP hoe for now harvests plants
-                        else
-                        {
-                            HarvestCrop(gridPosition);
-                        }
-                        break;
-                        // if hoe equipped, till soil
                         case "Gold Hoe":
-                        if (!tileState.ContainsKey(gridPosition) || tileState[gridPosition] < 1)
-                        {
-                            ChangeSoil(gridPosition, 1);
-                            farmLand.SetTile(gridPosition, plowedField);
-                            Debug.Log("Dirt space set to " + tileState[gridPosition] + ", tilled");
-                            seedFactory.CreateSeed(player.transform.position);
-                        }
-                        // TEMP hoe for now harvests plants
-                        else
-                        {
-                            HarvestCrop(gridPosition);
-                        }
-                        break;
+                            PlowOrHarvestField(gridPosition);
+                            break;
                         // if watering can equipped, water soil for faster growth
                         case "Rusty Watering Can":
-                        if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1)
-                        {
-                            ChangeSoil(gridPosition, 2);
-                            farmLand.SetTile(gridPosition, wateredField);
-                            Debug.Log("Dirt space set to " + tileState[gridPosition] + ", watered");
-                        }
-                        break;
-                        // if watering can equipped, water soil for faster growth
                         case "Bronze Watering Can":
-                        if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1)
-                        {
-                            ChangeSoil(gridPosition, 2);
-                            farmLand.SetTile(gridPosition, wateredField);
-                            Debug.Log("Dirt space set to " + tileState[gridPosition] + ", watered");
-                        }
-                        break;
-                        // if watering can equipped, water soil for faster growth
                         case "Silver Watering Can":
-                        if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1)
-                        {
-                            ChangeSoil(gridPosition, 2);
-                            farmLand.SetTile(gridPosition, wateredField);
-                            Debug.Log("Dirt space set to " + tileState[gridPosition] + ", watered");
-                        }
-                        break;
-                        // if watering can equipped, water soil for faster growth
                         case "Gold Watering Can":
-                        if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1)
-                        {
-                            ChangeSoil(gridPosition, 2);
-                            farmLand.SetTile(gridPosition, wateredField);
-                            Debug.Log("Dirt space set to " + tileState[gridPosition] + ", watered");
-                        }
-                        break;
-                        // if wheat seeds equipped, plant wheat seedling
+                            WaterField(gridPosition);
+                            break;
+                        // if seeds equipped, plant corresponding seedling
                         case "Wheat Seeds":
-                        if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1 && !farmPlants.HasTile(gridPosition))
-                        {
-                            farmPlants.SetTile(gridPosition, wheat[0]);
-                            wheatPlants.Add(gridPosition, 0);
-                            player.GetComponent<PlayerInventory>().RemoveFromInventory("Wheat Seeds");
-                            StartCoroutine(GrowTime(gridPosition));
-                            Debug.Log("Planted wheat seeds");
-                        }
-                        break;
-                        // if tomato seeds equipped, plant tomato seedling
                         case "Tomato Seeds":
-                        if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1 && !farmPlants.HasTile(gridPosition))
-                        {
-                            farmPlants.SetTile(gridPosition, tomato[0]);
-                            tomatoPlants.Add(gridPosition, 0);
-                            player.GetComponent<PlayerInventory>().RemoveFromInventory("Tomato Seeds");
-                            StartCoroutine(GrowTime(gridPosition));
-                            Debug.Log("Planted tomato seeds");
-                        }
-                        break;
-                        // if tomato seeds equipped, plant tomato seedling
                         case "Lentils Seeds":
-                        if (tileState.ContainsKey(gridPosition) && tileState[gridPosition] >= 1 && !farmPlants.HasTile(gridPosition))
-                        {
-                            farmPlants.SetTile(gridPosition, lentil[0]);
-                            lentilPlants.Add(gridPosition, 0);
-                            player.GetComponent<PlayerInventory>().RemoveFromInventory("Lentils Seeds");
-                            StartCoroutine(GrowTime(gridPosition));
-                            Debug.Log("Planted lentils seeds");
-                        }
-                        break;
+                            AddCrop(GetCropName(handItem), gridPosition);
+                            break;
                     }
             }
         }
