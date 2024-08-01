@@ -25,6 +25,9 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
     // sell mode for when at restaurant
     public bool sellMode = false;
 
+    // give mode for when at truck
+    public bool giveMode = false;
+
     public int money = 500;
 
     private Dictionary<Vector3Int, GameObject> grids;

@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     public GameObject inventoryUI;
     [SerializeField] Color normalInventory;
     [SerializeField] Color sellInventory;
+    [SerializeField] Color giveInventory;
     public Transform playerCenter;
     [SerializeField] private Transform outliner;
     [SerializeField] private float itemRange = 3f;
@@ -47,8 +48,14 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     private Dictionary<Vector3Int, int> lentilPlants = new Dictionary<Vector3Int, int>();
 
     [Space]
+    [Header("Main Objective")]
+    public int mainProgress;
+    [SerializeField] private int maxProgress;
+
+    [Space]
     [Header("Buildings")]
     public List<TileBase> restaurant;
+    public List<TileBase> truck;
     public List<TileBase> house;
     [SerializeField] private GameObject houseUI;
     public List<TileBase> pigPen;
@@ -291,6 +298,11 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
     private void Update()
     {
+        // if progress meets requirement, win the game (prompt to return to menu or continue playing?)
+        if (mainProgress >= maxProgress)
+        {
+            Debug.Log("Game is WON!");
+        }
 
         Vector3 mousepos = Input.mousePosition;
         mousepos = Camera.main.ScreenToWorldPoint(mousepos);
@@ -332,6 +344,24 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                             inventoryUI.SetActive(true);
                             player.GetComponent<PlayerInventory>().sellMode = true;
                             inventoryUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().color = sellInventory;
+                        }
+                        else
+                        {
+                            playerWorldCanvas.SetActive(true);
+                        }
+
+
+                        break;
+                    }
+                    else if (truck.Contains(buildings.GetTile(gridPosition + neighborPosition)))
+                    {
+                        Debug.Log("Interacting with Truck!");
+
+                        if (flag)
+                        {
+                            inventoryUI.SetActive(true);
+                            player.GetComponent<PlayerInventory>().giveMode = true;
+                            inventoryUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().color = giveInventory;
                         }
                         else
                         {
