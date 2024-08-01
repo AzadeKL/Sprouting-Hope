@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     public Transform playerCenter;
     [SerializeField] private Transform outliner;
     [SerializeField] private float itemRange = 3f;
+    [SerializeField] private GameObject playerWorldCanvas;
 
     [Space]
     [Header("GroundTiles")]
@@ -59,10 +60,9 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
     [SerializeField] private GameObject EggPrefab;
     [SerializeField] private int eggCount = 5;
-    [SerializeField] private AudioSource audioSource;
-    [SerializeField] private FloatReference money;
 
-    //[SerializeField] private List<TileData> tileDatas;
+
+
 
     private Dictionary<Vector3Int, int> tileState = new Dictionary<Vector3Int, int>();
 
@@ -313,8 +313,11 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         else player.GetComponent<PlayerMovement>().menuUp = false;
 
         // interact with building or other interactable object
-        if (Input.GetKeyUp(KeyCode.F))
+        if (true)
         {
+
+            var flag = Input.GetKeyUp(KeyCode.F);
+
             Vector3Int gridPosition = buildings.WorldToCell(player.transform.position);
             foreach (Vector3Int neighborPosition in neighborPositions)
             {
@@ -324,26 +327,17 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                     {
                         Debug.Log("Interacting with Restaurant!");
 
-                        inventoryUI.SetActive(true);
-                        player.GetComponent<PlayerInventory>().sellMode = true;
-                        inventoryUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().color = sellInventory;
-
-                        /*if (player.GetComponent<PlayerInventory>().inventory.TryGetValue("Egg", out int eggCount))
+                        if (flag)
                         {
-                            if (eggCount > 0)
-                            {
-                                player.GetComponent<PlayerInventory>().RemoveFromInventory("Egg");
-                                money.Value += 25f;
-                            }
-                            else
-                            {
-                                audioSource.Play();
-                            }
+                            inventoryUI.SetActive(true);
+                            player.GetComponent<PlayerInventory>().sellMode = true;
+                            inventoryUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().color = sellInventory;
                         }
                         else
                         {
-                            audioSource.Play();
-                        }*/
+                            playerWorldCanvas.SetActive(true);
+                        }
+
 
                         break;
                     }
@@ -351,17 +345,18 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                     {
                         Debug.Log("Interacting with Chicken Coop!");
 
-                        chickenCoopUI.SetActive(true);
-                        inventoryUI.SetActive(true);
-                        /*if (eggCount > 0)
+                        if (flag)
                         {
-                            Instantiate(EggPrefab, playerCenter.position, Quaternion.identity);
-                            eggCount--;
+                            inventoryUI.SetActive(true);
+                            chickenCoopUI.SetActive(true);
+                            inventoryUI.SetActive(true);
                         }
                         else
                         {
-                            audioSource.Play();
-                        }*/
+                            playerWorldCanvas.SetActive(true);
+                        }
+
+
 
                         break;
                     }
@@ -369,24 +364,52 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                     {
                         Debug.Log("Interacting with Farmhouse!");
 
-                        houseUI.SetActive(true);
+                        if (flag)
+                        {
+                            houseUI.SetActive(true);
+                        }
+                        else
+                        {
+                            playerWorldCanvas.SetActive(true);
+                        }
+
                         break;
                     }
                     else if (pigPen.Contains(buildings.GetTile(gridPosition + neighborPosition)))
                     {
                         Debug.Log("Interacting with Pig Pen!");
 
-                        pigPenUI.SetActive(true);
-                        inventoryUI.SetActive(true);
+                        if (flag)
+                        {
+                            pigPenUI.SetActive(true);
+                            inventoryUI.SetActive(true);
+                        }
+                        else
+                        {
+                            playerWorldCanvas.SetActive(true);
+                        }
+
                         break;
                     }
                     else if (storage.Contains(buildings.GetTile(gridPosition + neighborPosition)))
                     {
                         Debug.Log("Interacting with Storage!");
 
-                        storageUI.SetActive(true);
+                        if (flag)
+                        {
+                            storageUI.SetActive(true);
+                        }
+                        else
+                        {
+                            playerWorldCanvas.SetActive(true);
+                        }
+
                         break;
                     }
+                }
+                else
+                {
+                    playerWorldCanvas.SetActive(false);
                 }
             }
         }
