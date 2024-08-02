@@ -9241,9 +9241,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0.048494983
-    width: 1
-    height: 0.90301
+    y: -0.18750001
+    width: 0
+    height: 0.37500003
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
@@ -24057,7 +24057,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6419578533307305743, guid: 91f95978f20162e45893d20950b2cf5b, type: 3}
       propertyPath: tool
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6419578533307305743, guid: 91f95978f20162e45893d20950b2cf5b, type: 3}
       propertyPath: upgradeEffect
