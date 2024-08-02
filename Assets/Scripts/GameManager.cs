@@ -381,6 +381,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             disableTool = true;
         }
 
+
         if (houseUI.activeSelf || chickenCoopUI.activeSelf || inventoryUI.activeSelf || storageUI.activeSelf || pigPenUI.activeSelf) player.GetComponent<PlayerMovement>().menuUp = true;
         else player.GetComponent<PlayerMovement>().menuUp = false;
 
