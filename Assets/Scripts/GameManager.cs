@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
     [SerializeField]
     private float farmingrange = 1f;
+    public GameObject helpUI;
 
     [Header("Tilemap")]
     [SerializeField] private Tilemap grassMap;
@@ -105,7 +106,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     }
     private void Start()
     {
-        SaveSystem.DataManager.instance.Load(this);
+        helpUI.SetActive(!SaveSystem.DataManager.instance.Load(this));
     }
     public void Save(GameData gameData)
     {
@@ -342,6 +343,12 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
     private void Update()
     {
+        var helpKeyPressed = Input.GetKeyUp(KeyCode.H);
+        if (helpKeyPressed)
+        {
+            helpUI.SetActive(!helpUI.activeSelf);
+        }
+
         progressMeter.value = mainProgress;
         progressMeter.gameObject.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = mainProgress.ToString() + "/" + maxProgress.ToString();
         // if progress meets requirement, win the game (prompt to return to menu or continue playing?)
@@ -374,7 +381,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         if (true)
         {
 
-            var flag = Input.GetKeyUp(KeyCode.F);
+            var interactWBuildingKeyPressed = Input.GetKeyUp(KeyCode.F);
 
             Vector3Int gridPosition = buildings.WorldToCell(player.transform.position);
             foreach (Vector3Int neighborPosition in neighborPositions)
@@ -385,7 +392,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                     {
                         Debug.Log("Interacting with Restaurant!");
 
-                        if (flag)
+                        if (interactWBuildingKeyPressed)
                         {
                             inventoryUI.SetActive(true);
                             player.GetComponent<PlayerInventory>().sellMode = true;
@@ -403,7 +410,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                     {
                         Debug.Log("Interacting with Truck!");
 
-                        if (flag)
+                        if (interactWBuildingKeyPressed)
                         {
                             inventoryUI.SetActive(true);
                             player.GetComponent<PlayerInventory>().giveMode = true;
@@ -421,7 +428,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                     {
                         Debug.Log("Interacting with Chicken Coop!");
 
-                        if (flag)
+                        if (interactWBuildingKeyPressed)
                         {
                             inventoryUI.SetActive(true);
                             chickenCoopUI.SetActive(true);
@@ -440,7 +447,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                     {
                         Debug.Log("Interacting with Farmhouse!");
 
-                        if (flag)
+                        if (interactWBuildingKeyPressed)
                         {
                             houseUI.SetActive(true);
                         }
@@ -455,7 +462,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                     {
                         Debug.Log("Interacting with Pig Pen!");
 
-                        if (flag)
+                        if (interactWBuildingKeyPressed)
                         {
                             pigPenUI.SetActive(true);
                             inventoryUI.SetActive(true);
@@ -471,7 +478,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                     {
                         Debug.Log("Interacting with Storage!");
 
-                        if (flag)
+                        if (interactWBuildingKeyPressed)
                         {
                             storageUI.SetActive(true);
                         }
