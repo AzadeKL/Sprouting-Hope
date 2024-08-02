@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 3957493114213307045}
   - component: {fileID: 5410392387909594678}
   m_Layer: 0
-  m_Name: Lentil Seed
-  m_TagString: Lentil Seeds
+  m_Name: Lentils Seed
+  m_TagString: Lentils Seeds
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

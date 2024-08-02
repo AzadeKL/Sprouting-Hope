@@ -66,7 +66,7 @@ public class SeedFactory : MonoBehaviour
                 // return seed from harvest
                 Instantiate(seeds[2], pos, Quaternion.identity);
                 // 1 in 100 chance to get another seed
-                if (Random.Range(0, 100) < 1) Instantiate(seeds[1], pos, Quaternion.identity);
+                if (Random.Range(0, 100) < 1) Instantiate(seeds[2], pos, Quaternion.identity);
                 break;
         }
 

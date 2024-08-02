@@ -206,16 +206,31 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
                 player.GetComponent<PlayerInventory>().ChangeHandItem(item);
             }
         }
-        else if (eventData.button == PointerEventData.InputButton.Right && player.GetComponent<PlayerInventory>().sellMode == true)
+        else if (eventData.button == PointerEventData.InputButton.Right)
         {
-            var control = Input.GetKey(KeyCode.LeftControl);
-            int repeat = control == true ? 25 : 5;
-            for (int i = 0; i < repeat; i++)
+            if (player.GetComponent<PlayerInventory>().sellMode && imageicons.IndexOf(GetComponent<Image>().sprite) > 7)
             {
-                if (player.GetComponent<PlayerInventory>().inventory.ContainsKey(item) == false) break;
+                var control = Input.GetKey(KeyCode.LeftControl);
+                int repeat = control == true ? (int)Mathf.Min(25, int.Parse(quantity.text)) : 5;
+                for (int i = 0; i < repeat; i++)
+                {
+                    if (!player.GetComponent<PlayerInventory>().inventory.ContainsKey(item)) break;
 
-                player.GetComponent<PlayerInventory>().RemoveFromInventory(item);
-                player.GetComponent<PlayerInventory>().money += sellValue;
+                    player.GetComponent<PlayerInventory>().RemoveFromInventory(item);
+                    player.GetComponent<PlayerInventory>().money += sellValue;
+                }
+            }
+            else if (player.GetComponent<PlayerInventory>().giveMode && imageicons.IndexOf(GetComponent<Image>().sprite) > 7)
+            {
+                var control = Input.GetKey(KeyCode.LeftControl);
+                int repeat = control == true ? (int)Mathf.Min(25, int.Parse(quantity.text)) : 5;
+                for (int i = 0; i < repeat; i++)
+                {
+                    if (!player.GetComponent<PlayerInventory>().inventory.ContainsKey(item)) break;
+
+                    player.GetComponent<PlayerInventory>().RemoveFromInventory(item);
+                    GameObject.Find("GameManager").GetComponent<GameManager>().mainProgress += giveValue;
+                }
             }
 
 
