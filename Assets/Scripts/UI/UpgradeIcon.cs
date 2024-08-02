@@ -70,7 +70,11 @@ public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                 {
                     if (oldItem != null)
                     {
-                        SaveSystem.DataManager.instance.AddDestroyedDestroyable(oldItem.GetComponent<UpgradeIcon>());
+                        var upgradeIcon = oldItem.GetComponent<UpgradeIcon>();
+                        if (!SaveSystem.DataManager.instance.IsDestroyedDestroyable(upgradeIcon))
+                        {
+                            SaveSystem.DataManager.instance.AddDestroyedDestroyable(upgradeIcon);
+                        }
                         Destroy(oldItem);
                     }
                 }
