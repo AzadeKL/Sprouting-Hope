@@ -62,6 +62,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     [Space]
     [Header("Main Objective")]
     public int mainProgress;
+    [SerializeField] private GameObject winText;
     [SerializeField] private int maxProgress;
     [SerializeField] private Slider progressMeter;
 
@@ -356,7 +357,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         // if progress meets requirement, win the game (prompt to return to menu or continue playing?)
         if (mainProgress >= maxProgress)
         {
-            Debug.Log("Game is WON!");
+            winText.SetActive(true);
         }
 
         Vector3 mousepos = Input.mousePosition;
