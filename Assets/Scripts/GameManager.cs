@@ -82,6 +82,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     [SerializeField] private int eggCount = 5;
 
 
+    private GameObject toolTip;//UI tooltip 
 
 
     private Dictionary<Vector3Int, int> tileState = new Dictionary<Vector3Int, int>();
@@ -106,6 +107,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     }
     private void Start()
     {
+        toolTip = FindObjectOfType<Tooltip>(true).gameObject;
         helpUI.SetActive(!SaveSystem.DataManager.instance.Load(this));
     }
     public void Save(GameData gameData)
@@ -525,7 +527,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             {
                 CloseUIPanels();
             }
-            if (!inventoryUI.activeSelf) inventoryUI.transform.parent.GetChild(4).gameObject.SetActive(false);
+            if (!inventoryUI.activeSelf) toolTip.SetActive(false);
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -534,7 +536,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             {
                 PauseMenu.instance.notAllowed = true;
                 CloseUIPanels();
-                if (!inventoryUI.activeSelf) inventoryUI.transform.parent.GetChild(4).gameObject.SetActive(false);
+                if (!inventoryUI.activeSelf) toolTip.SetActive(false);
             }
         }
 

@@ -38,6 +38,8 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
     [SerializeField] private PlayerTool playerTool;
 
     [SerializeField] private GameEvent handChanged;
+
+    private GameObject toolTip;//Ui tool tip
     public void Save(GameData gameData)
     {
         var data = gameData.playerInventoryData;
@@ -52,6 +54,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             gameData.playerInventoryInventoryValues.Add(key_value.Value);
         }
     }
+
 
     public bool Load(GameData gameData)
     {
@@ -129,7 +132,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
                 // update hand icon in case holding last item used (like using last seed)
                 ChangeHandItemToPrevItem();
 
-                inventoryGrid.transform.parent.parent.parent.GetChild(4).gameObject.SetActive(false);
+                toolTip.SetActive(false);
                 GameObject icon = inventoryIcons[Item];
                 inventoryIcons.Remove(Item);
                 GameObject parent = icon.transform.parent.gameObject;
@@ -149,7 +152,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         if (full)
         {
             ChangeHandItemToPrevItem();
-            inventoryGrid.transform.parent.parent.parent.GetChild(4).gameObject.SetActive(false);
+            toolTip.SetActive(false);
             GameObject icon = inventoryIcons[Item];
             inventoryIcons.Remove(Item);
             inventory.Remove(Item);
@@ -159,7 +162,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         // right click take (bigger) half items from inventory
         else
         {
-            inventoryGrid.transform.parent.parent.parent.GetChild(4).gameObject.SetActive(false);
+            toolTip.SetActive(false);
             GameObject icon = inventoryIcons[Item];
             icon.GetComponent<InventoryIcon>().UpdateQuantity((int) Mathf.Ceil(inventory[Item] / 2f));
             inventory[Item] = (int) Mathf.Floor(inventory[Item] / 2f);
@@ -227,6 +230,8 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 
     void Start()
     {
+        toolTip = FindObjectOfType<Tooltip>(true).gameObject;
+
         if (SaveSystem.DataManager.instance.Load(this) == false)
         {
             // set up starting inventory
