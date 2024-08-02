@@ -1,7 +1,6 @@
 using SaveSystem;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Image = UnityEngine.UI.Image;
@@ -30,7 +29,6 @@ public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     private void Awake()
     {
-        toolTip = GameObject.Find("UI").transform.GetChild(4).gameObject;
         player = GameObject.Find("Player");
         rectTransform = transform.GetComponent<RectTransform>();
         canvas = rectTransform.root.GetComponent<Canvas>();
@@ -40,6 +38,11 @@ public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         {
             Destroy(gameObject);
         }
+    }
+
+    private void Start()
+    {
+        toolTip = FindObjectOfType<Tooltip>(true).gameObject;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -66,7 +69,7 @@ public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             // swap old item with better item?
             if (tool)
             {
-                foreach(GameObject oldItem in prevUpgrades)
+                foreach (GameObject oldItem in prevUpgrades)
                 {
                     if (oldItem != null)
                     {
