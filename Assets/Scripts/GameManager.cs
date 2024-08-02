@@ -113,6 +113,8 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     }
     public void Save(GameData gameData)
     {
+        gameData.gameManagerMainProgress = mainProgress;
+
         foreach (var tile in tileState)
         {
             ISaveable.AddKey(gameData.gameManagerTileStates, tile.Key, tile.Value);
@@ -125,6 +127,8 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     }
     public bool Load(GameData gameData)
     {
+        mainProgress = gameData.gameManagerMainProgress;
+
         foreach (var key_value in gameData.gameManagerTileStates)
         {
             var entry = ISaveable.ParseKey(key_value);

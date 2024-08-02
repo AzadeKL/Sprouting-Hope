@@ -31,6 +31,7 @@ namespace SaveSystem
         public List<string> playerInventoryInventoryKeys = new List<string>();
         public List<int> playerInventoryInventoryValues = new List<int>();
 
+        public int gameManagerMainProgress = 0;
         public List<string> gameManagerTileStates = new List<string>();
         public List<string> gameManagerPlants = new List<string>();
 
