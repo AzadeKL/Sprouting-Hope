@@ -25,11 +25,16 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
 
     private void Awake()
     {
-        toolTip = GameObject.Find("UI").transform.GetChild(4).gameObject;
         player = GameObject.Find("Player");
         rectTransform = transform.GetComponent<RectTransform>();
         canvas = rectTransform.root.GetComponent<Canvas>();
     }
+
+    private void Start()
+    {
+        toolTip = FindObjectOfType<Tooltip>(true).gameObject;
+    }
+
 
     public void UpdateQuantity(int amount)
     {
@@ -52,82 +57,82 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
         switch (tag)
         {
             case "Rusty Hoe":
-                GetComponent<Image>().sprite = imageicons[0];
-                break;
+            GetComponent<Image>().sprite = imageicons[0];
+            break;
             case "Bronze Hoe":
-                GetComponent<Image>().sprite = imageicons[1];
-                break;
+            GetComponent<Image>().sprite = imageicons[1];
+            break;
             case "Silver Hoe":
-                GetComponent<Image>().sprite = imageicons[2];
-                break;
+            GetComponent<Image>().sprite = imageicons[2];
+            break;
             case "Gold Hoe":
-                GetComponent<Image>().sprite = imageicons[3];
-                break;
+            GetComponent<Image>().sprite = imageicons[3];
+            break;
             case "Rusty Watering Can":
-                GetComponent<Image>().sprite = imageicons[4];
-                break;
+            GetComponent<Image>().sprite = imageicons[4];
+            break;
             case "Bronze Watering Can":
-                GetComponent<Image>().sprite = imageicons[5];
-                break;
+            GetComponent<Image>().sprite = imageicons[5];
+            break;
             case "Silver Watering Can":
-                GetComponent<Image>().sprite = imageicons[6];
-                break;
+            GetComponent<Image>().sprite = imageicons[6];
+            break;
             case "Gold Watering Can":
-                GetComponent<Image>().sprite = imageicons[7];
-                break;
+            GetComponent<Image>().sprite = imageicons[7];
+            break;
             case "Wheat Seeds":
-                GetComponent<Image>().sprite = imageicons[8];
-                sellValue = 1;
-                giveValue = 1;
-                break;
+            GetComponent<Image>().sprite = imageicons[8];
+            sellValue = 1;
+            giveValue = 1;
+            break;
             case "Tomato Seeds":
-                GetComponent<Image>().sprite = imageicons[9];
-                sellValue = 1;
-                giveValue = 1;
-                break;
+            GetComponent<Image>().sprite = imageicons[9];
+            sellValue = 1;
+            giveValue = 1;
+            break;
             case "Lentils Seeds":
-                GetComponent<Image>().sprite = imageicons[10];
-                sellValue = 1;
-                giveValue = 1;
-                break;
+            GetComponent<Image>().sprite = imageicons[10];
+            sellValue = 1;
+            giveValue = 1;
+            break;
             case "Wheat":
-                GetComponent<Image>().sprite = imageicons[11];
-                sellValue = 100;
-                giveValue = 50;
-                break;
+            GetComponent<Image>().sprite = imageicons[11];
+            sellValue = 100;
+            giveValue = 50;
+            break;
             case "Tomato":
-                GetComponent<Image>().sprite = imageicons[12];
-                sellValue = 100;
-                giveValue = 90;
-                break;
+            GetComponent<Image>().sprite = imageicons[12];
+            sellValue = 100;
+            giveValue = 90;
+            break;
             case "Lentil":
-                GetComponent<Image>().sprite = imageicons[13];
-                sellValue = 150;
-                giveValue = 100;
-                break;
+            GetComponent<Image>().sprite = imageicons[13];
+            sellValue = 150;
+            giveValue = 100;
+            break;
             case "Egg":
-                GetComponent<Image>().sprite = imageicons[14];
-                sellValue = 200;
-                giveValue = 100;
-                break;
+            GetComponent<Image>().sprite = imageicons[14];
+            sellValue = 200;
+            giveValue = 100;
+            break;
             case "Chicken":
-                GetComponent<Image>().sprite = imageicons[15];
-                sellValue = 500;
-                giveValue = 600;
-                break;
+            GetComponent<Image>().sprite = imageicons[15];
+            sellValue = 500;
+            giveValue = 600;
+            break;
             case "Pig":
-                GetComponent<Image>().sprite = imageicons[16];
-                sellValue = 700;
-                giveValue = 700;
-                break;
+            GetComponent<Image>().sprite = imageicons[16];
+            sellValue = 700;
+            giveValue = 700;
+            break;
             case "Cow":
-                GetComponent<Image>().sprite = imageicons[17];
-                sellValue = 1000;
-                giveValue = 700;
-                break;
+            GetComponent<Image>().sprite = imageicons[17];
+            sellValue = 1000;
+            giveValue = 700;
+            break;
             default:
-                GetComponent<Image>().sprite = imageicons[0];
-                break;
+            GetComponent<Image>().sprite = imageicons[0];
+            break;
         }
     }
 
@@ -193,7 +198,7 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
                     GameObject.Find("GameManager").GetComponent<GameManager>().mainProgress += giveValue;
                     player.GetComponent<PlayerInventory>().RemoveFromInventory(item);
                 }
-                
+
             }
             // put selected item in hand
             else if (!player.GetComponent<PlayerInventory>().sellMode && !player.GetComponent<PlayerInventory>().giveMode)
