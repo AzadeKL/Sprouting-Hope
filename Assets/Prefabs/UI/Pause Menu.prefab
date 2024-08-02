@@ -1129,8 +1129,8 @@ MonoBehaviour:
     m_SceneName: MainMenu
   select_clip: {fileID: 8300000, guid: 802329af6fa40bf4187b5bde72b65c91, type: 3}
   back_clip: {fileID: 8300000, guid: ea1ad31c4f5ff534b949c8ffa08b7abd, type: 3}
-  sceneIsChaning: {fileID: 11400000, guid: b0cb41f741242ae4391b1e6e9b323f1b, type: 2}
   pauseMenuUI: {fileID: 3428232845808696087}
+  notAllowed: 1
 --- !u!114 &2566461607315627925
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6177,7 +6177,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 8300000, guid: 802329af6fa40bf4187b5bde72b65c91, type: 3}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 1
