@@ -211,7 +211,7 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
             if (player.GetComponent<PlayerInventory>().sellMode && imageicons.IndexOf(GetComponent<Image>().sprite) > 7)
             {
                 var control = Input.GetKey(KeyCode.LeftControl);
-                int repeat = control == true ? (int)Mathf.Min(25, int.Parse(quantity.text)) : 5;
+                int repeat = control == true ? (int) Mathf.Min(25, int.Parse(quantity.text)) : 5;
                 for (int i = 0; i < repeat; i++)
                 {
                     if (!player.GetComponent<PlayerInventory>().inventory.ContainsKey(item)) break;
@@ -223,7 +223,7 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
             else if (player.GetComponent<PlayerInventory>().giveMode && imageicons.IndexOf(GetComponent<Image>().sprite) > 7)
             {
                 var control = Input.GetKey(KeyCode.LeftControl);
-                int repeat = control == true ? (int)Mathf.Min(25, int.Parse(quantity.text)) : 5;
+                int repeat = control == true ? (int) Mathf.Min(25, int.Parse(quantity.text)) : 5;
                 for (int i = 0; i < repeat; i++)
                 {
                     if (!player.GetComponent<PlayerInventory>().inventory.ContainsKey(item)) break;
@@ -239,6 +239,9 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (DragDisabled()) return;
+
+
         lastParent = transform.parent;
         transform.SetParent(rectTransform.root, true);
         // dragging with left click
@@ -257,6 +260,8 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (DragDisabled()) return;
+
         dragged = -1;
         // if item still exists in inventory (right click dragging), merge items back to one slot
         if (player.GetComponent<PlayerInventory>().inventory.ContainsKey(item))
@@ -275,9 +280,16 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
                 if (result.gameObject != null && result.gameObject.GetComponent<RectTransform>() != null)
                 {
                     //Debug.Log("UI Element clicked: " + result.gameObject.name);
-                    if (result.gameObject.name.Contains("GridCell") && result.gameObject.transform.childCount == 0)
+                    if (result.gameObject.name.Contains("GridCell"))
                     {
+                        if (result.gameObject.transform.childCount > 0)
+                        {
+                            var otherElement = result.gameObject.transform.GetChild(0);
+                            otherElement.SetParent(lastParent, true);
+                            otherElement.GetComponent<RectTransform>().localPosition = Vector3.zero;
+                        }
                         lastParent = result.gameObject.transform;
+
                     }
                 }
             }
@@ -292,6 +304,8 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (DragDisabled()) return;
+
         transform.position = eventData.position;
     }
 
@@ -301,5 +315,12 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
         var oldColor = lastParent.GetComponent<Image>().color;
         oldColor.a = colorAlpha;
         lastParent.GetComponent<Image>().color = oldColor;
+    }
+
+    private bool DragDisabled()
+    {
+        if (player.GetComponent<PlayerInventory>().sellMode == true || player.GetComponent<PlayerInventory>().giveMode == true) return true;
+
+        return false;
     }
 }
