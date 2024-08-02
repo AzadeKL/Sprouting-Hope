@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.ExceptionServices;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
@@ -29,6 +31,7 @@ namespace SaveSystem
         public List<string> playerInventoryInventoryKeys = new List<string>();
         public List<int> playerInventoryInventoryValues = new List<int>();
 
+        public List<string> gameManagerTileStates = new List<string>();
         public List<string> gameManagerPlants = new List<string>();
 
         public List<string> destroyedObjectIds = new List<string>();
@@ -50,12 +53,29 @@ namespace SaveSystem
             values.Add(key_value);
             //Debugger.Log("Added key: " + key_value);
         }
+        static public void AddKey<T>(List<string> values, Vector3Int key, T value)
+        {
+            var key_value = string.Join(":", Vector3IntToString(key), value);
+            values.Add(key_value);
+            //Debugger.Log("Added key: " + key_value);
+        }
 
         // Utility for unpacking data from GameData lists
         static public string[] ParseKey(string key_value)
         {
             //Debugger.Log("Parsed key: " + key_value);
             return key_value.Split(':', 2);
+        }
+
+        static public Vector3Int Vector3IntFromString(string str)
+        {
+            var tmp = str.Split(',');
+            return new Vector3Int(Convert.ToInt32(tmp[0]), Convert.ToInt32(tmp[1]), Convert.ToInt32(tmp[2]));
+        }
+
+        static public string Vector3IntToString(Vector3Int v)
+        {
+            return string.Join(',', v.x, v.y, v.z);
         }
     }
     public interface IDestroyable

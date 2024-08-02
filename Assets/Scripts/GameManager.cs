@@ -2,6 +2,7 @@ using SaveSystem;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
@@ -9,7 +10,7 @@ using TMPro;
 using Unity.IO.LowLevel.Unsafe;
 
 public class GameManager : MonoBehaviour, SaveSystem.ISaveable
-{    
+{
     // Enum for the field states
     private enum DirtFieldState
     {
@@ -103,7 +104,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     {
         if (seedFactory == null) { seedFactory = GetComponent<SeedFactory>(); }
         progressMeter.maxValue = maxProgress;
-
     }
     private void Start()
     {
@@ -111,24 +111,38 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     }
     public void Save(GameData gameData)
     {
-        Func<Vector3Int, string> Vector3dIntToString = (v) => { return string.Join(',', v.x, v.y, v.z); };
-        Func<string, KeyValuePair<Vector3Int, int>, string> PlantToEntry = (plantName, point) => string.Join(":", plantName, Vector3dIntToString(point.Key), point.Value);
+        foreach (var tile in tileState)
+        {
+            ISaveable.AddKey(gameData.gameManagerTileStates, tile.Key, tile.Value);
+        }
 
+        Func<string, KeyValuePair<Vector3Int, int>, string> PlantToEntry = (plantName, point) => string.Join(":", plantName, SaveSystem.ISaveable.Vector3IntToString(point.Key), point.Value);
         foreach (var key_value in wheatPlants) gameData.gameManagerPlants.Add(PlantToEntry("Wheat", key_value));
         foreach (var key_value in tomatoPlants) gameData.gameManagerPlants.Add(PlantToEntry("Tomato", key_value));
         foreach (var key_value in lentilPlants) gameData.gameManagerPlants.Add(PlantToEntry("Lentil", key_value));
     }
     public bool Load(GameData gameData)
     {
-        Func<string, Vector3Int> Vector3dIntFromString = (str) => { var tmp = str.Split(','); return new Vector3Int(Convert.ToInt32(tmp[0]), Convert.ToInt32(tmp[1]), Convert.ToInt32(tmp[2])); };
-
+        foreach (var key_value in gameData.gameManagerTileStates)
+        {
+            var entry = ISaveable.ParseKey(key_value);
+            var gridPosition = ISaveable.Vector3IntFromString(entry[0]);
+            int fieldState = Convert.ToInt32(entry[1]);
+            if (IsDirtFieldState(fieldState))
+            {
+                SetDirtFieldState(gridPosition, (DirtFieldState)fieldState);
+            }
+            else
+            {
+                tileState.Add(gridPosition, fieldState);
+            }
+        }
         foreach (var entry in gameData.gameManagerPlants)
         {
             var parsed = entry.Split(':');
             string cropName = parsed[0];
-            Vector3Int gridPosition = Vector3dIntFromString(parsed[1]);
+            Vector3Int gridPosition = SaveSystem.ISaveable.Vector3IntFromString(parsed[1]);
             int growthState = Convert.ToInt32(parsed[2]);
-            SetDirtFieldState(gridPosition, DirtFieldState.Plowed);
             AddCrop(cropName, gridPosition, growthState);
         }
 
