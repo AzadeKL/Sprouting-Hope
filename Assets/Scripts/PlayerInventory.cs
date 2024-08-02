@@ -129,9 +129,6 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             // if item slot is empty, remove from the dicts and lists and ui panel
             if (inventory[Item] == 0)
             {
-                // update hand icon in case holding last item used (like using last seed)
-                ChangeHandItemToPrevItem();
-
                 toolTip.SetActive(false);
                 GameObject icon = inventoryIcons[Item];
                 inventoryIcons.Remove(Item);
@@ -141,6 +138,9 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
                 //Destroy(parent);
                 inventory.Remove(Item);
                 inventoryIndex.Remove(Item);
+
+                // update hand icon in case holding last item used (like using last seed)
+                ChangeHandItemToPrevItem();
             }
         }
     }
