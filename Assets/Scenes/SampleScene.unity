@@ -8654,7 +8654,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -50}
+  m_AnchoredPosition: {x: 25, y: -50}
   m_SizeDelta: {x: 1400, y: 800}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &241875310
@@ -8677,7 +8677,17 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Press H to close or to reopen this window.
+  m_text: "Welcome to the Town! Seeing as you just began farming, a restaurant and
+    a humanitarian aid organization saw this as a perfect time to help you and want
+    to work with you to bring food to all kinds of people. \r\nYou can rest in your
+    house, sell some goods at Fresh Food for money, or you can give some of your
+    goods to the truck that goes to Greenbuds Cares which helps feed the hungry.\r\nSometimes
+    your animals give you some goods on a new day. So make sure to check them out.\r\n\r\nWASD
+    - Movement\r\nLeft Click - Use item\r\nF - Interact\r\n1-5, Mouse Wheel - Hotbar
+    Selection\r\nLight Click drag - Pick up half\r\nLeft Click drag - Pick up all\r\nRight
+    Click - Sell/Give 5 items\r\nShift + Right Click - Sell/Give 25 items\r\nShift
+    + Left Click -  Sell/Give full stack\r\nTab - Open Inventory\r\nH - Open/Close
+    info"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -8704,8 +8714,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 32
+  m_fontSizeBase: 32
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -9456,9 +9466,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0
+    y: 0.067307696
     width: 1
-    height: 1
+    height: 0.86538464
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
