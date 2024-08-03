@@ -105,6 +105,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     private float itemRangeModifier = 0f;
     private float timer = 1f;
     private float timerModifierPercentage = 0f;
+    private float baselineTimerModifierPercentage = 0f;
     private void Awake()
     {
         helpToggle = helpUI.transform.GetChild(2).GetComponent<Toggle>();
@@ -599,8 +600,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             if (!inventoryUI.activeSelf && CheckTimer())
             {
                 timer = 0f;
-                // get tile player is standing on
-                //Vector3Int gridPosition = farmLand.WorldToCell(player.transform.position + ((player.GetComponent<PlayerTool>().direction.normalized) * 2.5f));
                 Vector3 mousePosition = Input.mousePosition;
                 mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
                 mousePosition.z = 0;
@@ -609,7 +608,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                 var result = mousePosition - playerpos;
                 result.Normalize();
                 Debugger.Log(result + " mouse direction normalized", Debugger.PriorityLevel.Medium);
-                //Vector3Int gridPosition = farmLand.WorldToCell(playerpos + (result * farmingrange));
                 Vector3Int gridPosition = farmLand.WorldToCell(tilePos);
                 TileBase clickedTile = farmLand.GetTile(gridPosition);
                 // if farmland, check what tool was used
@@ -682,7 +680,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         else
         {
             var name = item.GetComponent<InventoryIcon>().item;
-            //Debugger.Log("Name im HandChange " + name, Debugger.PriorityLevel.High);
             var result = name switch
             {
                 string a when a.Contains("Rusty") => 1f,
@@ -699,12 +696,10 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                 string b when b.Contains("Bronze") => 0.2f,
                 string b when b.Contains("Silver") => 0.5f,
                 string b when b.Contains("Gold") => 1f,
-                _ => 0f
+                _ => baselineTimerModifierPercentage
             };
             timerModifierPercentage = timerModifier;
-
-
-            //Debugger.Log("Result of HandChange " + result, Debugger.PriorityLevel.High);
+            baselineTimerModifierPercentage = Mathf.Max(baselineTimerModifierPercentage, timerModifierPercentage);
         }
     }
 
