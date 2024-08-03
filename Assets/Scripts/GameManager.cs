@@ -3,7 +3,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
@@ -438,7 +437,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         UpdateIsModalMode();
 
         // interact with building or other interactable object
-        if (!isModalMode || inventoryUI.activeSelf)
+        if (isModalMode == false)
         {
 
             var interactWBuildingKeyPressed = Input.GetKeyUp(KeyCode.F);
