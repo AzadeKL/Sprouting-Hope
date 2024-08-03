@@ -9210,7 +9210,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentTime:
-    UseConstant: 1
+    UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 1b746dbb982bd2248b1207004338056f, type: 2}
   musicDatas:
