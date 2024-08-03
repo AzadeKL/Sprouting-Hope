@@ -48,6 +48,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3957493114213307045, guid: 6c27ff3e39349d047840ca98eb3210c6, type: 3}
+      propertyPath: spawnJumpMultiplier
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4880877291604096407, guid: 6c27ff3e39349d047840ca98eb3210c6, type: 3}
       propertyPath: m_Sprite
       value: 

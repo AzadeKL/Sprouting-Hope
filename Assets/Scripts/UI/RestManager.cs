@@ -58,23 +58,24 @@ public class RestManager : MonoBehaviour
         player.gameObject.SetActive(true);
 
 
-        if (player.GetComponent<PlayerInventory>().money < 500)
-        {
-            var randomNum = Random.Range(0, maxExclusive: 10000);
-            var money = player.GetComponent<PlayerInventory>().money;
-            if (500 - money > randomNum)
-            {
-                player.GetComponent<PlayerInventory>().money += 100;
-                FlyText();
-            }
+        //if (player.GetComponent<PlayerInventory>().money < 500)
+        //{
+        //    var randomNum = Random.Range(0, maxExclusive: 10000);
+        //    var money = player.GetComponent<PlayerInventory>().money;
+        //    if (500 - money > randomNum)
+        //    {
+        //        player.GetComponent<PlayerInventory>().money += 100;
+        //        FlyText();
+        //    }
 
-        }
+        //}
 
     }
 
     [ContextMenu("Fly Some Text")]
     public void FlyText()
     {
+        return;
         var result = Instantiate(floatingTextPrefab, player.transform.position + Vector3.up, Quaternion.identity);
         FloatingText floatingText = result.GetComponent<FloatingText>();
         floatingText.Initialize("You found 100 dollars under your hard pillow");
