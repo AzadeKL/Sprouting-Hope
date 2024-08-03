@@ -575,7 +575,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             if (isModalMode)
             {
                 // Inventory may be open with other menus - exit them all
-                if (inventoryUI.activeSelf) ExitModalMode();
+                if (inventoryUI.activeSelf || storageUI.activeSelf) ExitModalMode();
             }
             else
             {
