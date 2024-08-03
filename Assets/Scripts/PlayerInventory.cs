@@ -140,7 +140,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
                 inventoryIndex.Remove(Item);
 
                 // update hand icon in case holding last item used (like using last seed)
-                ChangeHandItemToPrevItem();
+                if (handItem == Item) {ChangeHandItemToPrevItem(); Debug.Log("changing hands");}
             }
         }
     }
@@ -151,12 +151,11 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         // left click take all items from inventory, removing from dicts
         if (full)
         {
-            ChangeHandItemToPrevItem();
+            if (handItem == Item) {ChangeHandItemToPrevItem(); Debug.Log("changing hands");}
             toolTip.SetActive(false);
             GameObject icon = inventoryIcons[Item];
             inventoryIcons.Remove(Item);
             inventory.Remove(Item);
-            Debug.Log(inventory.ContainsKey(Item));
             inventoryIndex.Remove(Item);
         }
         // right click take (bigger) half items from inventory
@@ -164,6 +163,8 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         {
             toolTip.SetActive(false);
             GameObject icon = inventoryIcons[Item];
+            Debug.Log(Mathf.Ceil(inventory[Item] / 2f));
+            Debug.Log(Mathf.Floor(inventory[Item] / 2f));
             icon.GetComponent<InventoryIcon>().UpdateQuantity((int) Mathf.Ceil(inventory[Item] / 2f));
             inventory[Item] = (int) Mathf.Floor(inventory[Item] / 2f);
             inventoryIcons[Item] = Instantiate(inventoryIcon, icon.GetComponent<InventoryIcon>().lastParent);
