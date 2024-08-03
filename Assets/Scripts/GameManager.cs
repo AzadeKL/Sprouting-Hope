@@ -304,22 +304,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         farmLand.SetTile(gridPosition, fieldType);
     }
 
-    //private void PlowOrHarvestField(Vector3Int gridPosition)
-    //{
-    //    // If the space is unset, plow it
-    //    if (!tileState.ContainsKey(gridPosition) || tileState[gridPosition] < 1)
-    //    {
-    //        PlowField(gridPosition);
-    //    }
-    //    // If the space is set, harvest it
-    //    else
-    //    {
-    //        HarvestCrop(gridPosition);
-    //    }
-    //}
-
-
-
     private void PlowField(Vector3Int gridPosition)
     {
         if (!tileState.ContainsKey(gridPosition) || tileState[gridPosition] < 1)
