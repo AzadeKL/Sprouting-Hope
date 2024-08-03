@@ -46,10 +46,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7fdc4dd876c0bc4d8908fee1889219a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collectSpeed: 30
+  radiusIncreaseSpeed: 0.1
   deathTime: 10
   animationTime: 0.3
-  waitForToRipe: 2
+  waitForToRipe: 1
   animationEase: 20
+  randomizerRange: 1.34
   spawnJumpMultiplier: 3
 --- !u!58 &5410392387909594678
 CircleCollider2D:
@@ -85,7 +88,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 1
+  m_Radius: 0.7
 --- !u!1 &8101837011081923908
 GameObject:
   m_ObjectHideFlags: 0
