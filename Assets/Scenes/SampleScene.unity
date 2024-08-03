@@ -25567,6 +25567,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c1cf9f9bf3ab584b8eb9fb67b0eb1bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  floatingTextPrefab: {fileID: 7400483344476064293, guid: 2d8750836b67430499316c043edfc381, type: 3}
   player: {fileID: 1822348381}
   gameManager: {fileID: 548942054}
   RestUIPanelMain: {fileID: 1043249260}
