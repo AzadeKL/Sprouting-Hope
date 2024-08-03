@@ -304,24 +304,29 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         farmLand.SetTile(gridPosition, fieldType);
     }
 
-    private void PlowOrHarvestField(Vector3Int gridPosition)
-    {
-        // If the space is unset, plow it
-        if (!tileState.ContainsKey(gridPosition) || tileState[gridPosition] < 1)
-        {
-            PlowField(gridPosition);
-        }
-        // If the space is set, harvest it
-        else
-        {
-            HarvestCrop(gridPosition);
-        }
-    }
+    //private void PlowOrHarvestField(Vector3Int gridPosition)
+    //{
+    //    // If the space is unset, plow it
+    //    if (!tileState.ContainsKey(gridPosition) || tileState[gridPosition] < 1)
+    //    {
+    //        PlowField(gridPosition);
+    //    }
+    //    // If the space is set, harvest it
+    //    else
+    //    {
+    //        HarvestCrop(gridPosition);
+    //    }
+    //}
+
+
 
     private void PlowField(Vector3Int gridPosition)
     {
-        SetDirtFieldState(gridPosition, DirtFieldState.Plowed);
-        seedFactory.CreateSeed(gridPosition);
+        if (!tileState.ContainsKey(gridPosition) || tileState[gridPosition] < 1)
+        {
+            SetDirtFieldState(gridPosition, DirtFieldState.Plowed);
+            seedFactory.CreateSeed(gridPosition);
+        }
     }
 
     private void WaterField(Vector3Int gridPosition)
@@ -622,12 +627,19 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                 string handItem = player.GetComponent<PlayerInventory>().handItem;
                 if (clickedTile) switch (handItem)
                     {
-                        // if hoe equipped, till soil
+                        // if Shovel equipped, till souil
+                        case "Rusty Shovel":
+                        case "Bronze Shovel":
+                        case "Silver Shovel":
+                        case "Gold Shovel":
+                        PlowField(gridPosition);
+                        break;
+                        // if hoe equipped, harvest
                         case "Rusty Hoe":
                         case "Bronze Hoe":
                         case "Silver Hoe":
                         case "Gold Hoe":
-                        PlowOrHarvestField(gridPosition);
+                        HarvestCrop(gridPosition);
                         break;
                         // if watering can equipped, water soil for faster growth
                         case "Rusty Watering Can":
@@ -707,7 +719,17 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                 _ => baselineTimerModifierPercentage
             };
             timerModifierPercentage = timerModifier;
-            baselineTimerModifierPercentage = Mathf.Max(baselineTimerModifierPercentage, timerModifierPercentage);
+
+            var baseLineModifier = name switch
+            {
+                string a when a.Contains("Rusty Shovel") => 0f,
+                string b when b.Contains("Bronze Shovel") => 0.2f,
+                string b when b.Contains("Silver Shovel") => 0.5f,
+                string b when b.Contains("Gold Shovel") => 1f,
+                _ => 0
+            };
+
+            baselineTimerModifierPercentage = Mathf.Max(baselineTimerModifierPercentage, baseLineModifier);
         }
     }
 

@@ -140,7 +140,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
                 inventoryIndex.Remove(Item);
 
                 // update hand icon in case holding last item used (like using last seed)
-                if (handItem == Item) {ChangeHandItemToPrevItem(); Debug.Log("changing hands");}
+                if (handItem == Item) { ChangeHandItemToPrevItem(); Debug.Log("changing hands"); }
             }
         }
     }
@@ -151,7 +151,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         // left click take all items from inventory, removing from dicts
         if (full)
         {
-            if (handItem == Item) {ChangeHandItemToPrevItem(); Debug.Log("changing hands");}
+            if (handItem == Item) { ChangeHandItemToPrevItem(); Debug.Log("changing hands"); }
             toolTip.SetActive(false);
             GameObject icon = inventoryIcons[Item];
             inventoryIcons.Remove(Item);
@@ -236,11 +236,12 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         if (SaveSystem.DataManager.instance.Load(this) == false)
         {
             // set up starting inventory
-            AddToInventory("Rusty Hoe");
+            AddToInventory("Rusty Shovel");
             AddToInventory("Wheat Seeds");
             AddToInventory("Rusty Watering Can");
+            AddToInventory("Rusty Hoe");
 
-            ChangeHandItem("Rusty Hoe");
+            ChangeHandItem("Rusty Shovel");
         }
 
     }

@@ -7,11 +7,12 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: 2d mat outline on Instrument Lute
+  m_Name: 2d mat outline on Invenyory
   m_Shader: {fileID: 4800000, guid: 456a2a9c974c2a146ab9080271c3d288, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - PIXELSNAP_ON
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -45,14 +46,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - PixelSnap: 0
+    - PixelSnap: 1
     - _Cutoff: 0.5
     - _EnableExternalAlpha: 0
     - _Outline: 1
-    - _OutlineSize: 7.6
+    - _OutlineSize: -0.74
     m_Colors:
-    - _Color: {r: 1, g: 0.97957134, b: 0.8632076, a: 1}
+    - _Color: {r: 0.8113208, g: 0.66206837, b: 0.66206837, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
-    - _OutlineColor: {r: 0.9622642, g: 0.78865, b: 0.022694906, a: 1}
+    - _OutlineColor: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

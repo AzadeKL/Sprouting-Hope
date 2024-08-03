@@ -100,19 +100,25 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 539f089cb5b48ac4db04b7a159cf3ca3, type: 3}
   - {fileID: 21300000, guid: f798328246667584abd3af0b7e69cd57, type: 3}
   - {fileID: 21300000, guid: 8d34278d002164f4db7a5d0d566e2a87, type: 3}
-  - {fileID: 21300000, guid: b305a8935b1ceac429cd5874752c2f7f, type: 3}
-  - {fileID: 21300000, guid: db049b07f3541794cadb789cebbb6e29, type: 3}
-  - {fileID: 21300000, guid: 9d291960a5dd47648a84242bb96ad534, type: 3}
-  - {fileID: 21300000, guid: 28104525df8f7904c90a27c94b66f4ef, type: 3}
+  - {fileID: 21300000, guid: a144f84213742104691ca6befe02bf06, type: 3}
+  - {fileID: 21300000, guid: 9fbf8d513c369e94f8836220adb44eeb, type: 3}
+  - {fileID: 21300000, guid: a4fe57ae163e2df4baea8d6ba36199d7, type: 3}
+  - {fileID: 21300000, guid: e20d6e98d4a6bfc429b391238e1fc8e6, type: 3}
   - {fileID: 21300000, guid: 0fd75cd707b008842bf7a27e287a5fca, type: 3}
   - {fileID: 21300000, guid: a6ac377c2dcb8224c99c7560884ca4d5, type: 3}
   - {fileID: 21300000, guid: 20eb387192d2c22449e11a57e3c319d8, type: 3}
   - {fileID: 21300000, guid: 572dbbc0ba203a34e843cfe766160279, type: 3}
   - {fileID: 21300000, guid: a577ce4b9a2e45d40bbcd534a01b331c, type: 3}
   - {fileID: 21300000, guid: 60a00ceadfbec1a43827da5b03993f5a, type: 3}
+  - {fileID: 21300000, guid: b305a8935b1ceac429cd5874752c2f7f, type: 3}
+  - {fileID: 21300000, guid: db049b07f3541794cadb789cebbb6e29, type: 3}
+  - {fileID: 21300000, guid: 9d291960a5dd47648a84242bb96ad534, type: 3}
+  - {fileID: 21300000, guid: 28104525df8f7904c90a27c94b66f4ef, type: 3}
+  - {fileID: 21300000, guid: 78e49b5b05c036643bb30886fc0dfa29, type: 3}
   quantity: {fileID: 9133616027069098356}
   item: 
   sellValue: 0
+  giveValue: 0
   lastParent: {fileID: 0}
 --- !u!114 &1947463414828090767
 MonoBehaviour:
@@ -121,7 +127,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2652448401726263400}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
@@ -136,8 +142,8 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_HighlightedColor: {r: 0.8396226, g: 0.7881363, b: 0.7881363, a: 1}
+    m_PressedColor: {r: 0.6320754, g: 0.6320754, b: 0.6320754, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -157,19 +163,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8452154618046965567}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: -4075785430003217690}
-        m_TargetAssemblyTypeName: InventoryIcon, Assembly-CSharp
-        m_MethodName: Clicked
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &2255924371800138249
 MonoBehaviour:
   m_ObjectHideFlags: 0
