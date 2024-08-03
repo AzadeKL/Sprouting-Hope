@@ -9984,9 +9984,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0.048494983
+    y: 0
     width: 1
-    height: 0.90301
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
@@ -10094,6 +10094,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   helpUI: {fileID: 354474628}
   showHelpOnNewGameKey: showHelpOnNewGame
+  time: 0
   grassMap: {fileID: 818847544}
   farmLand: {fileID: 1544950102}
   farmPlants: {fileID: 909364654}
@@ -10118,14 +10119,19 @@ MonoBehaviour:
   - {fileID: 11400000, guid: db4ee335381aca743a8e99acadee46b0, type: 2}
   - {fileID: 11400000, guid: d2e3ecc9563ace54493b188b4753a462, type: 2}
   - {fileID: 11400000, guid: a35efe357e1c42a4a9a857a56d34574e, type: 2}
+  wheatGrowTime: 150
   tomato:
   - {fileID: 11400000, guid: 8105efa24acf7fa488fd2f3199880ae7, type: 2}
   - {fileID: 11400000, guid: d6f54f13244871b40808c96222b3c128, type: 2}
   - {fileID: 11400000, guid: 016fca049d47dc34793712e786305ff3, type: 2}
+  tomatoGrowTime: 165
   lentil:
   - {fileID: 11400000, guid: a8208d6f707e44040ac0262d6e6d7a13, type: 2}
   - {fileID: 11400000, guid: 88126277d1fb08345a91932c9b2dffe4, type: 2}
   - {fileID: 11400000, guid: 7ed98a2a84df5f54495e57664424839b, type: 2}
+  lentilGrowTime: 135
+  wateringTimeReduction: 0.5
+  timePerTick: 12
   mainProgress: 0
   winText: {fileID: 1290855485}
   maxProgress: 10000
@@ -10815,7 +10821,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   globalLight: {fileID: 619394801}
-  dayDuration: 180
+  dayDuration: 300
   nightIntensity: 0.7
   dayIntensity: 1
   dayColor: {r: 1, g: 1, b: 1, a: 1}

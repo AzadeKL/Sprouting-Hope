@@ -58,15 +58,17 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     [Space]
     [Header("Plants")]
     public List<Tile> wheat;
-    [SerializeField] private float wheatGrowTime = 90f;
+    [SerializeField] private float wheatGrowTime;
     private Dictionary<Vector3Int, int> wheatPlants = new Dictionary<Vector3Int, int>();
     public List<Tile> tomato;
-    [SerializeField] private float tomatoGrowTime = 105f;
+    [SerializeField] private float tomatoGrowTime;
     private Dictionary<Vector3Int, int> tomatoPlants = new Dictionary<Vector3Int, int>();
     public List<Tile> lentil;
-    [SerializeField] private float lentilGrowTime = 75f;
+    [SerializeField] private float lentilGrowTime;
     private Dictionary<Vector3Int, int> lentilPlants = new Dictionary<Vector3Int, int>();
 
+    [SerializeField] private float wateringTimeReduction;
+    [SerializeField] private float timePerTick;
     private Dictionary<Vector3Int, float> growStartTime = new Dictionary<Vector3Int, float>();
     private Dictionary<Vector3Int, float> growTotalTime = new Dictionary<Vector3Int, float>();
 
@@ -327,7 +329,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             Debug.Log("Failed to water crop - grid location not initialized: " + gridPosition);
             return;
         }
-        if (growTotalTime.ContainsKey(gridPosition)) growTotalTime[gridPosition] /= 2;
+        if (growTotalTime.ContainsKey(gridPosition)) growTotalTime[gridPosition] *= wateringTimeReduction;
         SetDirtFieldState(gridPosition, DirtFieldState.Watered);
     }
 
@@ -664,9 +666,9 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     {
         if (!growTotalTime.ContainsKey(gridPosition)) growTotalTime.Add(gridPosition, 10f);
         // set growth time by plant type
-        if (wheatPlants.ContainsKey(gridPosition)) growTotalTime[gridPosition] = wheatGrowTime / 8f;
-        else if (tomatoPlants.ContainsKey(gridPosition)) growTotalTime[gridPosition] = tomatoGrowTime / 8f;
-        else if (lentilPlants.ContainsKey(gridPosition)) growTotalTime[gridPosition] = lentilGrowTime / 8f;
+        if (wheatPlants.ContainsKey(gridPosition)) growTotalTime[gridPosition] = wheatGrowTime / timePerTick;
+        else if (tomatoPlants.ContainsKey(gridPosition)) growTotalTime[gridPosition] = tomatoGrowTime / timePerTick;
+        else if (lentilPlants.ContainsKey(gridPosition)) growTotalTime[gridPosition] = lentilGrowTime / timePerTick;
 
         Debug.Log("Waiting for time to pass...");
         yield return new WaitUntil(() => time - growStartTime[gridPosition] >= growTotalTime[gridPosition]);
