@@ -406,6 +406,10 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
     private void Update()
     {
+        // Check if the game is paused
+        //Debugger.Log("Pause state: " + PauseMenu.instance.IsPaused());
+        if (PauseMenu.instance.IsPaused()) return;
+
         progressMeter.value = mainProgress;
         progressMeter.gameObject.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = mainProgress.ToString() + "/" + maxProgress.ToString();
         // if progress meets requirement, win the game (prompt to return to menu or continue playing?)

@@ -119,6 +119,10 @@ public class PauseMenu : MonoBehaviour
         isPaused = true;
     }
 
+    public bool IsPaused()
+    {
+        return isPaused; 
+    }
 
     public void LoadLevelWithSceneField(SceneField level)
     {
