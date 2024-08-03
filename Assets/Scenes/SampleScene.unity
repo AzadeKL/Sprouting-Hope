@@ -9159,12 +9159,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6419578533307305743, guid: 91f95978f20162e45893d20950b2cf5b, type: 3}
       propertyPath: upgradeEffect
-      value: 'Range improves by 20
+      value: 'Range improves by 2
 
-        Work time reduces by 1
+        Work time reduces by 0.2
 
-        Seed
-        change improves by 10'
+        Harvest
+        drop change improves by 3'
       objectReference: {fileID: 0}
     - target: {fileID: 6419578533307305743, guid: 91f95978f20162e45893d20950b2cf5b, type: 3}
       propertyPath: prevUpgrades.Array.size
@@ -9499,7 +9499,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6419578533307305743, guid: 91f95978f20162e45893d20950b2cf5b, type: 3}
       propertyPath: upgradeEffect
-      value: Decrease seed planting time
+      value: 'Range improves by 20
+
+        Work time reduces by 1
+
+        Seed
+        drop change improves by 10
+
+        (Passive}Instant seed planting time'
       objectReference: {fileID: 0}
     - target: {fileID: 6419578533307305743, guid: 91f95978f20162e45893d20950b2cf5b, type: 3}
       propertyPath: prevUpgrades.Array.size
@@ -10529,7 +10536,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6419578533307305743, guid: 91f95978f20162e45893d20950b2cf5b, type: 3}
       propertyPath: upgradeEffect
-      value: Decrease seed planting time
+      value: 'Range improves by 2
+
+        Work time reduces by 0.2
+
+        Seed
+        drop change improves by 3
+
+        (Passive}Decrease seed planting time'
       objectReference: {fileID: 0}
     - target: {fileID: 6419578533307305743, guid: 91f95978f20162e45893d20950b2cf5b, type: 3}
       propertyPath: prevUpgrades.Array.size
@@ -24939,8 +24953,8 @@ PrefabInstance:
 
         Work time reduces by 0.2
 
-        Seed
-        change improves by 3'
+        Harvest
+        drop change improves by 3'
       objectReference: {fileID: 0}
     - target: {fileID: 8452154618046965567, guid: 91f95978f20162e45893d20950b2cf5b, type: 3}
       propertyPath: m_Sprite
@@ -25202,12 +25216,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6419578533307305743, guid: 91f95978f20162e45893d20950b2cf5b, type: 3}
       propertyPath: upgradeEffect
-      value: 'Range improves by 5
+      value: 'Range improves by 2
 
-        Work time reduces by 0.5
+        Work time reduces by 0.2
 
-        Seed
-        change improves by 5'
+        Harvest
+        drop change improves by 3'
       objectReference: {fileID: 0}
     - target: {fileID: 6419578533307305743, guid: 91f95978f20162e45893d20950b2cf5b, type: 3}
       propertyPath: prevUpgrades.Array.size
@@ -29657,7 +29671,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6419578533307305743, guid: 91f95978f20162e45893d20950b2cf5b, type: 3}
       propertyPath: upgradeEffect
-      value: Decrease seed planting time
+      value: 'Range improves by 5
+
+        Work time reduces by 0.5
+
+        Seed
+        drop change improves by 5
+
+        (Passive}Decrease seed planting time'
       objectReference: {fileID: 0}
     - target: {fileID: 6419578533307305743, guid: 91f95978f20162e45893d20950b2cf5b, type: 3}
       propertyPath: prevUpgrades.Array.size
