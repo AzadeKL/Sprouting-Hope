@@ -96,8 +96,8 @@ public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void ChangeParentColor(float colorAlpha)
     {
         return;
-        var oldColor = lastParent.GetComponent<Image>().color;
+        /*var oldColor = lastParent.GetComponent<Image>().color;
         oldColor.a = colorAlpha;
-        lastParent.GetComponent<Image>().color = oldColor;
+        lastParent.GetComponent<Image>().color = oldColor;*/
     }
 }

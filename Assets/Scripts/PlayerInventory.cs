@@ -237,7 +237,6 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         {
             // set up starting inventory
             AddToInventory("Rusty Shovel");
-            AddToInventory("Wheat Seeds");
             AddToInventory("Rusty Watering Can");
             AddToInventory("Rusty Hoe");
 

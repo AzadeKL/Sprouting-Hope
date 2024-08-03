@@ -76,9 +76,9 @@ public class RestManager : MonoBehaviour
     public void FlyText()
     {
         return;
-        var result = Instantiate(floatingTextPrefab, player.transform.position + Vector3.up, Quaternion.identity);
+        /*var result = Instantiate(floatingTextPrefab, player.transform.position + Vector3.up, Quaternion.identity);
         FloatingText floatingText = result.GetComponent<FloatingText>();
-        floatingText.Initialize("You found 100 dollars under your hard pillow");
+        floatingText.Initialize("You found 100 dollars under your hard pillow");*/
 
     }
 }

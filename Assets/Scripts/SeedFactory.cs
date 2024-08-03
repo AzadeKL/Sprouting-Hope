@@ -5,7 +5,6 @@ public class SeedFactory : MonoBehaviour
 {
     [SerializeField] private List<GameObject> seeds;
     [SerializeField] private List<GameObject> crops;
-    [SerializeField] private int seedRandomSpawnUpperLimit = 5;
 
     void Awake()
     {
@@ -19,7 +18,9 @@ public class SeedFactory : MonoBehaviour
     {
         if (seeds.Count == 0) return;
 
-        var seedCount = Random.Range(1, Mathf.Max(2, seedRandomSpawnUpperLimit + itemModifier));
+        // weighted seed spawning
+        var seedCount = Random.Range(1, 2 + itemModifier);
+        if (Random.Range(0, 100) < 30) seedCount = Random.Range(1, 4 + itemModifier);
 
         for (int i = 0; i < seedCount; i++)
         {
@@ -51,10 +52,8 @@ public class SeedFactory : MonoBehaviour
                 {
                     Instantiate(crops[1], pos, Quaternion.identity);
                 }
-                // return seed from harvest
-                Instantiate(seeds[1], pos, Quaternion.identity);
-                // 1 in 100 chance to get another seed
-                if (Random.Range(0, 100) < 1) Instantiate(seeds[1], pos, Quaternion.identity);
+                // 25% chance to get seed
+                if (Random.Range(0, 100) < 25) Instantiate(seeds[1], pos, Quaternion.identity);
                 break;
             case "Lentils":
                 cropCount = Random.Range(1, 3 + itemModifier);
@@ -63,10 +62,8 @@ public class SeedFactory : MonoBehaviour
                 {
                     Instantiate(crops[2], pos, Quaternion.identity);
                 }
-                // return seed from harvest
-                Instantiate(seeds[2], pos, Quaternion.identity);
-                // 1 in 100 chance to get another seed
-                if (Random.Range(0, 100) < 1) Instantiate(seeds[2], pos, Quaternion.identity);
+                // 50% chance to get seed
+                if (Random.Range(0, 100) < 50) Instantiate(seeds[2], pos, Quaternion.identity);
                 break;
         }
 
