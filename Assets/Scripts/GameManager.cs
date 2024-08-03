@@ -37,6 +37,8 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     [Header("Player")]
     public GameObject player;
     public GameObject inventoryUI;
+    public Image inventoryUIHeaderImage;
+    public TextMeshProUGUI inventoryUIHeaderTextField;
     [SerializeField] Color normalInventory;
     [SerializeField] Color sellInventory;
     [SerializeField] Color giveInventory;
@@ -193,7 +195,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     void EnterInventoryMode()
     {
         inventoryUI.SetActive(true);
-        toolTip.SetActive(true);
+        // toolTip.SetActive(true);
     }
 
     void ExitInventoryMode()
@@ -202,6 +204,8 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         player.GetComponent<PlayerInventory>().sellMode = false;
         player.GetComponent<PlayerInventory>().giveMode = false;
         inventoryUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().color = normalInventory;
+        inventoryUIHeaderImage.color = normalInventory;
+        inventoryUIHeaderTextField.text = "Inventory";
         toolTip.SetActive(false);
     }
 
@@ -317,7 +321,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     private void PlowField(Vector3Int gridPosition)
     {
         SetDirtFieldState(gridPosition, DirtFieldState.Plowed);
-        seedFactory.CreateSeed(player.transform.position);
+        seedFactory.CreateSeed(gridPosition);
     }
 
     private void WaterField(Vector3Int gridPosition)
@@ -457,6 +461,8 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                             inventoryUI.SetActive(true);
                             player.GetComponent<PlayerInventory>().sellMode = true;
                             inventoryUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().color = sellInventory;
+                            inventoryUIHeaderImage.color = sellInventory;
+                            inventoryUIHeaderTextField.text = "Marketplace";
                         }
                         else
                         {
@@ -475,6 +481,8 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                             inventoryUI.SetActive(true);
                             player.GetComponent<PlayerInventory>().giveMode = true;
                             inventoryUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().color = giveInventory;
+                            inventoryUIHeaderImage.color = giveInventory;
+                            inventoryUIHeaderTextField.text = "Donate";
                         }
                         else
                         {
