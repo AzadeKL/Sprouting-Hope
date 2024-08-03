@@ -1123,8 +1123,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   notAllowedScenes:
-  - m_SceneAsset: {fileID: 102900000, guid: b17245320233f6e4993d5e3935013043, type: 3}
-    m_SceneName: OptionsMenu
   - m_SceneAsset: {fileID: 102900000, guid: 270096076f026df4091989c32444eaf1, type: 3}
     m_SceneName: MainMenu
   select_clip: {fileID: 8300000, guid: 802329af6fa40bf4187b5bde72b65c91, type: 3}

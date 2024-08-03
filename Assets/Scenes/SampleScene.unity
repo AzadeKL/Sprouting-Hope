@@ -9077,8 +9077,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 309788593}
-  - component: {fileID: 309788592}
   - component: {fileID: 309788594}
+  - component: {fileID: 309788592}
   m_Layer: 0
   m_Name: Music
   m_TagString: Untagged
@@ -9209,12 +9209,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84bea1dbbcac15445bc35ea8a6dc9789, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dayTimeMusic: {fileID: 8300000, guid: 3f8785b6da5b2624e8be1b5f0d943111, type: 3}
-  nightTimeMusic: {fileID: 8300000, guid: ce2adf77c6ba36e4bab4d526344dcc7b, type: 3}
   currentTime:
-    UseConstant: 0
+    UseConstant: 1
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 1b746dbb982bd2248b1207004338056f, type: 2}
+  musicDatas:
+  - {fileID: 11400000, guid: 6784f3ddeb30956459a07a176048a2c3, type: 2}
+  - {fileID: 11400000, guid: ebcc292a5bbf0ae438854e8389bb4922, type: 2}
+  dayToNightChangeTime: 6
+  nightToDayChangeTime: 18
+  defaultMusicVolume: 1
+  fadeOutTimer: 1
 --- !u!1 &322422309
 GameObject:
   m_ObjectHideFlags: 0
@@ -9562,9 +9567,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0.067307696
+    y: 0
     width: 1
-    height: 0.86538464
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
