@@ -23,8 +23,12 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     public GameObject helpUI;
     private Toggle helpToggle;
     [SerializeField] private string showHelpOnNewGameKey = "showHelpOnNewGame";
-    public float time;
 
+    [Header("Time")]
+    public float time;
+    [SerializeField] private float timePerTick;
+
+    [Space]
     [Header("Tilemap")]
     [SerializeField] private Tilemap grassMap;
     [SerializeField] private Tilemap farmLand;
@@ -57,6 +61,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
     [Space]
     [Header("Plants")]
+    [SerializeField] private float wateringTimeReduction;
     public List<Tile> wheat;
     [SerializeField] private float wheatGrowTime;
     private Dictionary<Vector3Int, int> wheatPlants = new Dictionary<Vector3Int, int>();
@@ -67,8 +72,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     [SerializeField] private float lentilGrowTime;
     private Dictionary<Vector3Int, int> lentilPlants = new Dictionary<Vector3Int, int>();
 
-    [SerializeField] private float wateringTimeReduction;
-    [SerializeField] private float timePerTick;
     private Dictionary<Vector3Int, float> growStartTime = new Dictionary<Vector3Int, float>();
     private Dictionary<Vector3Int, float> growTotalTime = new Dictionary<Vector3Int, float>();
 
