@@ -103,6 +103,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     };
     private bool disableTool = false;
     private bool isModalMode = false;
+    public bool escDisabled = false;
 
     private float itemRangeModifier = 0f;
     private float timer = 1f;
@@ -451,7 +452,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                             player.GetComponent<PlayerInventory>().sellMode = true;
                             inventoryUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().color = sellInventory;
                             inventoryUIHeaderImage.color = sellInventory;
-                            inventoryUIHeaderTextField.text = "Marketplace";
+                            inventoryUIHeaderTextField.text = "Fresh Food";
                         }
                         else
                         {
@@ -582,7 +583,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         }
 
         // esc key to either close existing windows or open pause menu
-        if (Input.GetKeyUp(KeyCode.Escape))
+        if (Input.GetKeyUp(KeyCode.Escape) && escDisabled == false)
         {
             if (isModalMode)
             {
