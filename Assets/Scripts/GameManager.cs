@@ -20,7 +20,10 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
     [SerializeField]
     private float farmingrange = 1f;
+
     public GameObject helpUI;
+    private Toggle helpToggle;
+    [SerializeField] private string showHelpOnNewGameKey = "showHelpOnNewGame";
 
     [Header("Tilemap")]
     [SerializeField] private Tilemap grassMap;
@@ -103,13 +106,17 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     private float timerModifierPercentage = 0f;
     private void Awake()
     {
+        helpToggle = helpUI.transform.GetChild(2).GetComponent<Toggle>();
         if (seedFactory == null) { seedFactory = GetComponent<SeedFactory>(); }
         progressMeter.maxValue = maxProgress;
     }
     private void Start()
     {
         toolTip = FindObjectOfType<Tooltip>(true).gameObject;
-        helpUI.SetActive(!SaveSystem.DataManager.instance.Load(this));
+        //Debug.Log("Current showHelpOnNewGameKey is set to: " + PlayerPrefs.GetInt(showHelpOnNewGameKey, 2));
+        bool showHelpOnNewGame = PlayerPrefs.GetInt(showHelpOnNewGameKey, 1) == 1;
+        helpToggle.isOn = showHelpOnNewGame;
+        helpUI.SetActive(showHelpOnNewGame && !SaveSystem.DataManager.instance.Load(this));
     }
     public void Save(GameData gameData)
     {
@@ -153,6 +160,12 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         }
 
         return true;
+    }
+
+    public void UpdateHelpPrefFromPopup()
+    {
+        //Debug.Log("Setting showHelpOnNewGameKey to: " + ((helpToggle.isOn) ? 1 : 0));
+        PlayerPrefs.SetInt(showHelpOnNewGameKey, (helpToggle.isOn) ? 1 : 0);
     }
 
     private static bool IsDirtFieldState(int state)
