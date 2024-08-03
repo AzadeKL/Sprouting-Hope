@@ -99,5 +99,6 @@ public class DayNightCycle : MonoBehaviour, SaveSystem.ISaveable
             dayCounter.Value++;
             //gameManager.UpdateCrops("Wheat");
         }
+        gameManager.time = (24 * dayCounter.Value) + time24HFormat.Value;
     }
 }

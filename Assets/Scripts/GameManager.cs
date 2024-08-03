@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     public GameObject helpUI;
     private Toggle helpToggle;
     [SerializeField] private string showHelpOnNewGameKey = "showHelpOnNewGame";
+    public float time;
 
     [Header("Tilemap")]
     [SerializeField] private Tilemap grassMap;
@@ -57,11 +58,17 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     [Space]
     [Header("Plants")]
     public List<Tile> wheat;
+    [SerializeField] private float wheatGrowTime = 90f;
     private Dictionary<Vector3Int, int> wheatPlants = new Dictionary<Vector3Int, int>();
     public List<Tile> tomato;
+    [SerializeField] private float tomatoGrowTime = 105f;
     private Dictionary<Vector3Int, int> tomatoPlants = new Dictionary<Vector3Int, int>();
     public List<Tile> lentil;
+    [SerializeField] private float lentilGrowTime = 75f;
     private Dictionary<Vector3Int, int> lentilPlants = new Dictionary<Vector3Int, int>();
+
+    private Dictionary<Vector3Int, float> growStartTime = new Dictionary<Vector3Int, float>();
+    private Dictionary<Vector3Int, float> growTotalTime = new Dictionary<Vector3Int, float>();
 
     [Space]
     [Header("Main Objective")]
@@ -320,7 +327,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             Debug.Log("Failed to water crop - grid location not initialized: " + gridPosition);
             return;
         }
-
+        if (growTotalTime.ContainsKey(gridPosition)) growTotalTime[gridPosition] /= 2;
         SetDirtFieldState(gridPosition, DirtFieldState.Watered);
     }
 
@@ -346,7 +353,8 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             SetDirtFieldState(gridPosition, DirtFieldState.Default);
             return;
         }
-
+        Debug.Log(time);
+        growStartTime.Add(gridPosition, time);
         farmPlants.SetTile(gridPosition, crop[growthState]);
         cropPlants.Add(gridPosition, growthState);
         string seedName = GetSeedName(cropName);
@@ -370,6 +378,8 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         }
 
         Debug.Log(cropName + " is growing!");
+        Debug.Log(time);
+        growStartTime[gridPosition] = time;
         if (cropPlants[gridPosition] < 2) ++cropPlants[gridPosition];
         farmPlants.SetTile(gridPosition, crop[cropPlants[gridPosition]]);
         StartCoroutine(GrowTime(gridPosition));
@@ -392,6 +402,8 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         }
 
         farmPlants.SetTile(gridPosition, null);
+        growStartTime.Remove(gridPosition);
+        growTotalTime.Remove(gridPosition);
         cropPlants.Remove(gridPosition);
         seedFactory.CreateCrop(gridPosition, cropName);
         Debug.Log("Harvested " + cropName);
@@ -650,17 +662,22 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
     IEnumerator GrowTime(Vector3Int gridPosition)
     {
-        float time = 10f;
+        if (!growTotalTime.ContainsKey(gridPosition)) growTotalTime.Add(gridPosition, 10f);
         // set growth time by plant type
-        if (wheatPlants.ContainsKey(gridPosition)) time = 20f;
-        else if (tomatoPlants.ContainsKey(gridPosition)) time = 20f;
-        else if (lentilPlants.ContainsKey(gridPosition)) time = 15f;
+        if (wheatPlants.ContainsKey(gridPosition)) growTotalTime[gridPosition] = wheatGrowTime / 8f;
+        else if (tomatoPlants.ContainsKey(gridPosition)) growTotalTime[gridPosition] = tomatoGrowTime / 8f;
+        else if (lentilPlants.ContainsKey(gridPosition)) growTotalTime[gridPosition] = lentilGrowTime / 8f;
 
-
+        Debug.Log("Waiting for time to pass...");
+        yield return new WaitUntil(() => time - growStartTime[gridPosition] >= growTotalTime[gridPosition]);
+        Debug.Log(time + " = " + growStartTime[gridPosition] + " + " + growTotalTime[gridPosition]);
+        /*
         // if watered, half the growth time
-        yield return new WaitForSeconds(time / 2);
+        yield return new WaitForSeconds(time / 2f);
         // otherwise wait the full cycle to grow
-        if (tileState[gridPosition] != 2) yield return new WaitForSeconds(time / 2);
+        if (tileState[gridPosition] != 2) yield return new WaitForSeconds(time / 2f);*/
+
+
         SetDirtFieldState(gridPosition, DirtFieldState.Plowed);
         UpdateCrops(gridPosition);
     }
