@@ -8683,11 +8683,11 @@ MonoBehaviour:
     house, sell some goods at Fresh Food for money, or you can give some of your
     goods to the truck that goes to Greenbuds Cares which helps feed the hungry.\r\nSometimes
     your animals give you some goods on a new day. So make sure to check them out.\r\n\r\nWASD
-    - Movement\r\nLeft Click - Use item\r\nF - Interact\r\n1-5, Mouse Wheel - Hotbar
-    Selection\r\nLight Click drag - Pick up half\r\nLeft Click drag - Pick up all\r\nRight
-    Click - Sell/Give 5 items\r\nShift + Right Click - Sell/Give 25 items\r\nShift
-    + Left Click -  Sell/Give full stack\r\nTab - Open Inventory\r\nH - Open/Close
-    info"
+    or arrow keys - Movement\r\nTab - Open Inventory\r\nF - Interact\r\n\n1-5, Mouse
+    Wheel - Hotbar Selection\r\nLeft Click - Use item\r\nRight Click - Sell/Give
+    5 items\r\nShift + Left Click -  Sell/Give full stack\r\nShift + Right Click
+    - Sell/Give 25 items\r\nLeft Click drag - Pick up all\r\nRight Click drag - Pick
+    up half\r\n\nH - Open/Close Help (this window)"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
