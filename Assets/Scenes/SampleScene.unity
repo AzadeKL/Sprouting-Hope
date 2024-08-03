@@ -28257,7 +28257,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  menuUp: 0
+  stop: 0
   animator: {fileID: 1822348393}
 --- !u!212 &1822348383
 SpriteRenderer:

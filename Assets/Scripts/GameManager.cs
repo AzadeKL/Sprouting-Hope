@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
@@ -100,6 +101,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         Vector3Int.down
     };
     private bool disableTool = false;
+    private bool isModalMode = false;
 
     private float itemRangeModifier = 0f;
     private float timer = 1f;
@@ -160,6 +162,47 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         }
 
         return true;
+    }
+
+    void SetIsModalMode(bool isSet)
+    {
+        isModalMode = isSet;
+        player.GetComponent<PlayerMovement>().stop = isSet;
+    }
+
+    void UpdateIsModalMode()
+    {
+        SetIsModalMode(helpUI.activeSelf || houseUI.activeSelf || chickenCoopUI.activeSelf || inventoryUI.activeSelf || storageUI.activeSelf || pigPenUI.activeSelf);
+        // If a modal mode is active, disable the pause menu, for the rest of the frame.
+        PauseMenu.instance.notAllowed = isModalMode;
+    }
+
+    void ExitModalMode()
+    {
+        ExitInventoryMode();
+        helpUI.SetActive(false);
+        pigPenUI.SetActive(false);
+        houseUI.SetActive(false);
+        storageUI.SetActive(false);
+        chickenCoopUI.SetActive(false);
+        player.GetComponent<PlayerInventory>().sellMode = false;
+        player.GetComponent<PlayerInventory>().giveMode = false;
+        SetIsModalMode(false);
+    }
+
+    void EnterInventoryMode()
+    {
+        inventoryUI.SetActive(true);
+        toolTip.SetActive(true);
+    }
+
+    void ExitInventoryMode()
+    {
+        inventoryUI.SetActive(false);
+        player.GetComponent<PlayerInventory>().sellMode = false;
+        player.GetComponent<PlayerInventory>().giveMode = false;
+        inventoryUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().color = normalInventory;
+        toolTip.SetActive(false);
     }
 
     public void UpdateHelpPrefFromPopup()
@@ -363,12 +406,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
     private void Update()
     {
-        var helpKeyPressed = Input.GetKeyUp(KeyCode.H);
-        if (helpKeyPressed)
-        {
-            helpUI.SetActive(!helpUI.activeSelf);
-        }
-
         progressMeter.value = mainProgress;
         progressMeter.gameObject.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = mainProgress.ToString() + "/" + maxProgress.ToString();
         // if progress meets requirement, win the game (prompt to return to menu or continue playing?)
@@ -394,12 +431,10 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             disableTool = true;
         }
 
-
-        if (houseUI.activeSelf || chickenCoopUI.activeSelf || inventoryUI.activeSelf || storageUI.activeSelf || pigPenUI.activeSelf) player.GetComponent<PlayerMovement>().menuUp = true;
-        else player.GetComponent<PlayerMovement>().menuUp = false;
+        UpdateIsModalMode();
 
         // interact with building or other interactable object
-        if (true)
+        if (!isModalMode || inventoryUI.activeSelf)
         {
 
             var interactWBuildingKeyPressed = Input.GetKeyUp(KeyCode.F);
@@ -518,53 +553,42 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             }
         }
 
+        // enable/disable help window only
+        if (Input.GetKeyUp(KeyCode.H))
+        {
+            if (isModalMode)
+            {
+                if (helpUI.activeSelf) helpUI.SetActive(false);
+            }
+            else
+            {
+                helpUI.SetActive(true);
+            }
+        }
+
+        // enable/disable inventory window
+        if (Input.GetKeyUp(KeyCode.Tab))
+        {
+            if (isModalMode)
+            {
+                // Inventory may be open with other menus - exit them all
+                if (inventoryUI.activeSelf) ExitModalMode();
+            }
+            else
+            {
+                EnterInventoryMode();
+            }
+        }
 
         // esc key to either close existing windows or open pause menu
         if (Input.GetKeyUp(KeyCode.Escape))
         {
-            if (player.GetComponent<PlayerMovement>().menuUp)
+            if (isModalMode)
             {
-                inventoryUI.SetActive(false);
-                pigPenUI.SetActive(false);
-                houseUI.SetActive(false);
-                storageUI.SetActive(false);
-                chickenCoopUI.SetActive(false);
-                player.GetComponent<PlayerInventory>().sellMode = false;
-                player.GetComponent<PlayerInventory>().giveMode = false;
-                inventoryUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().color = normalInventory;
+                ExitModalMode();
             }
-            else
-            {
-                // open/close pause menu here
-            }
+            // The PauseMenu handles Esc key-presses independently.
         }
-        // enable/disable inventory window only
-        if (Input.GetKeyUp(KeyCode.Tab))
-        {
-            if (!player.GetComponent<PlayerMovement>().menuUp) inventoryUI.SetActive(true);
-            else
-            {
-                CloseUIPanels();
-            }
-            if (!inventoryUI.activeSelf) toolTip.SetActive(false);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (player.GetComponent<PlayerMovement>().menuUp == true)
-            {
-                PauseMenu.instance.notAllowed = true;
-                CloseUIPanels();
-                if (!inventoryUI.activeSelf) toolTip.SetActive(false);
-            }
-        }
-
-        if (Input.GetKeyUp(KeyCode.Escape))
-        {
-            Invoke(nameof(EnablePauseMenu), 0.2f);
-
-        }
-
 
         // left click to interact with tool to tile
         if (Input.GetMouseButton(0) && disableTool == false)
@@ -618,18 +642,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         timer += Time.deltaTime;
     }
 
-    private void CloseUIPanels()
-    {
-        inventoryUI.SetActive(false);
-        pigPenUI.SetActive(false);
-        houseUI.SetActive(false);
-        storageUI.SetActive(false);
-        chickenCoopUI.SetActive(false);
-        player.GetComponent<PlayerInventory>().sellMode = false;
-        player.GetComponent<PlayerInventory>().giveMode = false;
-        inventoryUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().color = normalInventory;
-    }
-
     IEnumerator GrowTime(Vector3Int gridPosition)
     {
         float time = 10f;
@@ -646,12 +658,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         SetDirtFieldState(gridPosition, DirtFieldState.Plowed);
         UpdateCrops(gridPosition);
     }
-
-    private void EnablePauseMenu()
-    {
-        PauseMenu.instance.notAllowed = false;
-    }
-
 
     private bool CheckTimer()
     {
