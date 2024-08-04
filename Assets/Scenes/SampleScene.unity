@@ -10697,7 +10697,7 @@ MonoBehaviour:
   inventoryUI: {fileID: 1579636895}
   inventoryUIHeaderImage: {fileID: 1430384675}
   inventoryUIHeaderTextField: {fileID: 737634797}
-  normalInventory: {r: 0.9176471, g: 0.60784316, b: 0.23137255, a: 1}
+  normalInventory: {r: 1, g: 1, b: 1, a: 1}
   sellInventory: {r: 0.83921576, g: 0.10196079, b: 0.08235294, a: 1}
   giveInventory: {r: 0.15275212, g: 0.8392157, b: 0.08235293, a: 1}
   playerCenter: {fileID: 1881004798}
