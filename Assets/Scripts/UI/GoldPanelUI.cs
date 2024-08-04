@@ -12,6 +12,6 @@ public class GoldPanelUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        textMeshProUGUI.text = "Gold: $" + player.money.ToString();
+        textMeshProUGUI.text = "" + player.money.ToString();
     }
 }
