@@ -97,7 +97,7 @@ public class DayNightCycle : MonoBehaviour, SaveSystem.ISaveable
         {
             cycleTimer = 0f;
             dayCounter.Value++;
-            //gameManager.UpdateCrops("Wheat");
+            gameManager.UpdateAnimals();
         }
         gameManager.time = (24 * dayCounter.Value) + time24HFormat.Value;
     }

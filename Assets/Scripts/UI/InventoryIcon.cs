@@ -109,8 +109,8 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
                 break;
             case "Chicken":
                 GetComponent<Image>().sprite = imageicons[15];
-                sellValue = 500;
-                giveValue = 600;
+                sellValue = 80;
+                giveValue = 120;
                 break;
             case "Pig":
                 GetComponent<Image>().sprite = imageicons[16];
@@ -305,16 +305,33 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
                             otherElement.SetParent(lastParent, true);
                             otherElement.GetComponent<RectTransform>().localPosition = Vector3.zero;
                         }
+
                         lastParent = result.gameObject.transform;
 
+                    }
+                    // if putting chicken in chicken coop, or pig in pic pen
+                    else if ((result.gameObject.name.Contains("ChickenCell") && item == "Chicken") || (result.gameObject.name.Contains("PigPen") && item == "Pig"))
+                    {
+                        player.GetComponent<PlayerInventory>().AddAnimal(item, int.Parse(quantity.text));
+                        // if animal already exists inside enclosure, delete currect icon
+                        if (result.gameObject.transform.childCount > 0)
+                        {
+                            Destroy(this.gameObject);
+                        }
+                        lastParent = result.gameObject.transform.parent.GetChild(0);
                     }
                 }
             }
             transform.SetParent(lastParent, true);
             rectTransform.localPosition = Vector3.zero;
-            player.GetComponent<PlayerInventory>().inventory.Add(item, int.Parse(quantity.text));
-            player.GetComponent<PlayerInventory>().inventoryIndex.Add(item);
-            player.GetComponent<PlayerInventory>().inventoryIcons.Add(item, this.gameObject);
+
+            // if placed in inventory add back item to inventory dicts
+            if (lastParent.gameObject.name.Contains("GridCell"))
+            {
+                player.GetComponent<PlayerInventory>().inventory.Add(item, int.Parse(quantity.text));
+                player.GetComponent<PlayerInventory>().inventoryIndex.Add(item);
+                player.GetComponent<PlayerInventory>().inventoryIcons.Add(item, this.gameObject);
+            }
         }
 
     }

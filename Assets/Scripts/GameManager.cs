@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
     [Space]
     [SerializeField] private SeedFactory seedFactory;
+
     [Space]
     [Header("Player")]
     public GameObject player;
@@ -685,6 +686,36 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
         SetDirtFieldState(gridPosition, DirtFieldState.Plowed);
         UpdateCrops(gridPosition);
+    }
+
+    public void UpdateAnimals()
+    {
+        // if at least one chicken in coop, attempt at egg production
+        if (player.GetComponent<PlayerInventory>().chickenCoopInventory["Chicken"] > 0)
+        {
+            Debug.Log("Making more eggs!");
+            // if no eggs, make new icon for eggs
+            if (player.GetComponent<PlayerInventory>().chickenCoopInventory["Egg"] == 0)
+            {
+                GameObject newIcon = Instantiate(player.GetComponent<PlayerInventory>().inventoryIcon, chickenCoopUI.transform.GetChild(1).GetChild(1));
+                player.GetComponent<PlayerInventory>().StretchAndFill(newIcon.GetComponent<RectTransform>());
+                newIcon.GetComponent<InventoryIcon>().SetIcon("Egg");
+                newIcon.GetComponent<InventoryIcon>().UpdateQuantity(0);
+            }
+            // make 0-[# of chickens] eggs
+            int newEggs = UnityEngine.Random.Range(0, player.GetComponent<PlayerInventory>().chickenCoopInventory["Chicken"]);
+            player.GetComponent<PlayerInventory>().chickenCoopInventory["Chicken"] += newEggs;
+            chickenCoopUI.transform.GetChild(1).GetChild(1).GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(player.GetComponent<PlayerInventory>().chickenCoopInventory["Chicken"]);
+            
+        }
+        // if at least 2 pigs, attempt at pig production
+        if (player.GetComponent<PlayerInventory>().pigPenInventory > 1)
+        {
+            // make 0-[half total pigs] more pigs
+            int newPigs = UnityEngine.Random.Range(0, (int)Mathf.Floor(player.GetComponent<PlayerInventory>().pigPenInventory / 2));
+            player.GetComponent<PlayerInventory>().pigPenInventory += newPigs;
+            pigPenUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(player.GetComponent<PlayerInventory>().pigPenInventory);
+        }
     }
 
     IEnumerator DefaultSoil(Vector3Int gridPosition)

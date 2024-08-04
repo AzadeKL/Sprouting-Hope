@@ -33,11 +33,16 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
     private Dictionary<Vector3Int, GameObject> grids;
 
     [SerializeField] private GameObject inventoryGrid;
-    [SerializeField] private GameObject inventoryIcon;
+    public GameObject inventoryIcon;
     [SerializeField] private GameObject handIcon;
     [SerializeField] private PlayerTool playerTool;
 
     [SerializeField] private GameEvent handChanged;
+
+    [Space]
+    [Header("AnimalUI")]
+    public Dictionary<string, int> chickenCoopInventory = new Dictionary<string, int>{{"Chicken", 0}, {"Egg", 0}};
+    public int pigPenInventory = 0;
 
     private GameObject toolTip;//Ui tool tip
     public void Save(GameData gameData)
@@ -91,6 +96,21 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         ChangeHandItem(handItem);
 
         return true;
+    }
+
+    public void AddAnimal(string animal, int amount)
+    {
+        Debug.Log("Adding Animal");
+        switch(animal)
+        {
+            case "Chicken":
+            Debug.Log("Added Chicken");
+                chickenCoopInventory["Chicken"] = (int)Mathf.Max(0, chickenCoopInventory["Chicken"] + amount);
+                break;
+            case "Pig":
+                pigPenInventory = (int)Mathf.Max(0, pigPenInventory + amount);
+                break;
+        }
     }
 
     public void AddToInventory(string Item, int Count = 1)
