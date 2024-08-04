@@ -99,9 +99,31 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         return true;
     }
 
+    // when loading the game utilize variables to recreate the icons for each animal pen
     private void LoadAnimals()
     {
+        if (chickenCoopInventory["Chicken"] > 0)
+        {
+            GameObject newIcon = Instantiate(inventoryIcon, GameObject.Find("ChickenCell").transform.parent.GetChild(0));
+            StretchAndFill(newIcon.GetComponent<RectTransform>());
+            newIcon.GetComponent<InventoryIcon>().SetIcon("Chicken");
+            newIcon.GetComponent<InventoryIcon>().UpdateQuantity(chickenCoopInventory["Chicken"]);
+        }
+        if (chickenCoopInventory["Egg"] > 0)
+        {
+            GameObject newIcon = Instantiate(inventoryIcon, GameObject.Find("ChickenCell").transform.parent.GetChild(1));
+            StretchAndFill(newIcon.GetComponent<RectTransform>());
+            newIcon.GetComponent<InventoryIcon>().SetIcon("Egg");
+            newIcon.GetComponent<InventoryIcon>().UpdateQuantity(chickenCoopInventory["Egg"]);
+        }
         
+        if (pigPenInventory > 0)
+        {
+            GameObject newIcon = Instantiate(inventoryIcon, GameObject.Find("PigCell").transform);
+            StretchAndFill(newIcon.GetComponent<RectTransform>());
+            newIcon.GetComponent<InventoryIcon>().SetIcon("Pig");
+            newIcon.GetComponent<InventoryIcon>().UpdateQuantity(chickenCoopInventory["Pig"]);
+        }
     }
 
     public void AddAnimal(string animal, int amount)
