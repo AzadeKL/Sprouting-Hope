@@ -105,18 +105,18 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
             break;
             case "Egg":
             GetComponent<Image>().sprite = imageicons[14];
-            sellValue = 200;
-            giveValue = 100;
+            sellValue = 50;
+            giveValue = 150;
             break;
             case "Chicken":
             GetComponent<Image>().sprite = imageicons[15];
-            sellValue = 80;
-            giveValue = 120;
+            sellValue = 50;
+            giveValue = 250;
             break;
             case "Pig":
             GetComponent<Image>().sprite = imageicons[16];
-            sellValue = 700;
-            giveValue = 700;
+            sellValue = 125;
+            giveValue = 350;
             break;
             case "Cow":
             GetComponent<Image>().sprite = imageicons[17];

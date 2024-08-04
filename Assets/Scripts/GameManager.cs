@@ -97,7 +97,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     [SerializeField] private GameObject storageUI;
 
     [SerializeField] private GameObject EggPrefab;
-    [SerializeField] private int eggCount = 5;
 
 
     private GameObject toolTip;//UI tooltip 
@@ -335,6 +334,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         }
         if (growTotalTime.ContainsKey(gridPosition)) growTotalTime[gridPosition] *= wateringTimeReduction;
         SetDirtFieldState(gridPosition, DirtFieldState.Watered);
+
     }
 
     private void AddCrop(string cropName, Vector3Int gridPosition, int growthState = 0)
@@ -374,12 +374,10 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         string cropName = "";
         List<Tile> crop = null;
         Dictionary<Vector3Int, int> cropPlants = null;
-        eggCount = Mathf.Min(eggCount + 5, 10);
-        //buildings.transform.DOScale(Vector3.one * 1.05f, 0.3f).SetLoops(2, LoopType.Yoyo);
         if (!GetCropVarsAtGridPosition(gridPosition, ref cropName, ref crop, ref cropPlants))
         {
             Debug.Log("No crop to update at position: " + gridPosition);
-            SetDirtFieldState(gridPosition, DirtFieldState.Default);
+            SetDirtFieldState(gridPosition, (DirtFieldState) Mathf.Max(0, tileState[gridPosition] - 1));
             return;
         }
 
@@ -388,7 +386,8 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         growStartTime[gridPosition] = time;
         if (cropPlants[gridPosition] < 2) ++cropPlants[gridPosition];
         farmPlants.SetTile(gridPosition, crop[cropPlants[gridPosition]]);
-        StartCoroutine(GrowTime(gridPosition));
+        if (cropPlants[gridPosition] < 2) StartCoroutine(GrowTime(gridPosition));
+        else StartCoroutine(DefaultSoil(gridPosition));
     }
 
     private void HarvestCrop(Vector3Int gridPosition)
@@ -668,7 +667,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
     IEnumerator GrowTime(Vector3Int gridPosition)
     {
-        if (!growTotalTime.ContainsKey(gridPosition)) growTotalTime.Add(gridPosition, 10f);
+        if (!growTotalTime.ContainsKey(gridPosition)) growTotalTime.Add(gridPosition, 60f);
         // set growth time by plant type
         if (wheatPlants.ContainsKey(gridPosition)) growTotalTime[gridPosition] = wheatGrowTime / timePerTick;
         else if (tomatoPlants.ContainsKey(gridPosition)) growTotalTime[gridPosition] = tomatoGrowTime / timePerTick;
@@ -677,11 +676,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         Debug.Log("Waiting for time to pass...");
         yield return new WaitUntil(() => time - growStartTime[gridPosition] >= growTotalTime[gridPosition]);
         Debug.Log(time + " = " + growStartTime[gridPosition] + " + " + growTotalTime[gridPosition]);
-        /*
-        // if watered, half the growth time
-        yield return new WaitForSeconds(time / 2f);
-        // otherwise wait the full cycle to grow
-        if (tileState[gridPosition] != 2) yield return new WaitForSeconds(time / 2f);*/
 
 
         SetDirtFieldState(gridPosition, DirtFieldState.Plowed);
@@ -706,7 +700,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             int newEggs = UnityEngine.Random.Range(0, player.GetComponent<PlayerInventory>().chickenCoopInventory["Chicken"]);
             player.GetComponent<PlayerInventory>().chickenCoopInventory["Chicken"] += newEggs;
             chickenCoopUI.transform.GetChild(1).GetChild(1).GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(player.GetComponent<PlayerInventory>().chickenCoopInventory["Chicken"]);
-            
+
         }
         // if at least 2 pigs, attempt at pig production
         if (player.GetComponent<PlayerInventory>().pigPenInventory > 1)
@@ -720,11 +714,12 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
     IEnumerator DefaultSoil(Vector3Int gridPosition)
     {
-        float time = 10f;
+        float time = 60f;
         yield return new WaitForSeconds(time);
-        if (!wheatPlants.ContainsKey(gridPosition) && !tomatoPlants.ContainsKey(gridPosition) && !lentilPlants.ContainsKey(gridPosition))
+        if (!wheatPlants.ContainsKey(gridPosition) && !tomatoPlants.ContainsKey(gridPosition) && !lentilPlants.ContainsKey(gridPosition) && !farmPlants.HasTile(gridPosition))
         {
-            SetDirtFieldState(gridPosition, DirtFieldState.Default);
+            SetDirtFieldState(gridPosition, (DirtFieldState) Mathf.Max(0, tileState[gridPosition] - 1));
+            StartCoroutine(DefaultSoil(gridPosition));
         }
     }
 

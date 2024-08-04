@@ -99,6 +99,11 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         return true;
     }
 
+    private void LoadAnimals()
+    {
+        
+    }
+
     public void AddAnimal(string animal, int amount)
     {
         Debug.Log("Adding Animal");
