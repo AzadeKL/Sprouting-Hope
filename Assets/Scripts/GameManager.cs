@@ -159,7 +159,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             int fieldState = Convert.ToInt32(entry[1]);
             if (IsDirtFieldState(fieldState))
             {
-                SetDirtFieldState(gridPosition, (DirtFieldState)fieldState);
+                SetDirtFieldState(gridPosition, (DirtFieldState) fieldState);
             }
             else
             {
@@ -229,7 +229,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
     private static bool IsDirtFieldState(int state)
     {
-        return (state >= 0) && (state < (int)DirtFieldState.NumDirtFieldStates);
+        return (state >= 0) && (state < (int) DirtFieldState.NumDirtFieldStates);
     }
 
     private static string GetSeedName(string cropName)
@@ -247,21 +247,21 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         switch (cropName)
         {
             case "Wheat":
-                crop = wheat;
-                cropPlants = wheatPlants;
-                break;
+            crop = wheat;
+            cropPlants = wheatPlants;
+            break;
             case "Tomato":
-                crop = tomato;
-                cropPlants = tomatoPlants;
-                break;
+            crop = tomato;
+            cropPlants = tomatoPlants;
+            break;
             case "Lentils":
-                crop = lentil;
-                cropPlants = lentilPlants;
-                break;
+            crop = lentil;
+            cropPlants = lentilPlants;
+            break;
             default:
-                crop = null;
-                cropPlants = null;
-                break;
+            crop = null;
+            cropPlants = null;
+            break;
         }
 
         return crop != null;
@@ -292,26 +292,26 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         switch (dirtFieldState)
         {
             case DirtFieldState.Default:
-                fieldType = defaultField;
-                break;
+            fieldType = defaultField;
+            break;
             case DirtFieldState.Plowed:
-                fieldType = plowedField;
-                break;
+            fieldType = plowedField;
+            break;
             case DirtFieldState.Watered:
-                fieldType = wateredField;
-                break;
+            fieldType = wateredField;
+            break;
             default:
-                Debug.Log("Unrecognized dirt field state(" + dirtFieldState + ") at position: " + gridPosition);
-                return;
+            Debug.Log("Unrecognized dirt field state(" + dirtFieldState + ") at position: " + gridPosition);
+            return;
         }
-        Debug.Log("Set dirt field state at position: " + gridPosition + ", dirtFieldState: " + dirtFieldState + " = " + (int)dirtFieldState);
+        Debug.Log("Set dirt field state at position: " + gridPosition + ", dirtFieldState: " + dirtFieldState + " = " + (int) dirtFieldState);
         if (!tileState.ContainsKey(gridPosition))
         {
-            tileState.Add(gridPosition, (int)dirtFieldState);
+            tileState.Add(gridPosition, (int) dirtFieldState);
         }
         else
         {
-            tileState[gridPosition] = (int)dirtFieldState;
+            tileState[gridPosition] = (int) dirtFieldState;
         }
         farmLand.SetTile(gridPosition, fieldType);
     }
@@ -633,29 +633,29 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                         case "Bronze Shovel":
                         case "Silver Shovel":
                         case "Gold Shovel":
-                            PlowField(gridPosition);
-                            StartCoroutine(DefaultSoil(gridPosition));
-                            break;
+                        PlowField(gridPosition);
+                        StartCoroutine(DefaultSoil(gridPosition));
+                        break;
                         // if hoe equipped, harvest
                         case "Rusty Hoe":
                         case "Bronze Hoe":
                         case "Silver Hoe":
                         case "Gold Hoe":
-                            HarvestCrop(gridPosition);
-                            break;
+                        HarvestCrop(gridPosition);
+                        break;
                         // if watering can equipped, water soil for faster growth
                         case "Rusty Watering Can":
                         case "Bronze Watering Can":
                         case "Silver Watering Can":
                         case "Gold Watering Can":
-                            WaterField(gridPosition);
-                            break;
+                        WaterField(gridPosition);
+                        break;
                         // if seeds equipped, plant corresponding seedling
                         case "Wheat Seeds":
                         case "Tomato Seeds":
                         case "Lentils Seeds":
-                            AddCrop(GetCropName(handItem), gridPosition);
-                            break;
+                        AddCrop(GetCropName(handItem), gridPosition);
+                        break;
                     }
             }
         }
@@ -706,9 +706,9 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         if (player.GetComponent<PlayerInventory>().pigPenInventory > 1)
         {
             // make 0-[half total pigs] more pigs
-            int newPigs = UnityEngine.Random.Range(0, (int)Mathf.Floor(player.GetComponent<PlayerInventory>().pigPenInventory / 2));
+            int newPigs = UnityEngine.Random.Range(0, ((int) Mathf.Floor(player.GetComponent<PlayerInventory>().pigPenInventory / 2) + 1));
             player.GetComponent<PlayerInventory>().pigPenInventory += newPigs;
-            pigPenUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(player.GetComponent<PlayerInventory>().pigPenInventory);
+            pigPenUI.transform.GetChild(1).GetChild(0).GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(player.GetComponent<PlayerInventory>().pigPenInventory);
         }
     }
 

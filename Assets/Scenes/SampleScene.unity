@@ -8836,7 +8836,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 347
-  m_Sprite: {fileID: -602895318, guid: c98f5c8575993c04c8d35fef0eb56c7e, type: 3}
+  m_Sprite: {fileID: -15889879, guid: 6653693f8a3731f4cba552ff5c5e2399, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -8986,6 +8986,90 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 211653380}
   m_CullTransparentMesh: 1
+--- !u!1 &236078017
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 236078019}
+  - component: {fileID: 236078018}
+  m_Layer: 0
+  m_Name: Chickens with Pig Faces_0
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!212 &236078018
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 236078017}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 5
+  m_Sprite: {fileID: -15889879, guid: 6653693f8a3731f4cba552ff5c5e2399, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 2, y: 2}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!4 &236078019
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 236078017}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -12.35, y: -5.72, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &241875308
 GameObject:
   m_ObjectHideFlags: 0
@@ -9224,11 +9308,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6419578533307305743, guid: 91f95978f20162e45893d20950b2cf5b, type: 3}
       propertyPath: cost
-      value: 200
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 6419578533307305743, guid: 91f95978f20162e45893d20950b2cf5b, type: 3}
       propertyPath: item
-      value: 150
+      value: Pig
       objectReference: {fileID: 0}
     - target: {fileID: 6419578533307305743, guid: 91f95978f20162e45893d20950b2cf5b, type: 3}
       propertyPath: tool
@@ -9236,7 +9320,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6419578533307305743, guid: 91f95978f20162e45893d20950b2cf5b, type: 3}
       propertyPath: upgradeEffect
-      value: (Missing pig sprite)
+      value: Disguised Chicken aka Jeremy Wing
       objectReference: {fileID: 0}
     - target: {fileID: 6419578533307305743, guid: 91f95978f20162e45893d20950b2cf5b, type: 3}
       propertyPath: prevUpgrades.Array.size
@@ -9257,7 +9341,7 @@ PrefabInstance:
     - target: {fileID: 8452154618046965567, guid: 91f95978f20162e45893d20950b2cf5b, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 1306622955, guid: 8e8e2bb33ac8bf448b5ded13cf9b6526, type: 3}
+      objectReference: {fileID: -15889879, guid: 6653693f8a3731f4cba552ff5c5e2399, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9372,7 +9456,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &297240883
 Transform:
   m_ObjectHideFlags: 0
@@ -9889,7 +9973,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &344506394
 Transform:
   m_ObjectHideFlags: 0
@@ -22952,7 +23036,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &852517474
 Transform:
   m_ObjectHideFlags: 0
@@ -23165,7 +23249,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 347
-  m_Sprite: {fileID: 539949948, guid: c98f5c8575993c04c8d35fef0eb56c7e, type: 3}
+  m_Sprite: {fileID: -15889879, guid: 6653693f8a3731f4cba552ff5c5e2399, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -25956,7 +26040,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1210666266
 Transform:
   m_ObjectHideFlags: 0
@@ -26174,13 +26258,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1288357988}
+  - component: {fileID: 1288357989}
   m_Layer: 0
-  m_Name: ChickenSpawns
+  m_Name: PigSpawns
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1288357988
 Transform:
   m_ObjectHideFlags: 0
@@ -26200,6 +26285,24 @@ Transform:
   - {fileID: 852517474}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1288357989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1288357987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d77fd6df1d0a4a84dacaa91f6267c2a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pigSprites:
+  - {fileID: 1210666264}
+  - {fileID: 297240881}
+  - {fileID: 344506392}
+  - {fileID: 852517472}
+  playerInventory: {fileID: 1822348387}
 --- !u!1 &1289161570
 GameObject:
   m_ObjectHideFlags: 0
@@ -26273,7 +26376,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 347
-  m_Sprite: {fileID: 1748777579, guid: c98f5c8575993c04c8d35fef0eb56c7e, type: 3}
+  m_Sprite: {fileID: -15889879, guid: 6653693f8a3731f4cba552ff5c5e2399, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -28023,6 +28126,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 555502811}
   - {fileID: 1579636896}
   - {fileID: 1779212549}
   - {fileID: 2024473585}
@@ -28033,7 +28137,6 @@ RectTransform:
   - {fileID: 1848548497}
   - {fileID: 1530090785}
   - {fileID: 1108055810}
-  - {fileID: 555502811}
   - {fileID: 354474629}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -28059,8 +28162,8 @@ MonoBehaviour:
   gameManager: {fileID: 548942054}
   RestUIPanelMain: {fileID: 1043249260}
   volumeEffect: {fileID: 768206396}
-  restTimer: 60
-  speed: 30
+  restTimer: 120
+  speed: 60
 --- !u!1001 &1462343026
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -33272,7 +33375,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 133
-  m_Sprite: {fileID: 1738804459, guid: c98f5c8575993c04c8d35fef0eb56c7e, type: 3}
+  m_Sprite: {fileID: -15889879, guid: 6653693f8a3731f4cba552ff5c5e2399, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
   m_FlipY: 0
@@ -39751,6 +39854,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2914181483992069166, guid: ff0bb2ebff9c36b45ba820ed5995fef3, type: 3}
+      propertyPath: inventoryChanged
+      value: 
+      objectReference: {fileID: 11400000, guid: 781bb007457116a4bae988a082a9f33a, type: 2}
     - target: {fileID: 2971087821661240201, guid: ff0bb2ebff9c36b45ba820ed5995fef3, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -42386,3 +42493,4 @@ SceneRoots:
   - {fileID: 1652622013}
   - {fileID: 768206397}
   - {fileID: 1288357988}
+  - {fileID: 236078019}

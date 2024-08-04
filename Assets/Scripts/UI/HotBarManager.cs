@@ -79,10 +79,15 @@ public class HotBarManager : MonoBehaviour
     public void OnInventoryChanged()
     {
         GetIcons();
-        foreach (var item in hotbarSelectedImages)
+
+        if (playerInventory.hotbar[playerInventory.hotbarIndex].transform.childCount == 0)
         {
-            item.enabled = false;
+            foreach (var item in hotbarSelectedImages)
+            {
+                item.enabled = false;
+            }
         }
+
     }
 
 }

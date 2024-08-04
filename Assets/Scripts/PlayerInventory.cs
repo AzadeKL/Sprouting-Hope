@@ -116,7 +116,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             newIcon.GetComponent<InventoryIcon>().SetIcon("Egg");
             newIcon.GetComponent<InventoryIcon>().UpdateQuantity(chickenCoopInventory["Egg"]);
         }
-        
+
         if (pigPenInventory > 0)
         {
             GameObject newIcon = Instantiate(inventoryIcon, GameObject.Find("PigCell").transform);
@@ -303,7 +303,12 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 
     void Update()
     {
+        //DELETE TODO For testing  only
 
+        if (Input.GetKeyUp(KeyCode.F1))
+        {
+            money += 1000;
+        }
 
         // scroll wheel down the hotbar
         if (Input.GetAxis("Mouse ScrollWheel") > 0)

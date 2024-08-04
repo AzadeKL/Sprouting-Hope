@@ -7,6 +7,7 @@ using UserInterfaceGridLayout;
 
 public class InventoryPanelUI : MonoBehaviour
 {
+    [SerializeField] private GameEvent inventoryChanged;
 
     private List<Transform> tabPanels;
     private List<RectTransform> buttonsRectTr;
@@ -47,6 +48,7 @@ public class InventoryPanelUI : MonoBehaviour
         {
             tr.GetComponentInChildren<Button>().onClick.RemoveAllListeners();
         }
+        inventoryChanged.TriggerEvent();
     }
 
 
