@@ -122,7 +122,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             GameObject newIcon = Instantiate(inventoryIcon, GameObject.Find("PigCell").transform);
             StretchAndFill(newIcon.GetComponent<RectTransform>());
             newIcon.GetComponent<InventoryIcon>().SetIcon("Pig");
-            newIcon.GetComponent<InventoryIcon>().UpdateQuantity(chickenCoopInventory["Pig"]);
+            newIcon.GetComponent<InventoryIcon>().UpdateQuantity(pigPenInventory);
         }
     }
 
