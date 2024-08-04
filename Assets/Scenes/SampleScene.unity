@@ -8936,12 +8936,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 55.9
+  m_fontSize: 42.32
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMin: 12
+  m_fontSizeMax: 42.32
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -10140,6 +10140,10 @@ PrefabInstance:
     - target: {fileID: 4187659777415456145, guid: 2f9d5fb8cd5073d4ebc067af200578f2, type: 3}
       propertyPath: m_Name
       value: Tab Button Panel (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4187659777415456145, guid: 2f9d5fb8cd5073d4ebc067af200578f2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4876299359557918751, guid: 2f9d5fb8cd5073d4ebc067af200578f2, type: 3}
       propertyPath: m_text
@@ -11707,23 +11711,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.77647066, g: 0.46274513, b: 0.121568635, a: 1}
+  m_Color: {r: 0.8396226, g: 0.5721121, b: 0.2811944, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: -719064265, guid: be17b4b1b19b19b49b4583be74103ef5, type: 3}
   m_Type: 1
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 0.51
 --- !u!222 &776052171
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -24742,14 +24746,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.495283, b: 0.495283, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: -719064265, guid: f62df9fa2d718d24ca75a43ae1e6aa95, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -27346,14 +27350,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.43614274, g: 0.9339623, b: 0.54504514, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: -719064265, guid: f62df9fa2d718d24ca75a43ae1e6aa95, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -32230,12 +32234,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 65.2
+  m_fontSize: 42.32
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMin: 12
+  m_fontSizeMax: 42.32
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -40376,6 +40380,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1449948599}
     m_Modifications:
+    - target: {fileID: 820139772700620052, guid: c6871c91753919f48b6ab94a7b555945, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -1.5099983
+      objectReference: {fileID: 0}
     - target: {fileID: 2002622844308943507, guid: c6871c91753919f48b6ab94a7b555945, type: 3}
       propertyPath: player
       value: 
@@ -40463,6 +40471,26 @@ PrefabInstance:
     - target: {fileID: 7814411012446614431, guid: c6871c91753919f48b6ab94a7b555945, type: 3}
       propertyPath: m_Name
       value: Time Panel
+      objectReference: {fileID: 0}
+    - target: {fileID: 8838020639671637623, guid: c6871c91753919f48b6ab94a7b555945, type: 3}
+      propertyPath: m_fontSize
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 8838020639671637623, guid: c6871c91753919f48b6ab94a7b555945, type: 3}
+      propertyPath: m_fontSizeMax
+      value: 22.53
+      objectReference: {fileID: 0}
+    - target: {fileID: 8838020639671637623, guid: c6871c91753919f48b6ab94a7b555945, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 8838020639671637623, guid: c6871c91753919f48b6ab94a7b555945, type: 3}
+      propertyPath: m_characterSpacing
+      value: 22.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8838020639671637623, guid: c6871c91753919f48b6ab94a7b555945, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

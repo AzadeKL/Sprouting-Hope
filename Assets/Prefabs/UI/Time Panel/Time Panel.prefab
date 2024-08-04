@@ -303,7 +303,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 986780918441022697, guid: 998b11fd7257e6c40bc323b4e270fc3d, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.20000076
+      value: -1.5099983
       objectReference: {fileID: 0}
     - target: {fileID: 986780918441022697, guid: 998b11fd7257e6c40bc323b4e270fc3d, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -403,7 +403,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8968509851680389002, guid: 998b11fd7257e6c40bc323b4e270fc3d, type: 3}
       propertyPath: m_fontSize
-      value: 22.95
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 8968509851680389002, guid: 998b11fd7257e6c40bc323b4e270fc3d, type: 3}
       propertyPath: m_fontAsset
@@ -423,11 +423,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8968509851680389002, guid: 998b11fd7257e6c40bc323b4e270fc3d, type: 3}
       propertyPath: m_fontSizeMax
-      value: 25
+      value: 22.53
       objectReference: {fileID: 0}
     - target: {fileID: 8968509851680389002, guid: 998b11fd7257e6c40bc323b4e270fc3d, type: 3}
       propertyPath: m_fontSizeMin
       value: 22
+      objectReference: {fileID: 0}
+    - target: {fileID: 8968509851680389002, guid: 998b11fd7257e6c40bc323b4e270fc3d, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 8968509851680389002, guid: 998b11fd7257e6c40bc323b4e270fc3d, type: 3}
       propertyPath: m_sharedMaterial
@@ -435,11 +439,11 @@ PrefabInstance:
       objectReference: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
     - target: {fileID: 8968509851680389002, guid: 998b11fd7257e6c40bc323b4e270fc3d, type: 3}
       propertyPath: m_characterSpacing
-      value: 4.48
+      value: 22.6
       objectReference: {fileID: 0}
     - target: {fileID: 8968509851680389002, guid: 998b11fd7257e6c40bc323b4e270fc3d, type: 3}
       propertyPath: m_enableAutoSizing
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8968509851680389002, guid: 998b11fd7257e6c40bc323b4e270fc3d, type: 3}
       propertyPath: m_fontColor32.rgba
