@@ -290,6 +290,8 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
     {
         if (DragDisabled() || dragged < 0) return;
 
+        var dragFromAnimalShelter = (lastParent.name.Contains("PigCell") || lastParent.name.Contains("ChickenCell"));
+        bool startedDraggingWithRightClick = dragged == 1;
 
         Debug.Log("stopped");
         dragged = -1;
@@ -302,11 +304,14 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
             if (result.gameObject != null && result.gameObject.GetComponent<RectTransform>() != null)
             {
                 // if inventory cell, add to inventory
-                if (result.gameObject.name.Contains("GridCell"))
+                if (result.gameObject.name.Contains("GridCell") && startedDraggingWithRightClick == false)
                 {
-
                     if (result.gameObject.transform.childCount > 0)
                     {
+                        if (dragFromAnimalShelter == true)
+                        {
+                            break;
+                        }
                         var otherElement = result.gameObject.transform.GetChild(0);
                         otherElement.SetParent(lastParent, true);
                         otherElement.GetComponent<RectTransform>().localPosition = Vector3.zero;

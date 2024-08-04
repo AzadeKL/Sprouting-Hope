@@ -219,6 +219,13 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             GameObject icon = inventoryIcons[Item];
             Debug.Log(Mathf.Ceil(inventory[Item] / 2f));
             Debug.Log(Mathf.Floor(inventory[Item] / 2f));
+
+            if ((int) Mathf.Ceil(inventory[Item] / 2f) == 1)
+            {
+                RemoveFromInventoryOnly(Item, true);
+                return;
+            }
+
             icon.GetComponent<InventoryIcon>().UpdateQuantity((int) Mathf.Ceil(inventory[Item] / 2f));
             inventory[Item] = (int) Mathf.Floor(inventory[Item] / 2f);
             inventoryIcons[Item] = Instantiate(inventoryIcon, icon.GetComponent<InventoryIcon>().lastParent);
