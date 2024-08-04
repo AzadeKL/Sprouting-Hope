@@ -131,17 +131,17 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
             break;
             case "Tomato Seeds":
             GetComponent<Image>().sprite = imageicons[19];
-            sellValue = 1;
+            sellValue = 2;
             giveValue = 1;
             break;
             case "Lentils Seeds":
             GetComponent<Image>().sprite = imageicons[20];
-            sellValue = 1;
+            sellValue = 5;
             giveValue = 1;
             break;
             case "Wheat":
             GetComponent<Image>().sprite = imageicons[21];
-            sellValue = 2;
+            sellValue = 3;
             giveValue = 50;
             break;
             default:
