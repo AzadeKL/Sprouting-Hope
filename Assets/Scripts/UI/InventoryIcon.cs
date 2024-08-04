@@ -262,13 +262,23 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
             // dragging with left click
             if (eventData.button == PointerEventData.InputButton.Left)
             {
-                player.GetComponent<PlayerInventory>().RemoveFromInventoryOnly(item, true);
+                if (lastParent.gameObject.name.Contains("GridCell")) player.GetComponent<PlayerInventory>().RemoveFromInventoryOnly(item, true);
+                else if (lastParent.gameObject.name.Contains("ChickenCell") || lastParent.gameObject.name.Contains("PigCell")) player.GetComponent<PlayerInventory>().AddAnimal(item, 0 - int.Parse(quantity.text));
                 dragged = 0;
             }
             // dragging with right click
             else if (eventData.button == PointerEventData.InputButton.Right)
             {
-                player.GetComponent<PlayerInventory>().RemoveFromInventoryOnly(item, false);
+                if (lastParent.gameObject.name.Contains("GridCell")) player.GetComponent<PlayerInventory>().RemoveFromInventoryOnly(item, false);
+                else if (lastParent.gameObject.name.Contains("ChickenCell") || lastParent.gameObject.name.Contains("PigCell"))
+                {
+                    GameObject newIcon = Instantiate(player.GetComponent<PlayerInventory>().inventoryIcon, lastParent);
+                    player.GetComponent<PlayerInventory>().StretchAndFill(newIcon.GetComponent<RectTransform>());
+                    newIcon.GetComponent<InventoryIcon>().SetIcon(item);
+                    newIcon.GetComponent<InventoryIcon>().UpdateQuantity((int)Mathf.Floor(int.Parse(quantity.text) / 2f));
+                    player.GetComponent<PlayerInventory>().AddAnimal(item, 0 - (int)Mathf.Ceil(int.Parse(quantity.text) / 2f));
+                    UpdateQuantity((int)Mathf.Ceil(int.Parse(quantity.text) / 2f));
+                }
                 dragged = 1;
             }
         }
@@ -280,53 +290,67 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
 
         Debug.Log("stopped");
         dragged = -1;
-        // if item still exists in inventory (right click dragging), merge items back to one slot
-        if (player.GetComponent<PlayerInventory>().inventory.ContainsKey(item))
+        // scan cell being dragged at
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
+        foreach (RaycastResult result in results)
         {
-            player.GetComponent<PlayerInventory>().AddToInventory(item, int.Parse(quantity.text));
-            Destroy(this.gameObject);
-        }
-        // put item in new slot and add to inventory dicts again
-        else
-        {
-            List<RaycastResult> results = new List<RaycastResult>();
-            EventSystem.current.RaycastAll(eventData, results);
-            foreach (RaycastResult result in results)
+
+            if (result.gameObject != null && result.gameObject.GetComponent<RectTransform>() != null)
             {
-
-                if (result.gameObject != null && result.gameObject.GetComponent<RectTransform>() != null)
+                // if inventory cell, add to inventory
+                if (result.gameObject.name.Contains("GridCell"))
                 {
-                    //Debug.Log("UI Element clicked: " + result.gameObject.name);
-                    if (result.gameObject.name.Contains("GridCell"))
-                    {
-                        if (result.gameObject.transform.childCount > 0)
-                        {
-                            var otherElement = result.gameObject.transform.GetChild(0);
-                            otherElement.SetParent(lastParent, true);
-                            otherElement.GetComponent<RectTransform>().localPosition = Vector3.zero;
-                        }
 
-                        lastParent = result.gameObject.transform;
-
-                    }
-                    // if putting chicken in chicken coop, or pig in pic pen
-                    else if ((result.gameObject.name.Contains("ChickenCell") && item == "Chicken") || (result.gameObject.name.Contains("PigPen") && item == "Pig"))
+                    if (result.gameObject.transform.childCount > 0)
                     {
-                        player.GetComponent<PlayerInventory>().AddAnimal(item, int.Parse(quantity.text));
-                        // if animal already exists inside enclosure, delete currect icon
-                        if (result.gameObject.transform.childCount > 0)
-                        {
-                            Destroy(this.gameObject);
-                        }
-                        lastParent = result.gameObject.transform.parent.GetChild(0);
+                        var otherElement = result.gameObject.transform.GetChild(0);
+                        otherElement.SetParent(lastParent, true);
+                        otherElement.GetComponent<RectTransform>().localPosition = Vector3.zero;
                     }
+
+                    lastParent = result.gameObject.transform;
+
+                }
+                // if putting chicken in chicken coop, or pig in pig pen
+                else if ((result.gameObject.name.Contains("ChickenCell") && item == "Chicken") || (result.gameObject.name.Contains("PigCell") && item == "Pig"))
+                {
+                    if (result.gameObject.transform.childCount > 0)
+                    {
+                        var otherElement = result.gameObject.transform.GetChild(0);
+                        otherElement.SetParent(lastParent, true);
+                        otherElement.GetComponent<RectTransform>().localPosition = Vector3.zero;
+                        Destroy(otherElement.gameObject);
+                    }
+                    lastParent = result.gameObject.transform.parent.GetChild(0);
                 }
             }
-            transform.SetParent(lastParent, true);
-            rectTransform.localPosition = Vector3.zero;
+        }
+        transform.SetParent(lastParent, true);
+        rectTransform.localPosition = Vector3.zero;
 
-            // if placed in inventory add back item to inventory dicts
-            if (lastParent.gameObject.name.Contains("GridCell"))
+        if (lastParent.gameObject.name.Contains("ChickenCell") && player.GetComponent<PlayerInventory>().chickenCoopInventory["Chicken"] > 0
+            || lastParent.gameObject.name.Contains("PigCell") && player.GetComponent<PlayerInventory>().pigPenInventory > 0)
+        {
+            player.GetComponent<PlayerInventory>().AddAnimal(item, int.Parse(quantity.text));
+            if (lastParent.gameObject.name.Contains("ChickenCell")) lastParent.GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(player.GetComponent<PlayerInventory>().chickenCoopInventory[item]);
+            else if (lastParent.gameObject.name.Contains("PigCell")) lastParent.GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(player.GetComponent<PlayerInventory>().pigPenInventory);
+        }
+        else if (lastParent.gameObject.name.Contains("ChickenCell") || lastParent.gameObject.name.Contains("PigCell")) player.GetComponent<PlayerInventory>().AddAnimal(item, int.Parse(quantity.text));
+
+
+        // if placed in inventory add back item to inventory dicts
+        else if (lastParent.gameObject.name.Contains("GridCell"))
+        {
+            // if item still exists in inventory (right click dragging), merge items back to one slot
+            if (player.GetComponent<PlayerInventory>().inventory.ContainsKey(item))
+            {
+                Debug.Log("Still exists");
+                player.GetComponent<PlayerInventory>().AddToInventory(item, int.Parse(quantity.text));
+                Destroy(this.gameObject);
+                return;
+            }
+            else
             {
                 player.GetComponent<PlayerInventory>().inventory.Add(item, int.Parse(quantity.text));
                 player.GetComponent<PlayerInventory>().inventoryIndex.Add(item);

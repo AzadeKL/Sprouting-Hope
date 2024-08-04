@@ -110,6 +110,9 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             case "Pig":
                 pigPenInventory = (int)Mathf.Max(0, pigPenInventory + amount);
                 break;
+            case "Egg":
+                chickenCoopInventory["Egg"] = (int)Mathf.Max(0, chickenCoopInventory["Egg"] + amount);
+                break;
         }
     }
 
@@ -168,6 +171,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
     // remove said item from the inventory for dragging and other inventories
     public void RemoveFromInventoryOnly(string Item, bool full)
     {
+        Debug.Log("Dragging");
         // left click take all items from inventory, removing from dicts
         if (full)
         {
