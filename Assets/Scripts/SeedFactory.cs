@@ -81,10 +81,10 @@ public class SeedFactory : MonoBehaviour
             //Debugger.Log("Name im HandChange " + name, Debugger.PriorityLevel.High);
             int result = name switch
             {
-                string a when a.Contains("Rusty") => 1,
-                string b when b.Contains("Bronze") => 3,
-                string b when b.Contains("Silver") => 5,
-                string b when b.Contains("Gold") => 10,
+                string a when a.Contains("Rusty") => 0,
+                string b when b.Contains("Bronze") => 2,
+                string c when c.Contains("Silver") => 4,
+                string d when d.Contains("Gold") => 8,
                 _ => 0
             };
             itemModifier = result;

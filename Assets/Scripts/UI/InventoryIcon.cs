@@ -126,7 +126,7 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
 
             case "Wheat Seeds":
             GetComponent<Image>().sprite = imageicons[18];
-            sellValue = 1;
+            sellValue = 0;
             giveValue = 1;
             break;
             case "Tomato Seeds":
@@ -153,6 +153,7 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (player.GetComponent<PlayerInventory>().sellMode && sellValue > 0) toolTip.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item + "\n$" + sellValue;
+        else if (player.GetComponent<PlayerInventory>().giveMode && giveValue > 0) toolTip.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item + "\n+" + giveValue;
         else toolTip.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item;
         if (dragged < 0) toolTip.SetActive(true);
     }
