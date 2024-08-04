@@ -38,10 +38,11 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
     [SerializeField] private PlayerTool playerTool;
 
     [SerializeField] private GameEvent handChanged;
+    [SerializeField] private GameEvent inventoryChanged;
 
     [Space]
     [Header("AnimalUI")]
-    public Dictionary<string, int> chickenCoopInventory = new Dictionary<string, int>{{"Chicken", 0}, {"Egg", 0}};
+    public Dictionary<string, int> chickenCoopInventory = new Dictionary<string, int> { { "Chicken", 0 }, { "Egg", 0 } };
     public int pigPenInventory = 0;
 
     private GameObject toolTip;//Ui tool tip
@@ -101,18 +102,18 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
     public void AddAnimal(string animal, int amount)
     {
         Debug.Log("Adding Animal");
-        switch(animal)
+        switch (animal)
         {
             case "Chicken":
             Debug.Log("Added Chicken");
-                chickenCoopInventory["Chicken"] = (int)Mathf.Max(0, chickenCoopInventory["Chicken"] + amount);
-                break;
+            chickenCoopInventory["Chicken"] = (int) Mathf.Max(0, chickenCoopInventory["Chicken"] + amount);
+            break;
             case "Pig":
-                pigPenInventory = (int)Mathf.Max(0, pigPenInventory + amount);
-                break;
+            pigPenInventory = (int) Mathf.Max(0, pigPenInventory + amount);
+            break;
             case "Egg":
-                chickenCoopInventory["Egg"] = (int)Mathf.Max(0, chickenCoopInventory["Egg"] + amount);
-                break;
+            chickenCoopInventory["Egg"] = (int) Mathf.Max(0, chickenCoopInventory["Egg"] + amount);
+            break;
         }
     }
 
@@ -136,6 +137,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             newIcon.GetComponent<InventoryIcon>().UpdateQuantity(inventory[Item]);
             inventoryIcons.Add(Item, newIcon);
         }
+        inventoryChanged.TriggerEvent();
         //Debug.Log(Item + ", " + inventory[Item]);
     }
 
@@ -166,6 +168,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
                 if (handItem == Item) { ChangeHandItemToPrevItem(); Debug.Log("changing hands"); }
             }
         }
+        inventoryChanged.TriggerEvent();
     }
 
     // remove said item from the inventory for dragging and other inventories
@@ -195,6 +198,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             inventoryIcons[Item].GetComponent<InventoryIcon>().SetIcon(Item);
             inventoryIcons[Item].GetComponent<InventoryIcon>().UpdateQuantity(inventory[Item]);
         }
+        inventoryChanged.TriggerEvent();
     }
 
     public void ChangeHandItem(string Item)
@@ -245,7 +249,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         ChangeHandItem(newItem);
     }
 
-    private void UpdateHandItemFromHotbarIndex()
+    public void UpdateHandItemFromHotbarIndex()
     {
         string newItem = "";
         if ((hotbarIndex >= 0) && (hotbar[hotbarIndex].transform.childCount > 0)) newItem = hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item;
@@ -340,5 +344,27 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         if (hotbar[hotbarIndex].transform.childCount > 0) return;
         if (tryCount > hotbar.Count) return;
         FindNextItem(direction, tryCount + 1);
+    }
+
+
+    public List<InventoryIcon> GetHotBarItems()
+    {
+        var list = new List<InventoryIcon>();
+        foreach (var item in hotbar)
+        {
+            if (item.transform.childCount > 0)
+            {
+                var result = item.transform.GetChild(0).GetComponent<InventoryIcon>();
+                list.Add(result);
+
+            }
+            else
+            {
+                list.Add(null);
+            }
+
+
+        }
+        return list;
     }
 }
