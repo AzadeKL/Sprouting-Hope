@@ -291,7 +291,7 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
         if (DragDisabled() || dragged < 0) return;
 
         var dragFromAnimalShelter = (lastParent.name.Contains("PigCell") || lastParent.name.Contains("ChickenCell"));
-        bool startedDraggingWithRightClick = dragged == 1;
+        bool startedDraggingWithRightClick = (dragged == 1);
 
         Debug.Log("stopped");
         dragged = -1;
