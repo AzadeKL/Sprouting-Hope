@@ -1,3 +1,4 @@
+using DG.Tweening.Core.Easing;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -14,7 +15,8 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
     public string item;
     public int sellValue;
     public int giveValue;
-    private GameObject player;
+    private GameManager gameManager;
+    private PlayerInventory playerInventory;
     private GameObject toolTip;
 
     private RectTransform rectTransform;
@@ -26,7 +28,8 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
 
     private void Awake()
     {
-        player = GameObject.Find("Player");
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        playerInventory = GameObject.Find("Player").GetComponent<PlayerInventory>();
         rectTransform = transform.GetComponent<RectTransform>();
         canvas = rectTransform.root.GetComponent<Canvas>();
     }
@@ -152,8 +155,8 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (player.GetComponent<PlayerInventory>().sellMode && sellValue > 0) toolTip.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item + "\n$" + sellValue;
-        else if (player.GetComponent<PlayerInventory>().giveMode && giveValue > 0) toolTip.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item + "\n+" + giveValue;
+        if (playerInventory.sellMode && sellValue > 0) toolTip.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item + "\n$" + sellValue;
+        else if (playerInventory.giveMode && giveValue > 0) toolTip.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item + "\n+" + giveValue;
         else toolTip.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item;
         if (dragged < 0) toolTip.SetActive(true);
     }
@@ -169,7 +172,7 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
         if ((dragged == 0 && eventData.button == PointerEventData.InputButton.Right)
             || (dragged == 1 && eventData.button == PointerEventData.InputButton.Left))
         {
-            Debug.Log(player.GetComponent<PlayerInventory>().chickenCoopInventory["Chicken"]);
+            Debug.Log(playerInventory.chickenCoopInventory["Chicken"]);
             // scan cell being dragged at
             List<RaycastResult> results = new List<RaycastResult>();
             EventSystem.current.RaycastAll(eventData, results);
@@ -183,40 +186,40 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
                     if (result.gameObject.name.Contains("GridCell"))
                     {
                         UpdateQuantity(int.Parse(quantity.text) - 1);
-                        player.GetComponent<PlayerInventory>().AddToInventory(item);
+                        playerInventory.AddToInventory(item);
                     }
                     else if (result.gameObject.name.Contains("ChickenCell") && item == "Chicken")
                     {
                         UpdateQuantity(int.Parse(quantity.text) - 1);
-                        Debug.Log(player.GetComponent<PlayerInventory>().chickenCoopInventory["Chicken"]);
-                        if (player.GetComponent<PlayerInventory>().chickenCoopInventory["Chicken"] > 0)
+                        Debug.Log(playerInventory.chickenCoopInventory["Chicken"]);
+                        if (playerInventory.chickenCoopInventory["Chicken"] > 0)
                         {
-                            result.gameObject.transform.GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(player.GetComponent<PlayerInventory>().chickenCoopInventory[item] + 1);
+                            result.gameObject.transform.GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(playerInventory.chickenCoopInventory[item] + 1);
                         }
                         else
                         {
-                            GameObject newIcon = Instantiate(player.GetComponent<PlayerInventory>().inventoryIcon, result.gameObject.transform);
-                            player.GetComponent<PlayerInventory>().StretchAndFill(newIcon.GetComponent<RectTransform>());
+                            GameObject newIcon = Instantiate(playerInventory.inventoryIcon, result.gameObject.transform);
+                            playerInventory.StretchAndFill(newIcon.GetComponent<RectTransform>());
                             newIcon.GetComponent<InventoryIcon>().SetIcon(item);
-                            newIcon.GetComponent<InventoryIcon>().UpdateQuantity(player.GetComponent<PlayerInventory>().chickenCoopInventory[item]);
+                            newIcon.GetComponent<InventoryIcon>().UpdateQuantity(playerInventory.chickenCoopInventory[item]);
                         }
-                        player.GetComponent<PlayerInventory>().AddAnimal(item, 1);
+                        playerInventory.AddAnimal(item, 1);
                     }
                     else if (result.gameObject.name.Contains("PigCell") && item == "Pig")
                     {
                         UpdateQuantity(int.Parse(quantity.text) - 1);
-                        if (player.GetComponent<PlayerInventory>().pigPenInventory > 0)
+                        if (playerInventory.pigPenInventory > 0)
                         {
-                            result.gameObject.transform.GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(player.GetComponent<PlayerInventory>().pigPenInventory + 1);
+                            result.gameObject.transform.GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(playerInventory.pigPenInventory + 1);
                         }
                         else
                         {
-                            GameObject newIcon = Instantiate(player.GetComponent<PlayerInventory>().inventoryIcon, result.gameObject.transform);
-                            player.GetComponent<PlayerInventory>().StretchAndFill(newIcon.GetComponent<RectTransform>());
+                            GameObject newIcon = Instantiate(playerInventory.inventoryIcon, result.gameObject.transform);
+                            playerInventory.StretchAndFill(newIcon.GetComponent<RectTransform>());
                             newIcon.GetComponent<InventoryIcon>().SetIcon(item);
-                            newIcon.GetComponent<InventoryIcon>().UpdateQuantity(player.GetComponent<PlayerInventory>().pigPenInventory);
+                            newIcon.GetComponent<InventoryIcon>().UpdateQuantity(playerInventory.pigPenInventory);
                         }
-                        player.GetComponent<PlayerInventory>().AddAnimal(item, 1);
+                        playerInventory.AddAnimal(item, 1);
                     }
                     if (int.Parse(quantity.text) <= 0)
                     {
@@ -231,68 +234,68 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
         else if (eventData.button == PointerEventData.InputButton.Left)
         {
             // if on sell mode, sell non-tool item
-            if (player.GetComponent<PlayerInventory>().sellMode && imageicons.IndexOf(GetComponent<Image>().sprite) > 11)
+            if (playerInventory.sellMode && imageicons.IndexOf(GetComponent<Image>().sprite) > 11)
             {
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
                     Debug.Log(item + " was sold for $" + (sellValue * int.Parse(quantity.text)));
-                    player.GetComponent<PlayerInventory>().money += (sellValue * int.Parse(quantity.text));
-                    player.GetComponent<PlayerInventory>().RemoveFromInventory(item, int.Parse(quantity.text));
+                    playerInventory.money += (sellValue * int.Parse(quantity.text));
+                    playerInventory.RemoveFromInventory(item, int.Parse(quantity.text));
                 }
                 else
                 {
-                    player.GetComponent<PlayerInventory>().RemoveFromInventory(item);
+                    playerInventory.RemoveFromInventory(item);
                     Debug.Log(item + " was sold for $" + sellValue);
-                    player.GetComponent<PlayerInventory>().money += sellValue;
+                    playerInventory.money += sellValue;
                 }
             }
             // if on give mode, give away non-tool item
-            else if (player.GetComponent<PlayerInventory>().giveMode && imageicons.IndexOf(GetComponent<Image>().sprite) > 11)
+            else if (playerInventory.giveMode && imageicons.IndexOf(GetComponent<Image>().sprite) > 11)
             {
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
                     Debug.Log(item + " was given away for " + (giveValue * int.Parse(quantity.text)) + " goodness points!");
-                    GameObject.Find("GameManager").GetComponent<GameManager>().mainProgress += (giveValue * int.Parse(quantity.text));
-                    player.GetComponent<PlayerInventory>().RemoveFromInventory(item, int.Parse(quantity.text));
+                    gameManager.mainProgress += (giveValue * int.Parse(quantity.text));
+                    playerInventory.RemoveFromInventory(item, int.Parse(quantity.text));
                 }
                 else
                 {
                     Debug.Log(item + " was given away for " + giveValue + " goodness points!");
-                    GameObject.Find("GameManager").GetComponent<GameManager>().mainProgress += giveValue;
-                    player.GetComponent<PlayerInventory>().RemoveFromInventory(item);
+                    gameManager.mainProgress += giveValue;
+                    playerInventory.RemoveFromInventory(item);
                 }
 
             }
             // put selected item in hand
-            else if (!player.GetComponent<PlayerInventory>().sellMode && !player.GetComponent<PlayerInventory>().giveMode)
+            else if (!playerInventory.sellMode && !playerInventory.giveMode)
             {
-                player.GetComponent<PlayerInventory>().ChangeHandItem(item);
+                playerInventory.ChangeHandItem(item);
             }
         }
         else if (eventData.button == PointerEventData.InputButton.Right)
         {
-            if (player.GetComponent<PlayerInventory>().sellMode && imageicons.IndexOf(GetComponent<Image>().sprite) > 11)
+            if (playerInventory.sellMode && imageicons.IndexOf(GetComponent<Image>().sprite) > 11)
             {
                 var control = Input.GetKey(KeyCode.LeftControl);
                 int repeat = control == true ? (int)Mathf.Min(25, int.Parse(quantity.text)) : 5;
                 for (int i = 0; i < repeat; i++)
                 {
-                    if (!player.GetComponent<PlayerInventory>().inventory.ContainsKey(item)) break;
+                    if (!playerInventory.inventory.ContainsKey(item)) break;
 
-                    player.GetComponent<PlayerInventory>().RemoveFromInventory(item);
-                    player.GetComponent<PlayerInventory>().money += sellValue;
+                    playerInventory.RemoveFromInventory(item);
+                    playerInventory.money += sellValue;
                 }
             }
-            else if (player.GetComponent<PlayerInventory>().giveMode && imageicons.IndexOf(GetComponent<Image>().sprite) > 11)
+            else if (playerInventory.giveMode && imageicons.IndexOf(GetComponent<Image>().sprite) > 11)
             {
                 var control = Input.GetKey(KeyCode.LeftControl);
                 int repeat = control == true ? (int)Mathf.Min(25, int.Parse(quantity.text)) : 5;
                 for (int i = 0; i < repeat; i++)
                 {
-                    if (!player.GetComponent<PlayerInventory>().inventory.ContainsKey(item)) break;
+                    if (!playerInventory.inventory.ContainsKey(item)) break;
 
-                    player.GetComponent<PlayerInventory>().RemoveFromInventory(item);
-                    GameObject.Find("GameManager").GetComponent<GameManager>().mainProgress += giveValue;
+                    playerInventory.RemoveFromInventory(item);
+                    gameManager.mainProgress += giveValue;
                 }
             }
 
@@ -312,21 +315,21 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
             // dragging with left click
             if (eventData.button == PointerEventData.InputButton.Left)
             {
-                if (lastParent.gameObject.name.Contains("GridCell")) player.GetComponent<PlayerInventory>().RemoveFromInventoryOnly(item, true);
-                else if (lastParent.gameObject.name.Contains("ChickenCell") || lastParent.gameObject.name.Contains("PigCell")) player.GetComponent<PlayerInventory>().AddAnimal(item, 0 - int.Parse(quantity.text));
+                if (lastParent.gameObject.name.Contains("GridCell")) playerInventory.RemoveFromInventoryOnly(item, true);
+                else if (lastParent.gameObject.name.Contains("ChickenCell") || lastParent.gameObject.name.Contains("PigCell")) playerInventory.AddAnimal(item, 0 - int.Parse(quantity.text));
                 dragged = 0;
             }
             // dragging with right click
             else if (eventData.button == PointerEventData.InputButton.Right)
             {
-                if (lastParent.gameObject.name.Contains("GridCell")) player.GetComponent<PlayerInventory>().RemoveFromInventoryOnly(item, false);
+                if (lastParent.gameObject.name.Contains("GridCell")) playerInventory.RemoveFromInventoryOnly(item, false);
                 else if (lastParent.gameObject.name.Contains("ChickenCell") || lastParent.gameObject.name.Contains("PigCell"))
                 {
-                    GameObject newIcon = Instantiate(player.GetComponent<PlayerInventory>().inventoryIcon, lastParent);
-                    player.GetComponent<PlayerInventory>().StretchAndFill(newIcon.GetComponent<RectTransform>());
+                    GameObject newIcon = Instantiate(playerInventory.inventoryIcon, lastParent);
+                    playerInventory.StretchAndFill(newIcon.GetComponent<RectTransform>());
                     newIcon.GetComponent<InventoryIcon>().SetIcon(item);
                     newIcon.GetComponent<InventoryIcon>().UpdateQuantity((int)Mathf.Floor(int.Parse(quantity.text) / 2f));
-                    player.GetComponent<PlayerInventory>().AddAnimal(item, 0 - (int)Mathf.Ceil(int.Parse(quantity.text) / 2f));
+                    playerInventory.AddAnimal(item, 0 - (int)Mathf.Ceil(int.Parse(quantity.text) / 2f));
                     UpdateQuantity((int)Mathf.Ceil(int.Parse(quantity.text) / 2f));
                 }
                 dragged = 1;
@@ -386,33 +389,33 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
         rectTransform.localPosition = Vector3.zero;
 
         Debug.Log("new parent: " + lastParent.gameObject.name);
-        if (lastParent.gameObject.name.Contains("ChickenCell") && player.GetComponent<PlayerInventory>().chickenCoopInventory["Chicken"] > 0
-            || lastParent.gameObject.name.Contains("PigCell") && player.GetComponent<PlayerInventory>().pigPenInventory > 0)
+        if (lastParent.gameObject.name.Contains("ChickenCell") && playerInventory.chickenCoopInventory["Chicken"] > 0
+            || lastParent.gameObject.name.Contains("PigCell") && playerInventory.pigPenInventory > 0)
         {
-            player.GetComponent<PlayerInventory>().AddAnimal(item, int.Parse(quantity.text));
-            if (lastParent.gameObject.name.Contains("ChickenCell")) lastParent.GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(player.GetComponent<PlayerInventory>().chickenCoopInventory[item]);
-            else if (lastParent.gameObject.name.Contains("PigCell")) lastParent.GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(player.GetComponent<PlayerInventory>().pigPenInventory);
+            playerInventory.AddAnimal(item, int.Parse(quantity.text));
+            if (lastParent.gameObject.name.Contains("ChickenCell")) lastParent.GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(playerInventory.chickenCoopInventory[item]);
+            else if (lastParent.gameObject.name.Contains("PigCell")) lastParent.GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(playerInventory.pigPenInventory);
         }
-        else if (lastParent.gameObject.name.Contains("ChickenCell") || lastParent.gameObject.name.Contains("PigCell")) player.GetComponent<PlayerInventory>().AddAnimal(item, int.Parse(quantity.text));
+        else if (lastParent.gameObject.name.Contains("ChickenCell") || lastParent.gameObject.name.Contains("PigCell")) playerInventory.AddAnimal(item, int.Parse(quantity.text));
 
 
         // if placed in inventory add back item to inventory dicts
         else if (lastParent.gameObject.name.Contains("GridCell"))
         {
             // if item still exists in inventory (right click dragging), merge items back to one slot
-            if (player.GetComponent<PlayerInventory>().inventory.ContainsKey(item))
+            if (playerInventory.inventory.ContainsKey(item))
             {
                 Debug.Log("Still exists");
-                player.GetComponent<PlayerInventory>().AddToInventory(item, int.Parse(quantity.text));
+                playerInventory.AddToInventory(item, int.Parse(quantity.text));
                 toolTip.SetActive(false);
                 Destroy(this.gameObject);
                 return;
             }
             else
             {
-                player.GetComponent<PlayerInventory>().inventory.Add(item, int.Parse(quantity.text));
-                player.GetComponent<PlayerInventory>().inventoryIndex.Add(item);
-                player.GetComponent<PlayerInventory>().inventoryIcons.Add(item, this.gameObject);
+                playerInventory.inventory.Add(item, int.Parse(quantity.text));
+                playerInventory.inventoryIndex.Add(item);
+                playerInventory.inventoryIcons.Add(item, this.gameObject);
             }
         }
         inventoryChangedEvent.TriggerEvent();
@@ -435,7 +438,7 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
 
     private bool DragDisabled()
     {
-        if (player.GetComponent<PlayerInventory>().sellMode == true || player.GetComponent<PlayerInventory>().giveMode == true) return true;
+        if (playerInventory.sellMode == true || playerInventory.giveMode == true) return true;
 
         return false;
     }
