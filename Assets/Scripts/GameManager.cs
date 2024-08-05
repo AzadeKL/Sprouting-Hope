@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
     [Space]
     [SerializeField] private SeedFactory seedFactory;
+    [SerializeField] private GameObject waterPrefab;
 
     [Space]
     [Header("Player")]
@@ -348,6 +349,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         if (growTotalTime.ContainsKey(gridPosition)) growTotalTime[gridPosition] *= wateringTimeReduction;
         SetDirtFieldState(gridPosition, DirtFieldState.Watered);
         PlayActionSound(waterSounds[Random.Range(0, waterSounds.Count)]);
+        Instantiate(waterPrefab, gridPosition, Quaternion.identity);
     }
 
     private void AddCrop(string cropName, Vector3Int gridPosition, int growthState = 0)
