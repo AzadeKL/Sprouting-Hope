@@ -27,9 +27,11 @@ public class CollectableItem : MonoBehaviour
     private PlayerInventory player;
 
     private CircleCollider2D collider2d;
+    private AudioSource auidoSource;
     private void Awake()
     {
         collider2d = GetComponent<CircleCollider2D>();
+        auidoSource = GetComponent<AudioSource>();
     }
     private void Start()
     {
@@ -40,7 +42,7 @@ public class CollectableItem : MonoBehaviour
         player = GameObject.Find("Player").GetComponent<PlayerInventory>();
         transform.localScale = Vector3.zero;
         transform.DOScale(Vector3.one, 0.1f);
-        transform.DOBlendableMoveBy(Random.insideUnitSphere * spawnJumpMultiplier, 1f);
+        transform.DOBlendableMoveBy(Random.insideUnitSphere * spawnJumpMultiplier, 0.4f);
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -54,6 +56,9 @@ public class CollectableItem : MonoBehaviour
             transform.DOScale(Vector3.zero, animationTime).SetEase(animationEase);
             collider2d.radius = spawnJumpMultiplier;
             collected = true;
+            auidoSource.pitch = Random.Range(0.8f, 1.2f);
+            auidoSource.volume = Random.Range(0.3f, 0.8f);
+            auidoSource.Play();
         }
     }
 

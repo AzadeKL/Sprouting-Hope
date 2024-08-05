@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 {
@@ -98,6 +99,11 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
     [SerializeField] private GameObject EggPrefab;
 
+    [Space]
+    [Header("Sound Effects")]
+    [SerializeField] private List<AudioClip> plowSounds;
+    [SerializeField] private List<AudioClip> reapSounds;
+    [SerializeField] private List<AudioClip> waterSounds;
 
     private GameObject toolTip;//UI tooltip 
 
@@ -120,11 +126,14 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     private float timer = 1f;
     private float timerModifierPercentage = 0f;
     private float baselineTimerModifierPercentage = 0f;
+
+    private AudioSource audioSource;
     private void Awake()
     {
         helpToggle = helpUI.transform.GetChild(2).GetComponent<Toggle>();
         if (seedFactory == null) { seedFactory = GetComponent<SeedFactory>(); }
         progressMeter.maxValue = maxProgress;
+        audioSource = GetComponent<AudioSource>();
     }
     private void Start()
     {
@@ -322,6 +331,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         {
             SetDirtFieldState(gridPosition, DirtFieldState.Plowed);
             seedFactory.CreateSeed(gridPosition);
+            PlayActionSound(plowSounds[Random.Range(0, plowSounds.Count)]);
         }
     }
 
@@ -332,9 +342,12 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             Debug.Log("Failed to water crop - grid location not initialized: " + gridPosition);
             return;
         }
+
+        if (farmLand.GetTile(gridPosition) == (wateredField)) return;
+
         if (growTotalTime.ContainsKey(gridPosition)) growTotalTime[gridPosition] *= wateringTimeReduction;
         SetDirtFieldState(gridPosition, DirtFieldState.Watered);
-
+        PlayActionSound(waterSounds[Random.Range(0, waterSounds.Count)]);
     }
 
     private void AddCrop(string cropName, Vector3Int gridPosition, int growthState = 0)
@@ -412,6 +425,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         cropPlants.Remove(gridPosition);
         seedFactory.CreateCrop(gridPosition, cropName);
         Debug.Log("Harvested " + cropName);
+        PlayActionSound(reapSounds[Random.Range(0, reapSounds.Count)]);
     }
 
     private void Update()
@@ -774,6 +788,11 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
             baselineTimerModifierPercentage = Mathf.Max(baselineTimerModifierPercentage, baseLineModifier);
         }
+    }
+    private void PlayActionSound(AudioClip clip)
+    {
+        float upperValue = Mathf.Lerp(1f, 0.3f, timerModifierPercentage);
+        audioSource.PlayOneShot(clip, Random.Range(0.3f, upperValue));
     }
 
 }
