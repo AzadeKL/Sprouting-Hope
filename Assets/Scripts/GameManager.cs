@@ -633,7 +633,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                 {
                     if (restaurant.Contains(buildings.GetTile(gridPosition + neighborPosition)))
                     {
-                        Debug.Log("Interacting with Restaurant!");
+                        Debugger.Log("Interacting with Restaurant!", Debugger.PriorityLevel.LeastImportant);
 
                         if (interactWBuildingKeyPressed)
                         {
@@ -653,7 +653,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                     }
                     else if (truck.Contains(buildings.GetTile(gridPosition + neighborPosition)))
                     {
-                        Debug.Log("Interacting with Truck!");
+                        Debugger.Log("Interacting with Truck!", Debugger.PriorityLevel.LeastImportant);
 
                         if (interactWBuildingKeyPressed)
                         {
@@ -692,7 +692,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                     }
                     else if (house.Contains(buildings.GetTile(gridPosition + neighborPosition)))
                     {
-                        Debug.Log("Interacting with Farmhouse!");
+                        Debugger.Log("Interacting with Farmhouse!", Debugger.PriorityLevel.LeastImportant);
 
                         if (interactWBuildingKeyPressed)
                         {
@@ -723,7 +723,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                     }
                     else if (storage.Contains(buildings.GetTile(gridPosition + neighborPosition)))
                     {
-                        Debug.Log("Interacting with Storage!");
+                        Debugger.Log("Interacting with Storage!", Debugger.PriorityLevel.LeastImportant);
 
                         if (interactWBuildingKeyPressed)
                         {
