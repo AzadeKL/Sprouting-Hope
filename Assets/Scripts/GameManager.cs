@@ -554,7 +554,11 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                 newIcon.GetComponent<InventoryIcon>().SetIcon(animal);
                 newIcon.GetComponent<InventoryIcon>().UpdateQuantity(amount);
             }
-            else pigPenUI.transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<InventoryIcon>().UpdateQuantity(pigPenInventory);
+            else if (amount != 0)
+            {
+                //TODO There are places that amount can be ZERO  I would normally just put this check at start and return but because not to change functionallity it is here
+                pigPenUI.transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<InventoryIcon>().UpdateQuantity(pigPenInventory);
+            }
             break;
             case "Egg":
             chickenCoopInventory["Egg"] = (int) Mathf.Max(0, chickenCoopInventory["Egg"] + amount);
@@ -565,7 +569,11 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                 newIcon.GetComponent<InventoryIcon>().SetIcon(animal);
                 newIcon.GetComponent<InventoryIcon>().UpdateQuantity(amount);
             }
-            else chickenCoopUI.transform.GetChild(1).GetChild(0).GetChild(1).GetComponent<InventoryIcon>().UpdateQuantity(chickenCoopInventory["Egg"]);
+            else if (amount != 0)
+            {
+                //TODO There are places that amount can be ZERO  I would normally just put this check at start and return but because not to change functionallity it is here
+                chickenCoopUI.transform.GetChild(1).GetChild(1).GetChild(0).GetComponent<InventoryIcon>().UpdateQuantity(chickenCoopInventory["Egg"]);
+            }
             break;
         }
     }
