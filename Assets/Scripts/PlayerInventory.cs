@@ -260,13 +260,6 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 
     void Update()
     {
-        //DELETE TODO For testing  only
-
-        if (Input.GetKeyUp(KeyCode.F1))
-        {
-            money += 1000;
-        }
-
         // scroll wheel down the hotbar
         if (Input.GetAxis("Mouse ScrollWheel") > 0)
         {

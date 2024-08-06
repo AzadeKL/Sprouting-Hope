@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,10 +24,11 @@ public class HotBarManager : MonoBehaviour
     private void GetIcons()
     {
         List<InventoryIcon> icons = playerInventory.GetHotBarItems();
+
         for (int i = 0; i < icons.Count; i++)
         {
 
-            if (icons[i] == null)
+            if (icons[i] == null || Int32.Parse(icons[i].quantity.text) <= 0)
             {
                 var childImage = hotbarSelectedImages[i].transform.GetChild(0).GetComponentInChildren<Image>(true);
                 childImage.enabled = false;
@@ -38,6 +40,7 @@ public class HotBarManager : MonoBehaviour
                 childImage.enabled = true;
                 childImage.overrideSprite = icons[i].GetComponent<Image>().sprite;
             }
+
         }
     }
 
