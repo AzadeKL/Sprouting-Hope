@@ -194,6 +194,7 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
                     }
                     else if (result.gameObject.name.Contains("PigCell") && item == "Pig")
                     {
+                        UpdateQuantity(int.Parse(quantity.text) - 1);
                         gameManager.AddAnimal(item, 1);
                     }
                     if (int.Parse(quantity.text) <= 0)
