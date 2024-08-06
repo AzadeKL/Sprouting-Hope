@@ -98,7 +98,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     public int pigPenInventory = 0;
     public List<TileBase> chickenCoop;
     [SerializeField] private GameObject chickenCoopUI;
-    private Dictionary<string, int> chickenCoopInventory = new Dictionary<string, int> { { "Chicken", 0 }, { "Egg", 0 } };
+    public Dictionary<string, int> chickenCoopInventory = new Dictionary<string, int> { { "Chicken", 0 }, { "Egg", 0 } };
     public List<TileBase> storage;
     [SerializeField] private GameObject storageUI;
 
@@ -212,6 +212,36 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         return true;
     }
 
+    /*public void LoadAnimal(string animal, int amount)
+    {
+        Debug.Log("Loading Animal");
+        GameObject newIcon;
+        switch (animal)
+        {
+            case "Chicken":
+                chickenCoopInventory["Chicken"] = (int)Mathf.Max(0, chickenCoopInventory["Chicken"] + amount);
+                newIcon = Instantiate(playerInventory.inventoryIcon, chickenCoopUI.transform.GetChild(1).GetChild(0));
+                playerInventory.StretchAndFill(newIcon.GetComponent<RectTransform>());
+                newIcon.GetComponent<InventoryIcon>().SetIcon(animal);
+                newIcon.GetComponent<InventoryIcon>().UpdateQuantity(amount);
+                break;
+            case "Pig":
+                pigPenInventory = (int)Mathf.Max(0, pigPenInventory + amount);
+                newIcon = Instantiate(playerInventory.inventoryIcon, pigPenUI.transform.GetChild(1).GetChild(0));
+                playerInventory.StretchAndFill(newIcon.GetComponent<RectTransform>());
+                newIcon.GetComponent<InventoryIcon>().SetIcon(animal);
+                newIcon.GetComponent<InventoryIcon>().UpdateQuantity(amount);
+                break;
+            case "Egg":
+                chickenCoopInventory["Egg"] = (int)Mathf.Max(0, chickenCoopInventory["Egg"] + amount);
+                newIcon = Instantiate(playerInventory.inventoryIcon, chickenCoopUI.transform.GetChild(1).GetChild(1));
+                playerInventory.StretchAndFill(newIcon.GetComponent<RectTransform>());
+                newIcon.GetComponent<InventoryIcon>().SetIcon(animal);
+                newIcon.GetComponent<InventoryIcon>().UpdateQuantity(amount);
+                break;
+        }
+    }*/
+
     void SetIsModalMode(bool isSet)
     {
         isModalMode = isSet;
@@ -263,7 +293,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
     private static bool IsDirtFieldState(int state)
     {
-        return (state >= 0) && (state < (int) DirtFieldState.NumDirtFieldStates);
+        return (state >= 0) && (state < (int)DirtFieldState.NumDirtFieldStates);
     }
 
     private static string GetSeedName(string cropName)
@@ -281,21 +311,21 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         switch (cropName)
         {
             case "Wheat":
-            crop = wheat;
-            cropPlants = wheatPlants;
-            break;
+                crop = wheat;
+                cropPlants = wheatPlants;
+                break;
             case "Tomato":
-            crop = tomato;
-            cropPlants = tomatoPlants;
-            break;
+                crop = tomato;
+                cropPlants = tomatoPlants;
+                break;
             case "Lentils":
-            crop = lentil;
-            cropPlants = lentilPlants;
-            break;
+                crop = lentil;
+                cropPlants = lentilPlants;
+                break;
             default:
-            crop = null;
-            cropPlants = null;
-            break;
+                crop = null;
+                cropPlants = null;
+                break;
         }
 
         return crop != null;
@@ -326,26 +356,26 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         switch (dirtFieldState)
         {
             case DirtFieldState.Default:
-            fieldType = defaultField;
-            break;
+                fieldType = defaultField;
+                break;
             case DirtFieldState.Plowed:
-            fieldType = plowedField;
-            break;
+                fieldType = plowedField;
+                break;
             case DirtFieldState.Watered:
-            fieldType = wateredField;
-            break;
+                fieldType = wateredField;
+                break;
             default:
-            Debug.Log("Unrecognized dirt field state(" + dirtFieldState + ") at position: " + gridPosition);
-            return;
+                Debug.Log("Unrecognized dirt field state(" + dirtFieldState + ") at position: " + gridPosition);
+                return;
         }
-        Debug.Log("Set dirt field state at position: " + gridPosition + ", dirtFieldState: " + dirtFieldState + " = " + (int) dirtFieldState);
+        Debug.Log("Set dirt field state at position: " + gridPosition + ", dirtFieldState: " + dirtFieldState + " = " + (int)dirtFieldState);
         if (!tileState.ContainsKey(gridPosition))
         {
-            tileState.Add(gridPosition, (int) dirtFieldState);
+            tileState.Add(gridPosition, (int)dirtFieldState);
         }
         else
         {
-            tileState[gridPosition] = (int) dirtFieldState;
+            tileState[gridPosition] = (int)dirtFieldState;
         }
         farmLand.SetTile(gridPosition, fieldType);
     }
@@ -418,7 +448,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         if (!GetCropVarsAtGridPosition(gridPosition, ref cropName, ref crop, ref cropPlants))
         {
             Debug.Log("No crop to update at position: " + gridPosition);
-            SetDirtFieldState(gridPosition, (DirtFieldState) Mathf.Max(0, tileState[gridPosition] - 1));
+            SetDirtFieldState(gridPosition, (DirtFieldState)Mathf.Max(0, tileState[gridPosition] - 1));
             return;
         }
 
@@ -456,7 +486,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         PlayActionSound(reapSounds[Random.Range(0, reapSounds.Count)]);
     }
 
-    public void AddAnimal(string animal, int amount)
+    /*public void AddAnimal(string animal, int amount)
     {
         Debug.Log("Adding animal: " + animal + " count: " + amount);
 
@@ -497,6 +527,45 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             default:
                 Debugger.Log("Unrecognized animal: " + animal);
                 return;
+        }
+    }*/
+
+    public void AddAnimal(string animal, int amount)
+    {
+        Debug.Log("Adding Animal");
+        GameObject newIcon;
+        switch (animal)
+        {
+            case "Chicken":
+                if (chickenCoopUI.transform.GetChild(1).GetChild(0).childCount == 0 && chickenCoopInventory["Chicken"] + amount > 0)
+                {
+                    newIcon = Instantiate(playerInventory.inventoryIcon, chickenCoopUI.transform.GetChild(1).GetChild(0));
+                    playerInventory.StretchAndFill(newIcon.GetComponent<RectTransform>());
+                    newIcon.GetComponent<InventoryIcon>().SetIcon(animal);
+                    newIcon.GetComponent<InventoryIcon>().UpdateQuantity(amount);
+                }
+                chickenCoopInventory["Chicken"] = (int)Mathf.Max(0, chickenCoopInventory["Chicken"] + amount);
+                break;
+            case "Pig":
+                if (pigPenUI.transform.GetChild(1).GetChild(0).childCount == 0 && pigPenInventory + amount > 0)
+                {
+                    newIcon = Instantiate(playerInventory.inventoryIcon, pigPenUI.transform.GetChild(1).GetChild(0));
+                    playerInventory.StretchAndFill(newIcon.GetComponent<RectTransform>());
+                    newIcon.GetComponent<InventoryIcon>().SetIcon(animal);
+                    newIcon.GetComponent<InventoryIcon>().UpdateQuantity(amount);
+                }
+                pigPenInventory = (int)Mathf.Max(0, pigPenInventory + amount);
+                break;
+            case "Egg":
+                if (chickenCoopUI.transform.GetChild(1).GetChild(1).childCount == 0 && chickenCoopInventory["Egg"] + amount > 0)
+                {
+                    newIcon = Instantiate(playerInventory.inventoryIcon, chickenCoopUI.transform.GetChild(1).GetChild(1));
+                    playerInventory.StretchAndFill(newIcon.GetComponent<RectTransform>());
+                    newIcon.GetComponent<InventoryIcon>().SetIcon(animal);
+                    newIcon.GetComponent<InventoryIcon>().UpdateQuantity(amount);
+                }
+                chickenCoopInventory["Egg"] = (int)Mathf.Max(0, chickenCoopInventory["Egg"] + amount);
+                break;
         }
     }
 
@@ -719,29 +788,29 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                         case "Bronze Shovel":
                         case "Silver Shovel":
                         case "Gold Shovel":
-                        PlowField(gridPosition);
-                        StartCoroutine(DefaultSoil(gridPosition));
-                        break;
+                            PlowField(gridPosition);
+                            StartCoroutine(DefaultSoil(gridPosition));
+                            break;
                         // if hoe equipped, harvest
                         case "Rusty Hoe":
                         case "Bronze Hoe":
                         case "Silver Hoe":
                         case "Gold Hoe":
-                        HarvestCrop(gridPosition);
-                        break;
+                            HarvestCrop(gridPosition);
+                            break;
                         // if watering can equipped, water soil for faster growth
                         case "Rusty Watering Can":
                         case "Bronze Watering Can":
                         case "Silver Watering Can":
                         case "Gold Watering Can":
-                        WaterField(gridPosition);
-                        break;
+                            WaterField(gridPosition);
+                            break;
                         // if seeds equipped, plant corresponding seedling
                         case "Wheat Seeds":
                         case "Tomato Seeds":
                         case "Lentils Seeds":
-                        AddCrop(GetCropName(handItem), gridPosition);
-                        break;
+                            AddCrop(GetCropName(handItem), gridPosition);
+                            break;
                     }
             }
         }
@@ -778,14 +847,27 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         if (chickenCoopInventory["Chicken"] > 0)
         {
             Debug.Log("Making more eggs!");
+            // if no eggs, make new icon for eggs
+            if (chickenCoopInventory["Egg"] == 0)
+            {
+                GameObject newIcon = Instantiate(playerInventory.inventoryIcon, chickenCoopUI.transform.GetChild(1).GetChild(1));
+                playerInventory.StretchAndFill(newIcon.GetComponent<RectTransform>());
+                newIcon.GetComponent<InventoryIcon>().SetIcon("Egg");
+                newIcon.GetComponent<InventoryIcon>().UpdateQuantity(0);
+            }
             // make 0-[# of chickens] eggs
-            AddAnimal("Egg", chickenCoopInventory["Chicken"]);
-        }
-        // if at least 2 pigs, attempt at pig production
-        if (pigPenInventory > 1)
-        {
-            // make 0-[half total pigs] more pigs
-            AddAnimal("Pig", UnityEngine.Random.Range(0, (int)(pigPenInventory + 0.5f) / 2));
+            int newEggs = UnityEngine.Random.Range(0, chickenCoopInventory["Chicken"]);
+            chickenCoopInventory["Chicken"] += newEggs;
+            chickenCoopUI.transform.GetChild(1).GetChild(1).GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(chickenCoopInventory["Chicken"]);
+            // if at least 2 pigs, attempt at pig production
+            if (pigPenInventory > 1)
+            {
+                // make 0-[half total pigs] more pigs
+                int newPigs = UnityEngine.Random.Range(0, ((int)Mathf.Floor(pigPenInventory / 2) + 1));
+                pigPenInventory += newPigs;
+                pigPenUI.transform.GetChild(1).GetChild(0).GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(pigPenInventory);
+                AddAnimal("Pig", UnityEngine.Random.Range(0, (int)(pigPenInventory + 0.5f) / 2));
+            }
         }
     }
 
@@ -795,7 +877,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         yield return new WaitForSeconds(time);
         if (!wheatPlants.ContainsKey(gridPosition) && !tomatoPlants.ContainsKey(gridPosition) && !lentilPlants.ContainsKey(gridPosition) && !farmPlants.HasTile(gridPosition))
         {
-            SetDirtFieldState(gridPosition, (DirtFieldState) Mathf.Max(0, tileState[gridPosition] - 1));
+            SetDirtFieldState(gridPosition, (DirtFieldState)Mathf.Max(0, tileState[gridPosition] - 1));
             StartCoroutine(DefaultSoil(gridPosition));
         }
     }
@@ -852,6 +934,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             baselineTimerModifierPercentage = Mathf.Max(baselineTimerModifierPercentage, baseLineModifier);
         }
     }
+
     private void PlayActionSound(AudioClip clip)
     {
         float upperValue = Mathf.Lerp(1f, 0.3f, timerModifierPercentage);

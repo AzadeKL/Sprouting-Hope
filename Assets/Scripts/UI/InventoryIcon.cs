@@ -191,11 +191,13 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
                     {
                         UpdateQuantity(int.Parse(quantity.text) - 1);
                         gameManager.AddAnimal(item, 1);
+                        result.gameObject.transform.GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(gameManager.chickenCoopInventory[item]);
                     }
                     else if (result.gameObject.name.Contains("PigCell") && item == "Pig")
                     {
                         UpdateQuantity(int.Parse(quantity.text) - 1);
                         gameManager.AddAnimal(item, 1);
+                        result.gameObject.transform.GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(gameManager.pigPenInventory);
                     }
                     if (int.Parse(quantity.text) <= 0)
                     {
@@ -301,6 +303,11 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
                 if (lastParent.gameObject.name.Contains("GridCell")) playerInventory.RemoveFromInventoryOnly(item, false);
                 else if (lastParent.gameObject.name.Contains("ChickenCell") || lastParent.gameObject.name.Contains("PigCell"))
                 {
+                    GameObject newIcon = Instantiate(playerInventory.inventoryIcon, lastParent);
+                    playerInventory.StretchAndFill(newIcon.GetComponent<RectTransform>());
+                    newIcon.GetComponent<InventoryIcon>().SetIcon(item);
+                    newIcon.GetComponent<InventoryIcon>().UpdateQuantity((int)Mathf.Floor(int.Parse(quantity.text) / 2f));
+                    if (int.Parse(newIcon.GetComponent<InventoryIcon>().quantity.text) <= 0) Destroy(newIcon);
                     gameManager.AddAnimal(item, 0 - (int)Mathf.Ceil(int.Parse(quantity.text) / 2f));
                     UpdateQuantity((int)Mathf.Ceil(int.Parse(quantity.text) / 2f));
                 }
