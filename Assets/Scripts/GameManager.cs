@@ -487,15 +487,12 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         {
             case "Chicken":
                 chickenCoopInventory["Chicken"] = UpdateAndCreateIcon(chickenCoopInventory["Chicken"], chickenCoopUI.transform.GetChild(1).GetChild(0));
-                //if (needsUpdate) chickenCoopUI.transform.GetChild(1).GetChild(0).GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(chickenCoopInventory["Chicken"]);
                 break;
             case "Egg":
                 chickenCoopInventory["Egg"] = UpdateAndCreateIcon(chickenCoopInventory["Egg"], chickenCoopUI.transform.GetChild(1).GetChild(1));
-                //if (needsUpdate) chickenCoopUI.transform.GetChild(1).GetChild(1).GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(chickenCoopInventory["Egg"]);
                 break;
             case "Pig":
                 pigPenInventory = UpdateAndCreateIcon(pigPenInventory, pigPenUI.transform.GetChild(1).GetChild(0));
-                //if (needsUpdate) pigPenUI.transform.GetChild(1).GetChild(0).GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(pigPenInventory);
                 break;
             default:
                 Debugger.Log("Unrecognized animal: " + animal);
