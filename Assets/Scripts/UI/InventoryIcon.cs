@@ -326,11 +326,18 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
         var rightDragged = (dragged == 1);
         var leftDragged = (dragged == 0);
 
+
+
         Debugger.Log("stopped", Debugger.PriorityLevel.LeastImportant);
         dragged = -1;
         // scan cell being dragged at
         List<RaycastResult> results = new List<RaycastResult>();
         EventSystem.current.RaycastAll(eventData, results);
+
+        //This condition creates a bug and same as right draging to a full cell;
+        var BUGCREATER = dragFromAnimalShelter == true && results.Count == 0;
+
+
         foreach (RaycastResult result in results)
         {
 
