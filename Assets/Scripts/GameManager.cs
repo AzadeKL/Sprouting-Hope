@@ -821,17 +821,15 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
     IEnumerator GrowTime(Vector3Int gridPosition)
     {
-        if (growStartTime.ContainsKey(gridPosition) && growTotalTime.ContainsKey(gridPosition))
-        {
-            // set growth time by plant type
-            if (wheatPlants.ContainsKey(gridPosition)) growTotalTime[gridPosition] = wheatGrowTime / timePerTick;
-            else if (tomatoPlants.ContainsKey(gridPosition)) growTotalTime[gridPosition] = tomatoGrowTime / timePerTick;
-            else if (lentilPlants.ContainsKey(gridPosition)) growTotalTime[gridPosition] = lentilGrowTime / timePerTick;
+        if (!growTotalTime.ContainsKey(gridPosition)) growTotalTime.Add(gridPosition, 60f);
+        // set growth time by plant type
+        if (wheatPlants.ContainsKey(gridPosition)) growTotalTime[gridPosition] = wheatGrowTime / timePerTick;
+        else if (tomatoPlants.ContainsKey(gridPosition)) growTotalTime[gridPosition] = tomatoGrowTime / timePerTick;
+        else if (lentilPlants.ContainsKey(gridPosition)) growTotalTime[gridPosition] = lentilGrowTime / timePerTick;
 
-            Debug.Log("Waiting for time to pass...");
-            yield return new WaitUntil(() => time - growStartTime[gridPosition] >= growTotalTime[gridPosition]);
-            Debug.Log(time + " = " + growStartTime[gridPosition] + " + " + growTotalTime[gridPosition]);
-        }
+        Debug.Log("Waiting for time to pass...");
+        yield return new WaitUntil(() => time - growStartTime[gridPosition] >= growTotalTime[gridPosition]);
+        Debug.Log(time + " = " + growStartTime[gridPosition] + " + " + growTotalTime[gridPosition]);
 
         SetDirtFieldState(gridPosition, DirtFieldState.Plowed);
         UpdateCrops(gridPosition);
