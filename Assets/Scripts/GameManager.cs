@@ -140,9 +140,10 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     {
         toolTip = FindObjectOfType<Tooltip>(true).gameObject;
         //Debug.Log("Current showHelpOnNewGameKey is set to: " + PlayerPrefs.GetInt(showHelpOnNewGameKey, 2));
+        bool isNewGame = !SaveSystem.DataManager.instance.Load(this);
         bool showHelpOnNewGame = PlayerPrefs.GetInt(showHelpOnNewGameKey, 1) == 1;
         helpToggle.isOn = showHelpOnNewGame;
-        helpUI.SetActive(showHelpOnNewGame && !SaveSystem.DataManager.instance.Load(this));
+        helpUI.SetActive(isNewGame && showHelpOnNewGame);
     }
     public void Save(GameData gameData)
     {
@@ -153,7 +154,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             ISaveable.AddKey(gameData.gameManagerTileStates, tile.Key, tile.Value);
         }
 
-        Func<string, KeyValuePair<Vector3Int, int>, string> PlantToEntry = (plantName, point) => string.Join(":", plantName, SaveSystem.ISaveable.Vector3IntToString(point.Key), point.Value);
+        Func<string, KeyValuePair<Vector3Int, int>, string> PlantToEntry = (plantName, point) => string.Join(":", plantName, SaveSystem.ISaveable.Vector3IntToString(point.Key), point.Value, growStartTime[point.Key], growTotalTime[point.Key]);
         foreach (var key_value in wheatPlants) gameData.gameManagerPlants.Add(PlantToEntry("Wheat", key_value));
         foreach (var key_value in tomatoPlants) gameData.gameManagerPlants.Add(PlantToEntry("Tomato", key_value));
         foreach (var key_value in lentilPlants) gameData.gameManagerPlants.Add(PlantToEntry("Lentil", key_value));
@@ -169,20 +170,26 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             int fieldState = Convert.ToInt32(entry[1]);
             if (IsDirtFieldState(fieldState))
             {
-                SetDirtFieldState(gridPosition, (DirtFieldState) fieldState);
+                SetDirtFieldState(gridPosition, (DirtFieldState)fieldState);
             }
             else
             {
-                tileState.Add(gridPosition, fieldState);
+                // Field is a crop field
+                SetDirtFieldState(gridPosition, DirtFieldState.Plowed);
             }
         }
+
+        Debug.Log("Loading plants");
         foreach (var entry in gameData.gameManagerPlants)
         {
+            Debug.Log("Loading plants: " + entry);
             var parsed = entry.Split(':');
             string cropName = parsed[0];
             Vector3Int gridPosition = SaveSystem.ISaveable.Vector3IntFromString(parsed[1]);
             int growthState = Convert.ToInt32(parsed[2]);
-            AddCrop(cropName, gridPosition, growthState);
+            float startTime = (float)Convert.ToDouble(parsed[3]);
+            float totalTime = (float)Convert.ToDouble(parsed[4]);
+            AddCrop(cropName, gridPosition, growthState, startTime, totalTime);
         }
 
         return true;
@@ -352,7 +359,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         Instantiate(waterPrefab, gridPosition, Quaternion.identity);
     }
 
-    private void AddCrop(string cropName, Vector3Int gridPosition, int growthState = 0)
+    private void AddCrop(string cropName, Vector3Int gridPosition, int growthState = 0, float startTime = -1f, float totalTime = 60f)
     {
         Debug.Log("Adding crop(" + cropName + ") at position: " + gridPosition + ", growth: " + growthState);
         if (!tileState.ContainsKey(gridPosition) || (tileState[gridPosition] < 1))
@@ -374,8 +381,10 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             SetDirtFieldState(gridPosition, DirtFieldState.Default);
             return;
         }
-        Debug.Log(time);
-        growStartTime.Add(gridPosition, time);
+        if (startTime < 0) startTime = time;
+        Debug.Log(startTime);
+        growStartTime.Add(gridPosition, startTime);
+        growTotalTime.Add(gridPosition, totalTime);
         farmPlants.SetTile(gridPosition, crop[growthState]);
         cropPlants.Add(gridPosition, growthState);
         string seedName = GetSeedName(cropName);
@@ -683,7 +692,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
     IEnumerator GrowTime(Vector3Int gridPosition)
     {
-        if (!growTotalTime.ContainsKey(gridPosition)) growTotalTime.Add(gridPosition, 60f);
         // set growth time by plant type
         if (wheatPlants.ContainsKey(gridPosition)) growTotalTime[gridPosition] = wheatGrowTime / timePerTick;
         else if (tomatoPlants.ContainsKey(gridPosition)) growTotalTime[gridPosition] = tomatoGrowTime / timePerTick;
