@@ -294,7 +294,7 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
             if (eventData.button == PointerEventData.InputButton.Left)
             {
                 if (lastParent.gameObject.name.Contains("GridCell")) playerInventory.RemoveFromInventoryOnly(item, true);
-                else if (lastParent.gameObject.name.Contains("ChickenCell") || lastParent.gameObject.name.Contains("PigCell")) gameManager.AddAnimal(item, 0 - int.Parse(quantity.text));
+                else if (lastParent.gameObject.name.Contains("ChickenCell") || lastParent.gameObject.name.Contains("PigCell")) gameManager.AddAnimalNumb(item, 0 - int.Parse(quantity.text));
                 dragged = 0;
             }
             // dragging with right click
@@ -308,7 +308,7 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
                     newIcon.GetComponent<InventoryIcon>().SetIcon(item);
                     newIcon.GetComponent<InventoryIcon>().UpdateQuantity((int)Mathf.Floor(int.Parse(quantity.text) / 2f));
                     if (int.Parse(newIcon.GetComponent<InventoryIcon>().quantity.text) <= 0) Destroy(newIcon);
-                    gameManager.AddAnimal(item, 0 - (int)Mathf.Ceil(int.Parse(quantity.text) / 2f));
+                    gameManager.AddAnimalNumb(item, 0 - (int)Mathf.Ceil(int.Parse(quantity.text) / 2f));
                     UpdateQuantity((int)Mathf.Ceil(int.Parse(quantity.text) / 2f));
                 }
                 dragged = 1;

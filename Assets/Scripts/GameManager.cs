@@ -536,26 +536,29 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         switch (animal)
         {
             case "Chicken":
-                if (chickenCoopUI.transform.GetChild(1).GetChild(0).childCount == 0 && chickenCoopInventory["Chicken"] + amount > 0)
+                chickenCoopInventory["Chicken"] = (int)Mathf.Max(0, chickenCoopInventory["Chicken"] + amount);
+                if (chickenCoopUI.transform.GetChild(1).GetChild(0).childCount == 0 && chickenCoopInventory["Chicken"] > 0)
                 {
                     newIcon = Instantiate(playerInventory.inventoryIcon, chickenCoopUI.transform.GetChild(1).GetChild(0));
                     playerInventory.StretchAndFill(newIcon.GetComponent<RectTransform>());
                     newIcon.GetComponent<InventoryIcon>().SetIcon(animal);
                     newIcon.GetComponent<InventoryIcon>().UpdateQuantity(amount);
                 }
-                chickenCoopInventory["Chicken"] = (int)Mathf.Max(0, chickenCoopInventory["Chicken"] + amount);
+                else chickenCoopUI.transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<InventoryIcon>().UpdateQuantity(chickenCoopInventory["Chicken"]);
                 break;
             case "Pig":
-                if (pigPenUI.transform.GetChild(1).GetChild(0).childCount == 0 && pigPenInventory + amount > 0)
+                pigPenInventory = (int)Mathf.Max(0, pigPenInventory + amount);
+                if (pigPenUI.transform.GetChild(1).GetChild(0).childCount == 0 && pigPenInventory > 0)
                 {
                     newIcon = Instantiate(playerInventory.inventoryIcon, pigPenUI.transform.GetChild(1).GetChild(0));
                     playerInventory.StretchAndFill(newIcon.GetComponent<RectTransform>());
                     newIcon.GetComponent<InventoryIcon>().SetIcon(animal);
                     newIcon.GetComponent<InventoryIcon>().UpdateQuantity(amount);
                 }
-                pigPenInventory = (int)Mathf.Max(0, pigPenInventory + amount);
+                else pigPenUI.transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<InventoryIcon>().UpdateQuantity(pigPenInventory);
                 break;
             case "Egg":
+                chickenCoopInventory["Egg"] = (int)Mathf.Max(0, chickenCoopInventory["Egg"] + amount);
                 if (chickenCoopUI.transform.GetChild(1).GetChild(1).childCount == 0 && chickenCoopInventory["Egg"] + amount > 0)
                 {
                     newIcon = Instantiate(playerInventory.inventoryIcon, chickenCoopUI.transform.GetChild(1).GetChild(1));
@@ -563,6 +566,23 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                     newIcon.GetComponent<InventoryIcon>().SetIcon(animal);
                     newIcon.GetComponent<InventoryIcon>().UpdateQuantity(amount);
                 }
+                else chickenCoopUI.transform.GetChild(1).GetChild(0).GetChild(1).GetComponent<InventoryIcon>().UpdateQuantity(chickenCoopInventory["Egg"]);
+                break;
+        }
+    }
+
+    public void AddAnimalNumb(string animal, int amount)
+    {
+        Debug.Log("Adding Animal dict only");
+        switch (animal)
+        {
+            case "Chicken":
+                chickenCoopInventory["Chicken"] = (int)Mathf.Max(0, chickenCoopInventory["Chicken"] + amount);
+                break;
+            case "Pig":
+                pigPenInventory = (int)Mathf.Max(0, pigPenInventory + amount);
+                break;
+            case "Egg":
                 chickenCoopInventory["Egg"] = (int)Mathf.Max(0, chickenCoopInventory["Egg"] + amount);
                 break;
         }
