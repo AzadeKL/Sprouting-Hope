@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     [Space]
     [Header("Player")]
     public GameObject player;
+    private PlayerInventory playerInventory;
     public GameObject inventoryUI;
     public Image inventoryUIHeaderImage;
     public TextMeshProUGUI inventoryUIHeaderTextField;
@@ -138,6 +139,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     }
     private void Start()
     {
+        playerInventory = player.GetComponent<PlayerInventory>();
         toolTip = FindObjectOfType<Tooltip>(true).gameObject;
         //Debug.Log("Current showHelpOnNewGameKey is set to: " + PlayerPrefs.GetInt(showHelpOnNewGameKey, 2));
         bool isNewGame = !SaveSystem.DataManager.instance.Load(this);
@@ -216,8 +218,8 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         houseUI.SetActive(false);
         storageUI.SetActive(false);
         chickenCoopUI.SetActive(false);
-        player.GetComponent<PlayerInventory>().sellMode = false;
-        player.GetComponent<PlayerInventory>().giveMode = false;
+        playerInventory.sellMode = false;
+        playerInventory.giveMode = false;
         SetIsModalMode(false);
     }
 
@@ -230,8 +232,8 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     void ExitInventoryMode()
     {
         inventoryUI.SetActive(false);
-        player.GetComponent<PlayerInventory>().sellMode = false;
-        player.GetComponent<PlayerInventory>().giveMode = false;
+        playerInventory.sellMode = false;
+        playerInventory.giveMode = false;
         inventoryUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().color = normalInventory;
         inventoryUIHeaderImage.color = normalInventory;
         inventoryUIHeaderTextField.text = "Inventory";
@@ -388,7 +390,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         farmPlants.SetTile(gridPosition, crop[growthState]);
         cropPlants.Add(gridPosition, growthState);
         string seedName = GetSeedName(cropName);
-        player.GetComponent<PlayerInventory>().RemoveFromInventory(seedName);
+        playerInventory.RemoveFromInventory(seedName);
         StartCoroutine(GrowTime(gridPosition));
         Debug.Log("Planted " + seedName);
     }
@@ -490,7 +492,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                         if (interactWBuildingKeyPressed)
                         {
                             inventoryUI.SetActive(true);
-                            player.GetComponent<PlayerInventory>().sellMode = true;
+                            playerInventory.sellMode = true;
                             inventoryUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().color = sellInventory;
                             inventoryUIHeaderImage.color = sellInventory;
                             inventoryUIHeaderTextField.text = "Fresh Food";
@@ -510,7 +512,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                         if (interactWBuildingKeyPressed)
                         {
                             inventoryUI.SetActive(true);
-                            player.GetComponent<PlayerInventory>().giveMode = true;
+                            playerInventory.giveMode = true;
                             inventoryUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().color = giveInventory;
                             inventoryUIHeaderImage.color = giveInventory;
                             inventoryUIHeaderTextField.text = "Donate";
@@ -650,7 +652,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                 Vector3Int gridPosition = farmLand.WorldToCell(tilePos);
                 TileBase clickedTile = farmLand.GetTile(gridPosition);
                 // if farmland, check what tool was used
-                string handItem = player.GetComponent<PlayerInventory>().handItem;
+                string handItem = playerInventory.handItem;
                 if (clickedTile) switch (handItem)
                     {
                         // if Shovel equipped, till souil
@@ -709,30 +711,30 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     public void UpdateAnimals()
     {
         // if at least one chicken in coop, attempt at egg production
-        if (player.GetComponent<PlayerInventory>().chickenCoopInventory["Chicken"] > 0)
+        if (playerInventory.chickenCoopInventory["Chicken"] > 0)
         {
             Debug.Log("Making more eggs!");
             // if no eggs, make new icon for eggs
-            if (player.GetComponent<PlayerInventory>().chickenCoopInventory["Egg"] == 0)
+            if (playerInventory.chickenCoopInventory["Egg"] == 0)
             {
-                GameObject newIcon = Instantiate(player.GetComponent<PlayerInventory>().inventoryIcon, chickenCoopUI.transform.GetChild(1).GetChild(1));
-                player.GetComponent<PlayerInventory>().StretchAndFill(newIcon.GetComponent<RectTransform>());
+                GameObject newIcon = Instantiate(playerInventory.inventoryIcon, chickenCoopUI.transform.GetChild(1).GetChild(1));
+                playerInventory.StretchAndFill(newIcon.GetComponent<RectTransform>());
                 newIcon.GetComponent<InventoryIcon>().SetIcon("Egg");
                 newIcon.GetComponent<InventoryIcon>().UpdateQuantity(0);
             }
             // make 0-[# of chickens] eggs
-            int newEggs = UnityEngine.Random.Range(0, player.GetComponent<PlayerInventory>().chickenCoopInventory["Chicken"]);
-            player.GetComponent<PlayerInventory>().chickenCoopInventory["Chicken"] += newEggs;
-            chickenCoopUI.transform.GetChild(1).GetChild(1).GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(player.GetComponent<PlayerInventory>().chickenCoopInventory["Chicken"]);
+            int newEggs = UnityEngine.Random.Range(0, playerInventory.chickenCoopInventory["Chicken"]);
+            playerInventory.chickenCoopInventory["Chicken"] += newEggs;
+            chickenCoopUI.transform.GetChild(1).GetChild(1).GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(playerInventory.chickenCoopInventory["Chicken"]);
 
         }
         // if at least 2 pigs, attempt at pig production
-        if (player.GetComponent<PlayerInventory>().pigPenInventory > 1)
+        if (playerInventory.pigPenInventory > 1)
         {
             // make 0-[half total pigs] more pigs
-            int newPigs = UnityEngine.Random.Range(0, ((int) Mathf.Floor(player.GetComponent<PlayerInventory>().pigPenInventory / 2) + 1));
-            player.GetComponent<PlayerInventory>().pigPenInventory += newPigs;
-            pigPenUI.transform.GetChild(1).GetChild(0).GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(player.GetComponent<PlayerInventory>().pigPenInventory);
+            int newPigs = UnityEngine.Random.Range(0, ((int) Mathf.Floor(playerInventory.pigPenInventory / 2) + 1));
+            playerInventory.pigPenInventory += newPigs;
+            pigPenUI.transform.GetChild(1).GetChild(0).GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(playerInventory.pigPenInventory);
         }
     }
 
