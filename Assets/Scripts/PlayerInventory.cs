@@ -170,7 +170,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             Debug.Log(Mathf.Ceil(inventory[Item] / 2f));
             Debug.Log(Mathf.Floor(inventory[Item] / 2f));
 
-            if ((int) Mathf.Ceil(inventory[Item] / 2f) == 1)
+            if ((int) Mathf.Floor(inventory[Item] / 2f) == 0)
             {
                 RemoveFromInventoryOnly(Item, true);
                 return;
