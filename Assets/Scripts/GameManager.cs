@@ -198,7 +198,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             int growthState = Convert.ToInt32(parsed[2]);
             float startTime = (float)Convert.ToDouble(parsed[3]);
             float totalTime = (float)Convert.ToDouble(parsed[4]);
-            AddCrop(cropName, gridPosition, growthState, startTime, totalTime);
+            AddCrop(cropName, gridPosition, growthState, startTime, totalTime, false);
         }
 
         foreach (var key_value in gameData.gameManagerAnimalBuildings)
@@ -406,7 +406,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         Instantiate(waterPrefab, gridPosition, Quaternion.identity);
     }
 
-    private void AddCrop(string cropName, Vector3Int gridPosition, int growthState = 0, float startTime = -1f, float totalTime = 60f)
+    private void AddCrop(string cropName, Vector3Int gridPosition, int growthState = 0, float startTime = -1f, float totalTime = 60f, bool useSeed = true)
     {
         Debug.Log("Adding crop(" + cropName + ") at position: " + gridPosition + ", growth: " + growthState);
         if (!tileState.ContainsKey(gridPosition) || (tileState[gridPosition] < 1))
@@ -435,7 +435,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         farmPlants.SetTile(gridPosition, crop[growthState]);
         cropPlants.Add(gridPosition, growthState);
         string seedName = GetSeedName(cropName);
-        playerInventory.RemoveFromInventory(seedName);
+        if (useSeed) playerInventory.RemoveFromInventory(seedName);
         StartCoroutine(GrowTime(gridPosition));
         Debug.Log("Planted " + seedName);
     }
@@ -490,7 +490,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     {
         Debug.Log("Adding animal: " + animal + " count: " + amount);
 
-        bool needsUpdate = false;
         Func<int, Transform, int> UpdateAndCreateIcon = (count, parent) =>
         {
             bool wasZero = (count == 0);
@@ -822,15 +821,17 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
     IEnumerator GrowTime(Vector3Int gridPosition)
     {
-        // set growth time by plant type
-        if (wheatPlants.ContainsKey(gridPosition)) growTotalTime[gridPosition] = wheatGrowTime / timePerTick;
-        else if (tomatoPlants.ContainsKey(gridPosition)) growTotalTime[gridPosition] = tomatoGrowTime / timePerTick;
-        else if (lentilPlants.ContainsKey(gridPosition)) growTotalTime[gridPosition] = lentilGrowTime / timePerTick;
+        if (growStartTime.ContainsKey(gridPosition) && growTotalTime.ContainsKey(gridPosition))
+        {
+            // set growth time by plant type
+            if (wheatPlants.ContainsKey(gridPosition)) growTotalTime[gridPosition] = wheatGrowTime / timePerTick;
+            else if (tomatoPlants.ContainsKey(gridPosition)) growTotalTime[gridPosition] = tomatoGrowTime / timePerTick;
+            else if (lentilPlants.ContainsKey(gridPosition)) growTotalTime[gridPosition] = lentilGrowTime / timePerTick;
 
-        Debug.Log("Waiting for time to pass...");
-        yield return new WaitUntil(() => time - growStartTime[gridPosition] >= growTotalTime[gridPosition]);
-        Debug.Log(time + " = " + growStartTime[gridPosition] + " + " + growTotalTime[gridPosition]);
-
+            Debug.Log("Waiting for time to pass...");
+            yield return new WaitUntil(() => time - growStartTime[gridPosition] >= growTotalTime[gridPosition]);
+            Debug.Log(time + " = " + growStartTime[gridPosition] + " + " + growTotalTime[gridPosition]);
+        }
 
         SetDirtFieldState(gridPosition, DirtFieldState.Plowed);
         UpdateCrops(gridPosition);
