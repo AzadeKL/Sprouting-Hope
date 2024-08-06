@@ -16,7 +16,7 @@ public class VisualiseChickens : MonoBehaviour
 
     private void Update()
     {
-        var chickenOrEgg = 1;//Mathf.CeilToInt(gameManager.GetNumChickens() / 4) + gameManager.GetNumEggs() / 10;
+        var chickenOrEgg = Mathf.CeilToInt(gameManager.GetNumChickens() / 4) + gameManager.GetNumEggs() / 10;
 
         for (int i = 0; i < pigSprites.Count; i++)
         {

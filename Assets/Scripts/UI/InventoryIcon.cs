@@ -165,12 +165,14 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
         toolTip.SetActive(false);
     }
 
+    private bool leftrightmulti = false;
     public void OnPointerUp(PointerEventData eventData)
     {
         // dragging with left, clicking with right to drop one || dragging with right, clicking with left to drop one
         if ((dragged == 0 && eventData.button == PointerEventData.InputButton.Right)
             || (dragged == 1 && eventData.button == PointerEventData.InputButton.Left))
         {
+            leftrightmulti = true;
             // scan cell being dragged at
             List<RaycastResult> results = new List<RaycastResult>();
             EventSystem.current.RaycastAll(eventData, results);
@@ -247,6 +249,7 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
             else if (!playerInventory.sellMode && !playerInventory.giveMode)
             {
                 playerInventory.ChangeHandItem(item);
+                Debugger.Log("Value of dragged is= " + dragged, Debugger.PriorityLevel.MustShown);
             }
         }
         else if (eventData.button == PointerEventData.InputButton.Right)
@@ -284,7 +287,7 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
     {
         if (DragDisabled() || dragged >= 0) return;
 
-        Debug.Log("dragging");
+        Debugger.Log("DragStarted", Debugger.PriorityLevel.Low);
         lastParent = transform.parent;
         transform.SetParent(rectTransform.root, true);
         if (dragged < 0)
@@ -320,8 +323,10 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
         if (DragDisabled() || dragged < 0) return;
 
         var dragFromAnimalShelter = (lastParent.name.Contains("PigCell") || lastParent.name.Contains("ChickenCell"));
+        var rightDragged = (dragged == 1);
+        var leftDragged = (dragged == 0);
 
-        Debug.Log("stopped");
+        Debugger.Log("stopped", Debugger.PriorityLevel.LeastImportant);
         dragged = -1;
         // scan cell being dragged at
         List<RaycastResult> results = new List<RaycastResult>();
@@ -336,9 +341,30 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
                 {
                     if (result.gameObject.transform.childCount > 0)
                     {
-                        if (dragFromAnimalShelter == true)
+                        if (dragFromAnimalShelter == true || rightDragged == true || leftrightmulti == true)
                         {
+                            leftrightmulti = false;
+                            //var otherInventoryIcon = result.gameObject.transform.GetChild(0).GetComponent<InventoryIcon>();
+                            //if (otherInventoryIcon != null)
+                            //{
+                            //    if (otherInventoryIcon.item == item && dragFromAnimalShelter)
+                            //    {
+
+                            //        playerInventory.AddToInventory(item, int.Parse(quantity.text));
+                            //        otherInventoryIcon.UpdateQuantity(int.Parse(quantity.text));
+                            //        Destroy(this.gameObject);
+                            //        return;
+
+                            //    }
+                            //    else
+                            //    {
+                            //        break;
+                            //    }
+                            //}
+
                             break;
+
+
                         }
                         var otherElement = result.gameObject.transform.GetChild(0);
                         otherElement.SetParent(lastParent, true);
@@ -377,7 +403,7 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
             // if item still exists in inventory (right click dragging), merge items back to one slot
             if (playerInventory.inventory.ContainsKey(item))
             {
-                Debug.Log("Still exists");
+                Debugger.Log("Still exists", Debugger.PriorityLevel.Medium);
                 playerInventory.AddToInventory(item, int.Parse(quantity.text));
                 toolTip.SetActive(false);
                 Destroy(this.gameObject);

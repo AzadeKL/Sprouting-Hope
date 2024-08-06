@@ -151,7 +151,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
     // remove said item from the inventory for dragging and other inventories
     public void RemoveFromInventoryOnly(string Item, bool full)
     {
-        Debug.Log("Dragging");
+        Debugger.Log("Dragging", Debugger.PriorityLevel.LeastImportant);
         // left click take all items from inventory, removing from dicts
         if (full)
         {
@@ -167,8 +167,8 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         {
             toolTip.SetActive(false);
             GameObject icon = inventoryIcons[Item];
-            Debug.Log(Mathf.Ceil(inventory[Item] / 2f));
-            Debug.Log(Mathf.Floor(inventory[Item] / 2f));
+            //Debug.Log(Mathf.Ceil(inventory[Item] / 2f));
+            //Debug.Log(Mathf.Floor(inventory[Item] / 2f));
 
             if ((int) Mathf.Floor(inventory[Item] / 2f) == 0)
             {

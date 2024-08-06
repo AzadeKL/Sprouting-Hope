@@ -859,6 +859,16 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         return pigPenInventory;
     }
 
+    public int GetNumChickens()
+    {
+        return chickenCoopInventory["Chicken"];
+    }
+
+    public int GetNumEggs()
+    {
+        return chickenCoopInventory["Egg"];
+    }
+
     public void UpdateAnimals()
     {
         // if at least one chicken in coop, attempt at egg production
