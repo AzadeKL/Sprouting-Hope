@@ -78,6 +78,7 @@ public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                         {
                             SaveSystem.DataManager.instance.AddDestroyedDestroyable(upgradeIcon);
                         }
+                        toolTip.SetActive(false);
                         Destroy(oldItem);
                     }
                 }

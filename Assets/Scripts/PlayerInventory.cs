@@ -293,6 +293,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 
     void Start()
     {
+        Debug.Log(chickenCoopInventory["Chicken"]);
         toolTip = FindObjectOfType<Tooltip>(true).gameObject;
 
         if (SaveSystem.DataManager.instance.Load(this) == false)
