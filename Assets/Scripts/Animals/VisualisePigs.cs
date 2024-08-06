@@ -7,12 +7,16 @@ public class VisualisePigs : MonoBehaviour
 
     [SerializeField] private PlayerInventory playerInventory;
 
+    private GameManager gameManager;
 
-
+    private void Awake()
+    {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+    }
 
     private void Update()
     {
-        var pigCount = playerInventory.pigPenInventory;
+        var pigCount = gameManager.GetNumPigs();
 
         for (int i = 0; i < pigSprites.Count; i++)
         {

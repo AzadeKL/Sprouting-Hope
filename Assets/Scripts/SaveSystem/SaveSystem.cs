@@ -34,6 +34,7 @@ namespace SaveSystem
         public int gameManagerMainProgress = 0;
         public List<string> gameManagerTileStates = new List<string>();
         public List<string> gameManagerPlants = new List<string>();
+        public List<string> gameManagerAnimalBuildings = new List<string>();
 
         public List<string> destroyedObjectIds = new List<string>();
     }

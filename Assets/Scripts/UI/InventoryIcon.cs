@@ -172,7 +172,6 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
         if ((dragged == 0 && eventData.button == PointerEventData.InputButton.Right)
             || (dragged == 1 && eventData.button == PointerEventData.InputButton.Left))
         {
-            Debug.Log(playerInventory.chickenCoopInventory["Chicken"]);
             // scan cell being dragged at
             List<RaycastResult> results = new List<RaycastResult>();
             EventSystem.current.RaycastAll(eventData, results);
@@ -191,35 +190,11 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
                     else if (result.gameObject.name.Contains("ChickenCell") && item == "Chicken")
                     {
                         UpdateQuantity(int.Parse(quantity.text) - 1);
-                        Debug.Log(playerInventory.chickenCoopInventory["Chicken"]);
-                        if (playerInventory.chickenCoopInventory["Chicken"] > 0)
-                        {
-                            result.gameObject.transform.GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(playerInventory.chickenCoopInventory[item] + 1);
-                        }
-                        else
-                        {
-                            GameObject newIcon = Instantiate(playerInventory.inventoryIcon, result.gameObject.transform);
-                            playerInventory.StretchAndFill(newIcon.GetComponent<RectTransform>());
-                            newIcon.GetComponent<InventoryIcon>().SetIcon(item);
-                            newIcon.GetComponent<InventoryIcon>().UpdateQuantity(playerInventory.chickenCoopInventory[item]);
-                        }
-                        playerInventory.AddAnimal(item, 1);
+                        gameManager.AddAnimal(item, 1);
                     }
                     else if (result.gameObject.name.Contains("PigCell") && item == "Pig")
                     {
-                        UpdateQuantity(int.Parse(quantity.text) - 1);
-                        if (playerInventory.pigPenInventory > 0)
-                        {
-                            result.gameObject.transform.GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(playerInventory.pigPenInventory + 1);
-                        }
-                        else
-                        {
-                            GameObject newIcon = Instantiate(playerInventory.inventoryIcon, result.gameObject.transform);
-                            playerInventory.StretchAndFill(newIcon.GetComponent<RectTransform>());
-                            newIcon.GetComponent<InventoryIcon>().SetIcon(item);
-                            newIcon.GetComponent<InventoryIcon>().UpdateQuantity(playerInventory.pigPenInventory);
-                        }
-                        playerInventory.AddAnimal(item, 1);
+                        gameManager.AddAnimal(item, 1);
                     }
                     if (int.Parse(quantity.text) <= 0)
                     {
@@ -316,7 +291,7 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
             if (eventData.button == PointerEventData.InputButton.Left)
             {
                 if (lastParent.gameObject.name.Contains("GridCell")) playerInventory.RemoveFromInventoryOnly(item, true);
-                else if (lastParent.gameObject.name.Contains("ChickenCell") || lastParent.gameObject.name.Contains("PigCell")) playerInventory.AddAnimal(item, 0 - int.Parse(quantity.text));
+                else if (lastParent.gameObject.name.Contains("ChickenCell") || lastParent.gameObject.name.Contains("PigCell")) gameManager.AddAnimal(item, 0 - int.Parse(quantity.text));
                 dragged = 0;
             }
             // dragging with right click
@@ -325,11 +300,7 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
                 if (lastParent.gameObject.name.Contains("GridCell")) playerInventory.RemoveFromInventoryOnly(item, false);
                 else if (lastParent.gameObject.name.Contains("ChickenCell") || lastParent.gameObject.name.Contains("PigCell"))
                 {
-                    GameObject newIcon = Instantiate(playerInventory.inventoryIcon, lastParent);
-                    playerInventory.StretchAndFill(newIcon.GetComponent<RectTransform>());
-                    newIcon.GetComponent<InventoryIcon>().SetIcon(item);
-                    newIcon.GetComponent<InventoryIcon>().UpdateQuantity((int)Mathf.Floor(int.Parse(quantity.text) / 2f));
-                    playerInventory.AddAnimal(item, 0 - (int)Mathf.Ceil(int.Parse(quantity.text) / 2f));
+                    gameManager.AddAnimal(item, 0 - (int)Mathf.Ceil(int.Parse(quantity.text) / 2f));
                     UpdateQuantity((int)Mathf.Ceil(int.Parse(quantity.text) / 2f));
                 }
                 dragged = 1;
@@ -389,16 +360,10 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
         rectTransform.localPosition = Vector3.zero;
 
         Debug.Log("new parent: " + lastParent.gameObject.name);
-        if (lastParent.gameObject.name.Contains("ChickenCell") && playerInventory.chickenCoopInventory["Chicken"] > 0
-            || lastParent.gameObject.name.Contains("PigCell") && playerInventory.pigPenInventory > 0)
+        if (lastParent.gameObject.name.Contains("ChickenCell") || lastParent.gameObject.name.Contains("PigCell"))
         {
-            playerInventory.AddAnimal(item, int.Parse(quantity.text));
-            if (lastParent.gameObject.name.Contains("ChickenCell")) lastParent.GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(playerInventory.chickenCoopInventory[item]);
-            else if (lastParent.gameObject.name.Contains("PigCell")) lastParent.GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(playerInventory.pigPenInventory);
+            gameManager.AddAnimal(item, int.Parse(quantity.text));
         }
-        else if (lastParent.gameObject.name.Contains("ChickenCell") || lastParent.gameObject.name.Contains("PigCell")) playerInventory.AddAnimal(item, int.Parse(quantity.text));
-
-
         // if placed in inventory add back item to inventory dicts
         else if (lastParent.gameObject.name.Contains("GridCell"))
         {

@@ -40,11 +40,6 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
     [SerializeField] private GameEvent handChanged;
     [SerializeField] private GameEvent inventoryChanged;
 
-    [Space]
-    [Header("AnimalUI")]
-    public Dictionary<string, int> chickenCoopInventory = new Dictionary<string, int> { { "Chicken", 0 }, { "Egg", 0 } };
-    public int pigPenInventory = 0;
-
     private GameObject toolTip;//Ui tool tip
     public void Save(GameData gameData)
     {
@@ -97,51 +92,6 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         ChangeHandItem(handItem);
 
         return true;
-    }
-
-    // when loading the game utilize variables to recreate the icons for each animal pen
-    private void LoadAnimals()
-    {
-        if (chickenCoopInventory["Chicken"] > 0)
-        {
-            GameObject newIcon = Instantiate(inventoryIcon, GameObject.Find("ChickenCell").transform.parent.GetChild(0));
-            StretchAndFill(newIcon.GetComponent<RectTransform>());
-            newIcon.GetComponent<InventoryIcon>().SetIcon("Chicken");
-            newIcon.GetComponent<InventoryIcon>().UpdateQuantity(chickenCoopInventory["Chicken"]);
-        }
-        if (chickenCoopInventory["Egg"] > 0)
-        {
-            GameObject newIcon = Instantiate(inventoryIcon, GameObject.Find("ChickenCell").transform.parent.GetChild(1));
-            StretchAndFill(newIcon.GetComponent<RectTransform>());
-            newIcon.GetComponent<InventoryIcon>().SetIcon("Egg");
-            newIcon.GetComponent<InventoryIcon>().UpdateQuantity(chickenCoopInventory["Egg"]);
-        }
-
-        if (pigPenInventory > 0)
-        {
-            GameObject newIcon = Instantiate(inventoryIcon, GameObject.Find("PigCell").transform);
-            StretchAndFill(newIcon.GetComponent<RectTransform>());
-            newIcon.GetComponent<InventoryIcon>().SetIcon("Pig");
-            newIcon.GetComponent<InventoryIcon>().UpdateQuantity(pigPenInventory);
-        }
-    }
-
-    public void AddAnimal(string animal, int amount)
-    {
-        Debug.Log("Adding Animal");
-        switch (animal)
-        {
-            case "Chicken":
-            Debug.Log("Added Chicken");
-            chickenCoopInventory["Chicken"] = (int) Mathf.Max(0, chickenCoopInventory["Chicken"] + amount);
-            break;
-            case "Pig":
-            pigPenInventory = (int) Mathf.Max(0, pigPenInventory + amount);
-            break;
-            case "Egg":
-            chickenCoopInventory["Egg"] = (int) Mathf.Max(0, chickenCoopInventory["Egg"] + amount);
-            break;
-        }
     }
 
     public void AddToInventory(string Item, int Count = 1)
@@ -293,7 +243,6 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 
     void Start()
     {
-        Debug.Log(chickenCoopInventory["Chicken"]);
         toolTip = FindObjectOfType<Tooltip>(true).gameObject;
 
         if (SaveSystem.DataManager.instance.Load(this) == false)
