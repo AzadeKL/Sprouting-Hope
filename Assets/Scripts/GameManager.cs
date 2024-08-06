@@ -673,7 +673,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                     }
                     else if (chickenCoop.Contains(buildings.GetTile(gridPosition + neighborPosition)))
                     {
-                        Debug.Log("Interacting with Chicken Coop!");
+                        Debugger.Log("Interacting with Chicken Coop!", Debugger.PriorityLevel.LeastImportant);
 
                         if (interactWBuildingKeyPressed)
                         {
@@ -707,7 +707,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                     }
                     else if (pigPen.Contains(buildings.GetTile(gridPosition + neighborPosition)))
                     {
-                        Debug.Log("Interacting with Pig Pen!");
+                        Debugger.Log("Interacting with Pig Pen!", Debugger.PriorityLevel.LeastImportant);
 
                         if (interactWBuildingKeyPressed)
                         {
