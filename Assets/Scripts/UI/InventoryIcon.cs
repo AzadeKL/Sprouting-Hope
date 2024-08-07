@@ -335,7 +335,7 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
         EventSystem.current.RaycastAll(eventData, results);
 
         //This condition creates a bug and same as right draging to a full cell;
-        var BUGCREATER = dragFromAnimalShelter == true && results.Count == 0;
+        var BUGCREATER = dragFromAnimalShelter == true && rightDragged;//&& results.Count == 0 It is not zero because raycast is getting the object itself
 
 
         foreach (RaycastResult result in results)
@@ -396,6 +396,21 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
                 }
             }
         }
+
+
+        if (BUGCREATER == true && lastParent.childCount > 0)
+        {
+            var myOtherHalf = lastParent.GetChild(0).GetComponent<InventoryIcon>();
+            var total = int.Parse(myOtherHalf.quantity.text) + int.Parse(quantity.text);
+            myOtherHalf.UpdateQuantity(total);
+
+            //TODO need  1 more step with pigPenInventory?
+            Debugger.Log("BUGCREATER Check total is  " + total + " but gamemanager value is " + gameManager.pigPenInventory, Debugger.PriorityLevel.MustShown);
+
+            Destroy(gameObject);
+            return;
+        }
+
         transform.SetParent(lastParent, true);
         rectTransform.localPosition = Vector3.zero;
 

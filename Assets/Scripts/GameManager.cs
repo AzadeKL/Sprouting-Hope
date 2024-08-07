@@ -899,6 +899,8 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             if (pigPenInventory > 1)
             {
                 // make 0-[half total pigs] more pigs
+
+                //TODO Is this a bug or intendted operation? Why there is 2 DIFFERENT random here?
                 int newPigs = UnityEngine.Random.Range(0, ((int) Mathf.Floor(pigPenInventory / 2) + 1));
                 pigPenInventory += newPigs;
                 pigPenUI.transform.GetChild(1).GetChild(0).GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(pigPenInventory);
