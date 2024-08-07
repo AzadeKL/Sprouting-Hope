@@ -384,8 +384,20 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
                 // if putting chicken in chicken coop, or pig in pig pen
                 else if ((result.gameObject.name.Contains("ChickenCell") && item == "Chicken") || (result.gameObject.name.Contains("PigCell") && item == "Pig"))
                 {
+
+
                     if (result.gameObject.transform.childCount > 0)
                     {
+
+                        if (rightDragged == true)
+                        {
+                            //Right dragging to itself back in Animal Pens. I have no idea how EGGS will react to these changes.
+                            var myOtherHalf = lastParent.GetChild(0).GetComponent<InventoryIcon>();
+                            var total = int.Parse(myOtherHalf.quantity.text) + int.Parse(quantity.text);
+                            UpdateQuantity(total);
+                            BUGCREATER = false;
+                        }
+
                         var otherElement = result.gameObject.transform.GetChild(0);
                         otherElement.SetParent(lastParent, true);
                         otherElement.GetComponent<RectTransform>().localPosition = Vector3.zero;
@@ -393,6 +405,9 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
                         Destroy(otherElement.gameObject);
                     }
                     lastParent = result.gameObject.transform.parent.GetChild(0);
+
+
+
                 }
             }
         }
@@ -404,8 +419,9 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
             var total = int.Parse(myOtherHalf.quantity.text) + int.Parse(quantity.text);
             myOtherHalf.UpdateQuantity(total);
 
-            //TODO need  1 more step with pigPenInventory?
-            Debugger.Log("BUGCREATER Check total is  " + total + " but gamemanager value is " + gameManager.pigPenInventory, Debugger.PriorityLevel.MustShown);
+            //TODO need  1 more step with pigPenInventory? (testing with pigs generally)
+
+            Debugger.Log("BUGCREATER Check total is  " + total + " but gamemanager value for PIGS is " + gameManager.pigPenInventory, Debugger.PriorityLevel.MustShown);
 
             Destroy(gameObject);
             return;
