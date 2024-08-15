@@ -28,7 +28,7 @@ public class HotBarManager : MonoBehaviour
         for (int i = 0; i < icons.Count; i++)
         {
 
-            if (icons[i] == null || Int32.Parse(icons[i].quantity.text) <= 0)
+            if (icons[i] == null || icons[i].quantity <= 0)
             {
                 var childImage = hotbarSelectedImages[i].transform.GetChild(0).GetComponentInChildren<Image>(true);
                 childImage.enabled = false;

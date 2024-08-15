@@ -9426,9 +9426,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0
+    y: 0.048494983
     width: 1
-    height: 1
+    height: 0.90301
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
@@ -37964,6 +37964,7 @@ MonoBehaviour:
   - {fileID: 1404549799}
   - {fileID: 1198524950}
   hotbarIndex: 0
+  newInventory: []
   sellMode: 0
   giveMode: 0
   money: 50
@@ -49562,6 +49563,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: -12.340088
       objectReference: {fileID: 0}
+    - target: {fileID: 569039828812942668, guid: ff0bb2ebff9c36b45ba820ed5995fef3, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 648332917342345450, guid: ff0bb2ebff9c36b45ba820ed5995fef3, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -51997,6 +52002,10 @@ PrefabInstance:
     - target: {fileID: 7486766995299965674, guid: ff0bb2ebff9c36b45ba820ed5995fef3, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7546209215970858766, guid: ff0bb2ebff9c36b45ba820ed5995fef3, type: 3}
+      propertyPath: m_Name
+      value: GridCell (0)
       objectReference: {fileID: 0}
     - target: {fileID: 7707891458759002661, guid: ff0bb2ebff9c36b45ba820ed5995fef3, type: 3}
       propertyPath: m_AnchorMax.y

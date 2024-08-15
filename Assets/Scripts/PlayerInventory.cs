@@ -19,8 +19,10 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
     public int hotbarIndex;
 
     // inventory
+    public GameObject[] newInventory;
     public Dictionary<string, int> inventory = new Dictionary<string, int>();
     public Dictionary<string, GameObject> inventoryIcons = new Dictionary<string, GameObject>();
+
 
     // sell mode for when at restaurant
     public bool sellMode = false;
