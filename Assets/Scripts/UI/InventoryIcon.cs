@@ -5,21 +5,27 @@ using UnityEngine.EventSystems;
 using Image = UnityEngine.UI.Image;
 
 
-public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler
+public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler
 {
     [SerializeField] private GameEvent inventoryChangedEvent;
     [SerializeField] private List<Sprite> imageicons;
-    public TextMeshProUGUI quantity;
+    [SerializeField] private TextMeshProUGUI quantityText;
 
+
+    [Space]
+    [Header("Item Info")]
+    public int quantity;
     public string item;
     public int sellValue;
     public int giveValue;
+    public Transform lastParent;
+
+
     private GameManager gameManager;
     private PlayerInventory playerInventory;
     private GameObject toolTip;
 
     private RectTransform rectTransform;
-    public Transform lastParent;
     private Canvas canvas;
 
     private int dragged = -1;
@@ -41,16 +47,17 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
 
     public void UpdateQuantity(int amount)
     {
-        quantity.text = amount.ToString();
-        if (amount <= 1)
+        quantity = amount;
+        quantityText.text = quantity.ToString();
+        if (quantity <= 1)
         {
-            quantity.gameObject.transform.parent.gameObject.GetComponent<Image>().enabled = false;
-            quantity.enabled = false;
+            quantityText.gameObject.transform.parent.gameObject.GetComponent<Image>().enabled = false;
+            quantityText.enabled = false;
         }
         else
         {
-            quantity.gameObject.transform.parent.gameObject.GetComponent<Image>().enabled = true;
-            quantity.enabled = true;
+            quantityText.gameObject.transform.parent.gameObject.GetComponent<Image>().enabled = true;
+            quantityText.enabled = true;
         }
     }
 
@@ -60,95 +67,95 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
         switch (tag)
         {
             case "Rusty Hoe":
-            GetComponent<Image>().sprite = imageicons[0];
-            break;
+                GetComponent<Image>().sprite = imageicons[0];
+                break;
             case "Bronze Hoe":
-            GetComponent<Image>().sprite = imageicons[1];
-            break;
+                GetComponent<Image>().sprite = imageicons[1];
+                break;
             case "Silver Hoe":
-            GetComponent<Image>().sprite = imageicons[2];
-            break;
+                GetComponent<Image>().sprite = imageicons[2];
+                break;
             case "Gold Hoe":
-            GetComponent<Image>().sprite = imageicons[3];
-            break;
+                GetComponent<Image>().sprite = imageicons[3];
+                break;
             case "Rusty Watering Can":
-            GetComponent<Image>().sprite = imageicons[4];
-            break;
+                GetComponent<Image>().sprite = imageicons[4];
+                break;
             case "Bronze Watering Can":
-            GetComponent<Image>().sprite = imageicons[5];
-            break;
+                GetComponent<Image>().sprite = imageicons[5];
+                break;
             case "Silver Watering Can":
-            GetComponent<Image>().sprite = imageicons[6];
-            break;
+                GetComponent<Image>().sprite = imageicons[6];
+                break;
             case "Gold Watering Can":
-            GetComponent<Image>().sprite = imageicons[7];
-            break;
+                GetComponent<Image>().sprite = imageicons[7];
+                break;
             case "Rusty Shovel":
-            GetComponent<Image>().sprite = imageicons[8];
-            break;
+                GetComponent<Image>().sprite = imageicons[8];
+                break;
             case "Bronze Shovel":
-            GetComponent<Image>().sprite = imageicons[9];
-            break;
+                GetComponent<Image>().sprite = imageicons[9];
+                break;
             case "Silver Shovel":
-            GetComponent<Image>().sprite = imageicons[10];
-            break;
+                GetComponent<Image>().sprite = imageicons[10];
+                break;
             case "Gold Shovel":
-            GetComponent<Image>().sprite = imageicons[11];
-            break;
+                GetComponent<Image>().sprite = imageicons[11];
+                break;
             case "Tomato":
-            GetComponent<Image>().sprite = imageicons[12];
-            sellValue = 6;
-            giveValue = 90;
-            break;
+                GetComponent<Image>().sprite = imageicons[12];
+                sellValue = 6;
+                giveValue = 90;
+                break;
             case "Lentil":
-            GetComponent<Image>().sprite = imageicons[13];
-            sellValue = 10;
-            giveValue = 100;
-            break;
+                GetComponent<Image>().sprite = imageicons[13];
+                sellValue = 10;
+                giveValue = 100;
+                break;
             case "Egg":
-            GetComponent<Image>().sprite = imageicons[14];
-            sellValue = 50;
-            giveValue = 150;
-            break;
+                GetComponent<Image>().sprite = imageicons[14];
+                sellValue = 50;
+                giveValue = 150;
+                break;
             case "Chicken":
-            GetComponent<Image>().sprite = imageicons[15];
-            sellValue = 50;
-            giveValue = 250;
-            break;
+                GetComponent<Image>().sprite = imageicons[15];
+                sellValue = 50;
+                giveValue = 250;
+                break;
             case "Pig":
-            GetComponent<Image>().sprite = imageicons[16];
-            sellValue = 125;
-            giveValue = 350;
-            break;
+                GetComponent<Image>().sprite = imageicons[16];
+                sellValue = 125;
+                giveValue = 350;
+                break;
             case "Cow":
-            GetComponent<Image>().sprite = imageicons[17];
-            sellValue = 1000;
-            giveValue = 700;
-            break;
+                GetComponent<Image>().sprite = imageicons[17];
+                sellValue = 1000;
+                giveValue = 700;
+                break;
 
             case "Wheat Seeds":
-            GetComponent<Image>().sprite = imageicons[18];
-            sellValue = 0;
-            giveValue = 1;
-            break;
+                GetComponent<Image>().sprite = imageicons[18];
+                sellValue = 0;
+                giveValue = 1;
+                break;
             case "Tomato Seeds":
-            GetComponent<Image>().sprite = imageicons[19];
-            sellValue = 2;
-            giveValue = 1;
-            break;
+                GetComponent<Image>().sprite = imageicons[19];
+                sellValue = 2;
+                giveValue = 1;
+                break;
             case "Lentils Seeds":
-            GetComponent<Image>().sprite = imageicons[20];
-            sellValue = 5;
-            giveValue = 1;
-            break;
+                GetComponent<Image>().sprite = imageicons[20];
+                sellValue = 5;
+                giveValue = 1;
+                break;
             case "Wheat":
-            GetComponent<Image>().sprite = imageicons[21];
-            sellValue = 3;
-            giveValue = 50;
-            break;
+                GetComponent<Image>().sprite = imageicons[21];
+                sellValue = 3;
+                giveValue = 50;
+                break;
             default:
-            GetComponent<Image>().sprite = imageicons[22];
-            break;
+                GetComponent<Image>().sprite = imageicons[22];
+                break;
         }
     }
 
@@ -165,9 +172,60 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
         toolTip.SetActive(false);
     }
 
-    private bool leftrightmulti = false;
+    private GameObject raycastIcon(PointerEventData eventData)
+    {
+        // scan cell being dragged at
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
+        GameObject foundObject = null;
+        foreach (RaycastResult result in results)
+        {
+            if (result.gameObject != null && result.gameObject.GetComponent<RectTransform>() != null)
+            {
+                if (result.gameObject.name.Contains("Cell") || result.gameObject.name.Contains("Cell") || result.gameObject.name.Contains("Cell"))foundObject = result.gameObject;
+            }
+        }
+        return foundObject;
+    }
+
     public void OnPointerUp(PointerEventData eventData)
     {
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            Debug.Log("clicked");
+            if (dragged < 0)
+            {
+                dragged = 0;
+                lastParent = transform.parent;
+                transform.SetParent(rectTransform.root, true);
+            }
+            else if (dragged >= 0)
+            {
+                Debug.Log("End Drag");
+                GameObject newCell = raycastIcon(eventData);
+                // scan cell being dragged at
+                if (newCell)
+                {
+                    Debug.Log(newCell.name);
+                    if (newCell.name.Contains("GridCell"))
+                    {
+                        lastParent = newCell.transform;
+                        transform.SetParent(lastParent);
+                        rectTransform.localPosition = Vector3.zero;
+                    }
+                }
+                else
+                {
+                    Debug.Log("whoops");
+                    transform.SetParent(lastParent);
+                    rectTransform.localPosition = Vector3.zero;
+                }
+                dragged = -1;
+            }
+        }
+
+
+        /*
         // dragging with left, clicking with right to drop one || dragging with right, clicking with left to drop one
         if ((dragged == 0 && eventData.button == PointerEventData.InputButton.Right)
             || (dragged == 1 && eventData.button == PointerEventData.InputButton.Left))
@@ -280,10 +338,10 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
             }
 
 
-        }
+        }*/
     }
 
-    public void OnBeginDrag(PointerEventData eventData)
+    /*public void OnBeginDrag(PointerEventData eventData)
     {
         if (DragDisabled() || dragged >= 0) return;
 
@@ -316,9 +374,9 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
                 dragged = 1;
             }
         }
-    }
+    }*/
 
-    public void OnEndDrag(PointerEventData eventData)
+    /*public void OnEndDrag(PointerEventData eventData)
     {
         if (DragDisabled() || dragged < 0) return;
 
@@ -455,13 +513,11 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
             }
         }
         inventoryChangedEvent.TriggerEvent();
-    }
+    }*/
 
-    public void OnDrag(PointerEventData eventData)
+    void Update()
     {
-        if (DragDisabled() || dragged < 0) return;
-
-        transform.position = eventData.position;
+        if (!DragDisabled() && dragged >= 0) transform.position = Input.mousePosition;
     }
 
     public void ChangeParentColor(float colorAlpha)

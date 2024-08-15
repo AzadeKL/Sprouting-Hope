@@ -200,13 +200,13 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             AddCrop(cropName, gridPosition, growthState, startTime, totalTime, false);
         }
 
-        foreach (var key_value in gameData.gameManagerAnimalBuildings)
+        /*foreach (var key_value in gameData.gameManagerAnimalBuildings)
         {
             var parsed = ISaveable.ParseKey(key_value);
             string animal = parsed[0];
             int count = Convert.ToInt32((string) parsed[1]);
             AddAnimal(animal, count);
-        }
+        }*/
 
         return true;
     }

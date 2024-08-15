@@ -117,7 +117,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 28104525df8f7904c90a27c94b66f4ef, type: 3}
   - {fileID: 21300000, guid: 60a00ceadfbec1a43827da5b03993f5a, type: 3}
   - {fileID: 21300000, guid: 78e49b5b05c036643bb30886fc0dfa29, type: 3}
-  quantity: {fileID: 9133616027069098356}
+  quantityText: {fileID: 9133616027069098356}
+  quantity: 0
   item: 
   sellValue: 0
   giveValue: 0
