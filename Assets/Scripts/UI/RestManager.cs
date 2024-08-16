@@ -49,13 +49,17 @@ public class RestManager : MonoBehaviour
 
     private void HidePlayer()
     {
-        player.gameObject.SetActive(false);
+        player.GetComponent<SpriteRenderer>().enabled = false;
+        player.GetComponent<PlayerMovement>().enabled = false;
+        foreach (Transform child in player.transform) child.gameObject.SetActive(false);
 
     }
 
     private void ShowPlayer()
     {
-        player.gameObject.SetActive(true);
+        player.GetComponent<SpriteRenderer>().enabled = true;
+        player.GetComponent<PlayerMovement>().enabled = true;
+        foreach (Transform child in player.transform) child.gameObject.SetActive(true);
 
 
         //if (player.GetComponent<PlayerInventory>().money < 500)

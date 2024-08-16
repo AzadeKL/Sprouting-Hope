@@ -90,7 +90,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             AddToInventory(gameData.playerInventoryInventoryKeys[i], gameData.playerInventoryInventoryValues[i]);
         }
 
-        ChangeHandItem(handItem);
+        //ChangeHandItem(handItem);
 
         return true;
     }
@@ -116,6 +116,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             {
                 InventoryIcon newIcon = Instantiate(inventoryIcon, gridslot).GetComponent<InventoryIcon>();
                 newIcon.InitializeVariables();
+                Debug.Log("initialized");
                 newIcon.SetIcon(Item);
                 newIcon.UpdateQuantity(Count);
                 inventoryChanged.TriggerEvent();

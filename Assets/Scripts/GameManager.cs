@@ -178,7 +178,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             int fieldState = Convert.ToInt32(entry[1]);
             if (IsDirtFieldState(fieldState))
             {
-                SetDirtFieldState(gridPosition, (DirtFieldState) fieldState);
+                SetDirtFieldState(gridPosition, (DirtFieldState)fieldState);
             }
             else
             {
@@ -195,8 +195,8 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             string cropName = parsed[0];
             Vector3Int gridPosition = SaveSystem.ISaveable.Vector3IntFromString(parsed[1]);
             int growthState = Convert.ToInt32(parsed[2]);
-            float startTime = (float) Convert.ToDouble(parsed[3]);
-            float totalTime = (float) Convert.ToDouble(parsed[4]);
+            float startTime = (float)Convert.ToDouble(parsed[3]);
+            float totalTime = (float)Convert.ToDouble(parsed[4]);
             AddCrop(cropName, gridPosition, growthState, startTime, totalTime, false);
         }
 
@@ -292,7 +292,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
     private static bool IsDirtFieldState(int state)
     {
-        return (state >= 0) && (state < (int) DirtFieldState.NumDirtFieldStates);
+        return (state >= 0) && (state < (int)DirtFieldState.NumDirtFieldStates);
     }
 
     private static string GetSeedName(string cropName)
@@ -310,21 +310,21 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         switch (cropName)
         {
             case "Wheat":
-            crop = wheat;
-            cropPlants = wheatPlants;
-            break;
+                crop = wheat;
+                cropPlants = wheatPlants;
+                break;
             case "Tomato":
-            crop = tomato;
-            cropPlants = tomatoPlants;
-            break;
+                crop = tomato;
+                cropPlants = tomatoPlants;
+                break;
             case "Lentils":
-            crop = lentil;
-            cropPlants = lentilPlants;
-            break;
+                crop = lentil;
+                cropPlants = lentilPlants;
+                break;
             default:
-            crop = null;
-            cropPlants = null;
-            break;
+                crop = null;
+                cropPlants = null;
+                break;
         }
 
         return crop != null;
@@ -355,26 +355,26 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         switch (dirtFieldState)
         {
             case DirtFieldState.Default:
-            fieldType = defaultField;
-            break;
+                fieldType = defaultField;
+                break;
             case DirtFieldState.Plowed:
-            fieldType = plowedField;
-            break;
+                fieldType = plowedField;
+                break;
             case DirtFieldState.Watered:
-            fieldType = wateredField;
-            break;
+                fieldType = wateredField;
+                break;
             default:
-            Debug.Log("Unrecognized dirt field state(" + dirtFieldState + ") at position: " + gridPosition);
-            return;
+                Debug.Log("Unrecognized dirt field state(" + dirtFieldState + ") at position: " + gridPosition);
+                return;
         }
-        Debug.Log("Set dirt field state at position: " + gridPosition + ", dirtFieldState: " + dirtFieldState + " = " + (int) dirtFieldState);
+        Debug.Log("Set dirt field state at position: " + gridPosition + ", dirtFieldState: " + dirtFieldState + " = " + (int)dirtFieldState);
         if (!tileState.ContainsKey(gridPosition))
         {
-            tileState.Add(gridPosition, (int) dirtFieldState);
+            tileState.Add(gridPosition, (int)dirtFieldState);
         }
         else
         {
-            tileState[gridPosition] = (int) dirtFieldState;
+            tileState[gridPosition] = (int)dirtFieldState;
         }
         farmLand.SetTile(gridPosition, fieldType);
     }
@@ -447,7 +447,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         if (!GetCropVarsAtGridPosition(gridPosition, ref cropName, ref crop, ref cropPlants))
         {
             Debug.Log("No crop to update at position: " + gridPosition);
-            SetDirtFieldState(gridPosition, (DirtFieldState) Mathf.Max(0, tileState[gridPosition] - 1));
+            SetDirtFieldState(gridPosition, (DirtFieldState)Mathf.Max(0, tileState[gridPosition] - 1));
             return;
         }
 
@@ -528,6 +528,11 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         }
     }*/
 
+    public Transform GetChickenSlot()
+    {
+        return chickenCoopUI.transform.GetChild(1).GetChild(0);
+    }
+
     public void AddAnimal(string animal, int amount)
     {
         Debug.Log("Adding Animal");
@@ -535,43 +540,43 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         switch (animal)
         {
             case "Chicken":
-            chickenCoopInventory["Chicken"] = (int) Mathf.Max(0, chickenCoopInventory["Chicken"] + amount);
-            if (chickenCoopUI.transform.GetChild(1).GetChild(0).childCount == 0 && chickenCoopInventory["Chicken"] > 0)
-            {
-                newIcon = Instantiate(playerInventory.inventoryIcon, chickenCoopUI.transform.GetChild(1).GetChild(0));
-                newIcon.GetComponent<InventoryIcon>().SetIcon(animal);
-                newIcon.GetComponent<InventoryIcon>().UpdateQuantity(amount);
-            }
-            else chickenCoopUI.transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<InventoryIcon>().UpdateQuantity(chickenCoopInventory["Chicken"]);
-            break;
+                chickenCoopInventory["Chicken"] = (int)Mathf.Max(0, chickenCoopInventory["Chicken"] + amount);
+                if (chickenCoopUI.transform.GetChild(1).GetChild(0).childCount == 0 && chickenCoopInventory["Chicken"] > 0)
+                {
+                    newIcon = Instantiate(playerInventory.inventoryIcon, chickenCoopUI.transform.GetChild(1).GetChild(0));
+                    newIcon.GetComponent<InventoryIcon>().SetIcon(animal);
+                    newIcon.GetComponent<InventoryIcon>().UpdateQuantity(amount);
+                }
+                else chickenCoopUI.transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<InventoryIcon>().UpdateQuantity(chickenCoopInventory["Chicken"]);
+                break;
             case "Pig":
-            pigPenInventory = (int) Mathf.Max(0, pigPenInventory + amount);
-            if (pigPenUI.transform.GetChild(1).GetChild(0).childCount == 0 && pigPenInventory > 0)
-            {
-                newIcon = Instantiate(playerInventory.inventoryIcon, pigPenUI.transform.GetChild(1).GetChild(0));
-                newIcon.GetComponent<InventoryIcon>().SetIcon(animal);
-                newIcon.GetComponent<InventoryIcon>().UpdateQuantity(amount);
-            }
-            else if (amount != 0)
-            {
-                //TODO There are places that amount can be ZERO  I would normally just put this check at start and return but because not to change functionallity it is here
-                pigPenUI.transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<InventoryIcon>().UpdateQuantity(pigPenInventory);
-            }
-            break;
+                pigPenInventory = (int)Mathf.Max(0, pigPenInventory + amount);
+                if (pigPenUI.transform.GetChild(1).GetChild(0).childCount == 0 && pigPenInventory > 0)
+                {
+                    newIcon = Instantiate(playerInventory.inventoryIcon, pigPenUI.transform.GetChild(1).GetChild(0));
+                    newIcon.GetComponent<InventoryIcon>().SetIcon(animal);
+                    newIcon.GetComponent<InventoryIcon>().UpdateQuantity(amount);
+                }
+                else if (amount != 0)
+                {
+                    //TODO There are places that amount can be ZERO  I would normally just put this check at start and return but because not to change functionallity it is here
+                    pigPenUI.transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<InventoryIcon>().UpdateQuantity(pigPenInventory);
+                }
+                break;
             case "Egg":
-            chickenCoopInventory["Egg"] = (int) Mathf.Max(0, chickenCoopInventory["Egg"] + amount);
-            if (chickenCoopUI.transform.GetChild(1).GetChild(1).childCount == 0 && chickenCoopInventory["Egg"] + amount > 0)
-            {
-                newIcon = Instantiate(playerInventory.inventoryIcon, chickenCoopUI.transform.GetChild(1).GetChild(1));
-                newIcon.GetComponent<InventoryIcon>().SetIcon(animal);
-                newIcon.GetComponent<InventoryIcon>().UpdateQuantity(amount);
-            }
-            else if (amount != 0)
-            {
-                //TODO There are places that amount can be ZERO  I would normally just put this check at start and return but because not to change functionallity it is here
-                chickenCoopUI.transform.GetChild(1).GetChild(1).GetChild(0).GetComponent<InventoryIcon>().UpdateQuantity(chickenCoopInventory["Egg"]);
-            }
-            break;
+                chickenCoopInventory["Egg"] = (int)Mathf.Max(0, chickenCoopInventory["Egg"] + amount);
+                if (chickenCoopUI.transform.GetChild(1).GetChild(1).childCount == 0 && chickenCoopInventory["Egg"] + amount > 0)
+                {
+                    newIcon = Instantiate(playerInventory.inventoryIcon, chickenCoopUI.transform.GetChild(1).GetChild(1));
+                    newIcon.GetComponent<InventoryIcon>().SetIcon(animal);
+                    newIcon.GetComponent<InventoryIcon>().UpdateQuantity(amount);
+                }
+                else if (amount != 0)
+                {
+                    //TODO There are places that amount can be ZERO  I would normally just put this check at start and return but because not to change functionallity it is here
+                    chickenCoopUI.transform.GetChild(1).GetChild(1).GetChild(0).GetComponent<InventoryIcon>().UpdateQuantity(chickenCoopInventory["Egg"]);
+                }
+                break;
         }
     }
 
@@ -581,14 +586,14 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         switch (animal)
         {
             case "Chicken":
-            chickenCoopInventory["Chicken"] = (int) Mathf.Max(0, chickenCoopInventory["Chicken"] + amount);
-            break;
+                chickenCoopInventory["Chicken"] = (int)Mathf.Max(0, chickenCoopInventory["Chicken"] + amount);
+                break;
             case "Pig":
-            pigPenInventory = (int) Mathf.Max(0, pigPenInventory + amount);
-            break;
+                pigPenInventory = (int)Mathf.Max(0, pigPenInventory + amount);
+                break;
             case "Egg":
-            chickenCoopInventory["Egg"] = (int) Mathf.Max(0, chickenCoopInventory["Egg"] + amount);
-            break;
+                chickenCoopInventory["Egg"] = (int)Mathf.Max(0, chickenCoopInventory["Egg"] + amount);
+                break;
         }
     }
 
@@ -811,29 +816,29 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                         case "Bronze Shovel":
                         case "Silver Shovel":
                         case "Gold Shovel":
-                        PlowField(gridPosition);
-                        StartCoroutine(DefaultSoil(gridPosition));
-                        break;
+                            PlowField(gridPosition);
+                            StartCoroutine(DefaultSoil(gridPosition));
+                            break;
                         // if hoe equipped, harvest
                         case "Rusty Hoe":
                         case "Bronze Hoe":
                         case "Silver Hoe":
                         case "Gold Hoe":
-                        HarvestCrop(gridPosition);
-                        break;
+                            HarvestCrop(gridPosition);
+                            break;
                         // if watering can equipped, water soil for faster growth
                         case "Rusty Watering Can":
                         case "Bronze Watering Can":
                         case "Silver Watering Can":
                         case "Gold Watering Can":
-                        WaterField(gridPosition);
-                        break;
+                            WaterField(gridPosition);
+                            break;
                         // if seeds equipped, plant corresponding seedling
                         case "Wheat Seeds":
                         case "Tomato Seeds":
                         case "Lentils Seeds":
-                        AddCrop(GetCropName(handItem), gridPosition);
-                        break;
+                            AddCrop(GetCropName(handItem), gridPosition);
+                            break;
                     }
             }
         }
@@ -877,31 +882,32 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     public void UpdateAnimals()
     {
         // if at least one chicken in coop, attempt at egg production
-        if (chickenCoopInventory["Chicken"] > 0)
+        if (chickenCoopUI.transform.GetChild(1).GetChild(0).childCount > 0)
         {
-            Debug.Log("Making more eggs!");
             // if no eggs, make new icon for eggs
-            if (chickenCoopInventory["Egg"] == 0)
+            if (chickenCoopUI.transform.GetChild(1).GetChild(1).childCount == 0)
             {
-                GameObject newIcon = Instantiate(playerInventory.inventoryIcon, chickenCoopUI.transform.GetChild(1).GetChild(1));
-                newIcon.GetComponent<InventoryIcon>().SetIcon("Egg");
-                newIcon.GetComponent<InventoryIcon>().UpdateQuantity(0);
+                InventoryIcon newIcon = Instantiate(playerInventory.inventoryIcon, chickenCoopUI.transform.GetChild(1).GetChild(1)).GetComponent<InventoryIcon>();
+                newIcon.InitializeVariables();
+                newIcon.SetIcon("Egg");
             }
             // make 0-[# of chickens] eggs
-            int newEggs = UnityEngine.Random.Range(0, chickenCoopInventory["Chicken"]);
-            chickenCoopInventory["Chicken"] += newEggs;
-            chickenCoopUI.transform.GetChild(1).GetChild(1).GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(chickenCoopInventory["Chicken"]);
-            // if at least 2 pigs, attempt at pig production
-            if (pigPenInventory > 1)
-            {
-                // make 0-[half total pigs] more pigs
+            InventoryIcon eggIcon = chickenCoopUI.transform.GetChild(1).GetChild(1).GetChild(0).gameObject.GetComponent<InventoryIcon>();
+            int newEggs = UnityEngine.Random.Range(0, chickenCoopUI.transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<InventoryIcon>().quantity + 1);
+            Debug.Log("Making " + newEggs + " eggs!");
+            Debug.Log(eggIcon.quantity);
+            eggIcon.UpdateQuantity(eggIcon.quantity + newEggs);
+        }
 
-                //TODO Is this a bug or intendted operation? Why there is 2 DIFFERENT random here?
-                int newPigs = UnityEngine.Random.Range(0, ((int) Mathf.Floor(pigPenInventory / 2) + 1));
-                pigPenInventory += newPigs;
-                pigPenUI.transform.GetChild(1).GetChild(0).GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(pigPenInventory);
-                AddAnimal("Pig", UnityEngine.Random.Range(0, (int) (pigPenInventory + 0.5f) / 2));
-            }
+        // if at least 2 pigs, attempt at pig production
+        if (pigPenUI.transform.GetChild(1).GetChild(0).childCount > 0 && pigPenUI.transform.GetChild(1).GetChild(0).GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity > 1)
+        {
+            InventoryIcon pigIcon = pigPenUI.transform.GetChild(1).GetChild(0).GetChild(0).gameObject.GetComponent<InventoryIcon>();
+            // make 0-[half total pigs] more pigs
+            int newPigs = UnityEngine.Random.Range(0, ((int)Mathf.Floor(pigIcon.quantity / 2)) + 1);
+            Debug.Log("Making " + newPigs + " pigs!");
+            Debug.Log(pigIcon.quantity);
+            pigIcon.UpdateQuantity(pigIcon.quantity + newPigs);
         }
     }
 
@@ -911,7 +917,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         yield return new WaitForSeconds(time);
         if (!wheatPlants.ContainsKey(gridPosition) && !tomatoPlants.ContainsKey(gridPosition) && !lentilPlants.ContainsKey(gridPosition) && !farmPlants.HasTile(gridPosition))
         {
-            SetDirtFieldState(gridPosition, (DirtFieldState) Mathf.Max(0, tileState[gridPosition] - 1));
+            SetDirtFieldState(gridPosition, (DirtFieldState)Mathf.Max(0, tileState[gridPosition] - 1));
             StartCoroutine(DefaultSoil(gridPosition));
         }
     }
