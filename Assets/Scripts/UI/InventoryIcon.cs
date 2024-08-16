@@ -16,6 +16,8 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     [Header("Item Info")]
     public int quantity;
     public string item;
+
+    [Space]
     public int sellValue;
     public int giveValue;
     public Transform lastParent;
@@ -28,15 +30,14 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     private RectTransform rectTransform;
     private Canvas canvas;
 
-    private int dragged = -1;
+    private bool dragged = false;
 
 
     private void Awake()
     {
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        playerInventory = GameObject.Find("Player").GetComponent<PlayerInventory>();
         rectTransform = transform.GetComponent<RectTransform>();
         canvas = rectTransform.root.GetComponent<Canvas>();
+        StretchAndFill(gameObject.GetComponent<RectTransform>());
     }
 
     private void Start()
@@ -44,10 +45,24 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         toolTip = FindObjectOfType<Tooltip>(true).gameObject;
     }
 
+    public void InitializeVariables()
+    {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        playerInventory = GameObject.Find("Player").GetComponent<PlayerInventory>();
+    }
 
     public void UpdateQuantity(int amount)
     {
         quantity = amount;
+        if (quantity <= 0)
+        {
+            if (playerInventory.hotbar[playerInventory.hotbarIndex].transform == transform.parent)
+            {
+                playerInventory.FindNextItem(-1);
+                playerInventory.UpdateHandItemFromHotbarIndex();
+            }
+            Destroy(this.gameObject);
+        }
         quantityText.text = quantity.ToString();
         if (quantity <= 1)
         {
@@ -159,12 +174,32 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
     }
 
+
+    public void StretchAndFill(RectTransform rectTransform)
+    {
+        if (rectTransform == null)
+        {
+            Debug.LogError("RectTransform is null!");
+            return;
+        }
+
+        // Set anchors to stretch in all directions
+        rectTransform.anchorMin = new Vector2(0.5f, 0.5f); // Bottom-left corner
+        rectTransform.anchorMax = new Vector2(0.5f, 0.5f); // Top-right corner      
+
+        // Reset offsets
+        rectTransform.offsetMin = Vector2.zero;
+        rectTransform.offsetMax = Vector2.zero;
+
+        rectTransform.sizeDelta = new Vector2(100, 200);
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (playerInventory.sellMode && sellValue > 0) toolTip.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item + "\n$" + sellValue;
         else if (playerInventory.giveMode && giveValue > 0) toolTip.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item + "\n+" + giveValue;
         else toolTip.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item;
-        if (dragged < 0) toolTip.SetActive(true);
+        if (!dragged) toolTip.SetActive(true);
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -182,45 +217,102 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             if (result.gameObject != null && result.gameObject.GetComponent<RectTransform>() != null)
             {
-                if (result.gameObject.name.Contains("Cell") || result.gameObject.name.Contains("Cell") || result.gameObject.name.Contains("Cell"))foundObject = result.gameObject;
+                if (result.gameObject.name.Contains("Cell") || result.gameObject.name.Contains("Cell") || result.gameObject.name.Contains("Cell")) foundObject = result.gameObject;
             }
         }
         return foundObject;
     }
 
+    private void TransferQuantities(int amount, Transform parent)
+    {
+        if (parent.childCount > 0)
+        {
+            InventoryIcon other = parent.GetChild(0).GetComponent<InventoryIcon>();
+            if (other.item == item)
+            {
+                other.UpdateQuantity(other.quantity + amount);
+                UpdateQuantity(quantity - amount);
+            }
+        }
+        else if (parent.childCount == 0 && quantity == amount)
+        {
+            Debug.Log("bruh");
+            transform.SetParent(parent, true);
+            rectTransform.localPosition = Vector3.zero;
+            dragged = false;
+        }
+        else
+        {
+            InventoryIcon other = Instantiate(this.gameObject, parent).GetComponent<InventoryIcon>();
+            other.SetIcon(item);
+            other.UpdateQuantity(amount);
+            UpdateQuantity(quantity - amount);
+        }
+    }
+
     public void OnPointerUp(PointerEventData eventData)
     {
+        Transform obstructedSlot = null;
+        if (dragged)
+        {
+            GameObject newCell = raycastIcon(eventData);
+            if (newCell)
+            {
+                // if inventory space and empty, put one there
+                if (newCell.name.Contains("GridCell") && (newCell.transform.childCount == 0 || newCell.transform.GetChild(0).gameObject.GetComponent<InventoryIcon>().item == item))
+                {
+                    lastParent = newCell.transform;
+                }
+                else if (newCell.name.Contains("GridCell") && newCell.transform.childCount > 0 && newCell.transform.GetChild(0).gameObject.GetComponent<InventoryIcon>().item != item)
+                {
+                    obstructedSlot = newCell.transform;
+                }
+            }
+        }
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            Debug.Log("clicked");
-            if (dragged < 0)
+            // pick up item full
+            if (!dragged)
             {
-                dragged = 0;
+                dragged = true;
                 lastParent = transform.parent;
                 transform.SetParent(rectTransform.root, true);
+                toolTip.SetActive(false);
             }
-            else if (dragged >= 0)
+            // drop item full
+            else if (obstructedSlot)
             {
-                Debug.Log("End Drag");
-                GameObject newCell = raycastIcon(eventData);
-                // scan cell being dragged at
-                if (newCell)
+                obstructedSlot.GetChild(0).GetComponent<InventoryIcon>().TransferQuantities(obstructedSlot.GetChild(0).GetComponent<InventoryIcon>().quantity, lastParent);
+                TransferQuantities(quantity, obstructedSlot);
+                dragged = false;
+            }
+            else
+            {
+                TransferQuantities(quantity, lastParent);
+                dragged = false;
+            }
+        }
+        else if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            // pick up half
+            if (!dragged)
+            {
+                dragged = true;
+                lastParent = transform.parent;
+                transform.SetParent(rectTransform.root, true);
+                toolTip.SetActive(false);
+
+                // only split item if more than one
+                if (quantity > 1)
                 {
-                    Debug.Log(newCell.name);
-                    if (newCell.name.Contains("GridCell"))
-                    {
-                        lastParent = newCell.transform;
-                        transform.SetParent(lastParent);
-                        rectTransform.localPosition = Vector3.zero;
-                    }
+                    TransferQuantities((int)Mathf.Floor(quantity / 2), lastParent);
                 }
-                else
-                {
-                    Debug.Log("whoops");
-                    transform.SetParent(lastParent);
-                    rectTransform.localPosition = Vector3.zero;
-                }
-                dragged = -1;
+            }
+            // drop one
+            else
+            {
+                // if item slot contains other item type or not clicking grid, return one back to original slot
+                TransferQuantities(1, lastParent);
             }
         }
 
@@ -517,7 +609,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     void Update()
     {
-        if (!DragDisabled() && dragged >= 0) transform.position = Input.mousePosition;
+        if (!DragDisabled() && dragged) transform.position = Input.mousePosition;
     }
 
     public void ChangeParentColor(float colorAlpha)
