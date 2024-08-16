@@ -539,7 +539,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             if (chickenCoopUI.transform.GetChild(1).GetChild(0).childCount == 0 && chickenCoopInventory["Chicken"] > 0)
             {
                 newIcon = Instantiate(playerInventory.inventoryIcon, chickenCoopUI.transform.GetChild(1).GetChild(0));
-                playerInventory.StretchAndFill(newIcon.GetComponent<RectTransform>());
                 newIcon.GetComponent<InventoryIcon>().SetIcon(animal);
                 newIcon.GetComponent<InventoryIcon>().UpdateQuantity(amount);
             }
@@ -550,7 +549,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             if (pigPenUI.transform.GetChild(1).GetChild(0).childCount == 0 && pigPenInventory > 0)
             {
                 newIcon = Instantiate(playerInventory.inventoryIcon, pigPenUI.transform.GetChild(1).GetChild(0));
-                playerInventory.StretchAndFill(newIcon.GetComponent<RectTransform>());
                 newIcon.GetComponent<InventoryIcon>().SetIcon(animal);
                 newIcon.GetComponent<InventoryIcon>().UpdateQuantity(amount);
             }
@@ -565,7 +563,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             if (chickenCoopUI.transform.GetChild(1).GetChild(1).childCount == 0 && chickenCoopInventory["Egg"] + amount > 0)
             {
                 newIcon = Instantiate(playerInventory.inventoryIcon, chickenCoopUI.transform.GetChild(1).GetChild(1));
-                playerInventory.StretchAndFill(newIcon.GetComponent<RectTransform>());
                 newIcon.GetComponent<InventoryIcon>().SetIcon(animal);
                 newIcon.GetComponent<InventoryIcon>().UpdateQuantity(amount);
             }
@@ -887,7 +884,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             if (chickenCoopInventory["Egg"] == 0)
             {
                 GameObject newIcon = Instantiate(playerInventory.inventoryIcon, chickenCoopUI.transform.GetChild(1).GetChild(1));
-                playerInventory.StretchAndFill(newIcon.GetComponent<RectTransform>());
                 newIcon.GetComponent<InventoryIcon>().SetIcon("Egg");
                 newIcon.GetComponent<InventoryIcon>().UpdateQuantity(0);
             }

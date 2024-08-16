@@ -19,7 +19,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
     public int hotbarIndex;
 
     // inventory
-    public GameObject[] newInventory;
+    public Transform[] newInventory;
     public Dictionary<string, int> inventory = new Dictionary<string, int>();
     public Dictionary<string, GameObject> inventoryIcons = new Dictionary<string, GameObject>();
 
@@ -32,7 +32,6 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 
     public int money = 500;
 
-    private Dictionary<Vector3Int, GameObject> grids;
 
     [SerializeField] private GameObject inventoryGrid;
     public GameObject inventoryIcon;
@@ -67,14 +66,14 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             switch (parsed[0])
             {
                 case "handItem":
-                handItem = parsed[1];
-                break;
+                    handItem = parsed[1];
+                    break;
                 case "money":
-                money = Convert.ToInt32(parsed[1]);
-                break;
+                    money = Convert.ToInt32(parsed[1]);
+                    break;
                 default:
-                Debugger.Log("Invalid key for class (" + this.GetType().Name + "): " + key_value);
-                break;
+                    Debugger.Log("Invalid key for class (" + this.GetType().Name + "): " + key_value);
+                    break;
             }
         }
 
@@ -98,6 +97,52 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 
     public void AddToInventory(string Item, int Count = 1)
     {
+        foreach (Transform gridslot in newInventory)
+        {
+            if (gridslot.childCount > 0)
+            {
+                InventoryIcon icon = gridslot.GetChild(0).gameObject.GetComponent<InventoryIcon>();
+                if (icon.item == Item)
+                {
+                    icon.UpdateQuantity(Count + icon.quantity);
+                    inventoryChanged.TriggerEvent();
+                    return;
+                }
+            }
+        }
+        foreach (Transform gridslot in newInventory)
+        {
+            if (gridslot.childCount == 0)
+            {
+                InventoryIcon newIcon = Instantiate(inventoryIcon, gridslot).GetComponent<InventoryIcon>();
+                newIcon.InitializeVariables();
+                newIcon.SetIcon(Item);
+                newIcon.UpdateQuantity(Count);
+                inventoryChanged.TriggerEvent();
+                return;
+            }
+        }
+    }
+
+    public void RemoveFromInventory(string Item, int Count = 1)
+    {
+        foreach (Transform gridslot in newInventory)
+        {
+            if (gridslot.childCount > 0)
+            {
+                InventoryIcon icon = gridslot.GetChild(0).gameObject.GetComponent<InventoryIcon>();
+                if (icon.item == Item)
+                {
+                    icon.UpdateQuantity(icon.quantity - Count);
+                    inventoryChanged.TriggerEvent();
+                    return;
+                }
+            }
+        }
+    }
+
+    /*public void AddToInventory(string Item, int Count = 1)
+    {
         //Debug.Log(Item);
         if (inventory.ContainsKey(Item))
         {
@@ -111,7 +156,6 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             int i = 0;
             while (inventoryGrid.transform.GetChild(i).transform.childCount != 0) i++;
             GameObject newIcon = Instantiate(inventoryIcon, inventoryGrid.transform.GetChild(i).transform);
-            StretchAndFill(newIcon.GetComponent<RectTransform>());
             newIcon.GetComponent<InventoryIcon>().SetIcon(Item);
             newIcon.GetComponent<InventoryIcon>().UpdateQuantity(inventory[Item]);
             inventoryIcons.Add(Item, newIcon);
@@ -185,7 +229,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             inventoryIcons[Item].GetComponent<InventoryIcon>().UpdateQuantity(inventory[Item]);
         }
         inventoryChanged.TriggerEvent();
-    }
+    }*/
 
     public void ChangeHandItem(string Item)
     {
@@ -200,20 +244,13 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             return;
         }
 
-        // if the item does not exist, clear the current item
-        if (!inventoryIcons.ContainsKey(handItem))
-        {
-            //Debugger.Log("Invalid Hand Item: " + handItem);
-            ChangeHandItem("");
-            return;
-        }
 
         // change hand icon to item icon to display what is currently in hand
         handIcon.GetComponent<Image>().enabled = true;
-        handIcon.GetComponent<Image>().sprite = inventoryIcons[handItem].GetComponent<Image>().sprite;
+        handIcon.GetComponent<Image>().sprite = hotbar[hotbarIndex].transform.GetChild(0).gameObject.GetComponent<Image>().sprite;
         playerTool.visual.enabled = true;
-        playerTool.visual.sprite = inventoryIcons[handItem].GetComponent<Image>().sprite;
-        handChanged.TriggerEvent(inventoryIcons[Item]);
+        playerTool.visual.sprite = hotbar[hotbarIndex].transform.GetChild(0).gameObject.GetComponent<Image>().sprite;
+        handChanged.TriggerEvent(hotbar[hotbarIndex].transform.GetChild(0).gameObject);
 
         for (int i = 0; i < hotbar.Count; ++i)
         {
@@ -303,26 +340,8 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
     }
 
 
-    public void StretchAndFill(RectTransform rectTransform)
-    {
-        if (rectTransform == null)
-        {
-            Debug.LogError("RectTransform is null!");
-            return;
-        }
 
-        // Set anchors to stretch in all directions
-        rectTransform.anchorMin = new Vector2(0.5f, 0.5f); // Bottom-left corner
-        rectTransform.anchorMax = new Vector2(0.5f, 0.5f); // Top-right corner      
-
-        // Reset offsets
-        rectTransform.offsetMin = Vector2.zero;
-        rectTransform.offsetMax = Vector2.zero;
-
-        rectTransform.sizeDelta = new Vector2(100, 200);
-    }
-
-    private void FindNextItem(int direction, int tryCount = 0)
+    public void FindNextItem(int direction, int tryCount = 0)
     {
         hotbarIndex = (hotbarIndex + direction + hotbar.Count) % hotbar.Count;
         if (hotbar[hotbarIndex].transform.childCount > 0) return;
