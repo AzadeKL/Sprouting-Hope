@@ -61,6 +61,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 playerInventory.FindNextItem(-1);
                 playerInventory.UpdateHandItemFromHotbarIndex();
             }
+            toolTip.SetActive(false);
             Destroy(this.gameObject);
         }
         quantityText.text = quantity.ToString();
@@ -244,6 +245,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         else
         {
             InventoryIcon other = Instantiate(this.gameObject, parent).GetComponent<InventoryIcon>();
+            other.InitializeVariables();
             other.SetIcon(item);
             other.UpdateQuantity(amount);
             UpdateQuantity(quantity - amount);
@@ -267,12 +269,20 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 {
                     obstructedSlot = newCell.transform;
                 }
+                else if (newCell.name.Contains("ChickenCell") && item == "Chicken")
+                {
+                    lastParent = gameManager.GetChickenSlot();
+                }
+                else if (newCell.name.Contains("PigCell") && item == "Pig")
+                {
+                    lastParent = newCell.transform;
+                }
             }
         }
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             // pick up item full
-            if (!dragged)
+            if (!dragged && !DragDisabled())
             {
                 dragged = true;
                 lastParent = transform.parent;
@@ -286,6 +296,40 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 TransferQuantities(quantity, obstructedSlot);
                 dragged = false;
             }
+            // if on sell mode, sell non-tool item
+            else if (playerInventory.sellMode && imageicons.IndexOf(GetComponent<Image>().sprite) > 11)
+            {
+                Debug.Log("SellMode");
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    Debug.Log(item + " was sold for $" + (sellValue * quantity));
+                    playerInventory.money += (sellValue * quantity);
+                    UpdateQuantity(0);
+                }
+                else
+                {
+                    Debug.Log(item + " was sold for $" + sellValue);
+                    playerInventory.money += sellValue;
+                    UpdateQuantity(quantity - 1);
+                }
+            }
+            // if on give mode, give away non-tool item
+            else if (playerInventory.giveMode && imageicons.IndexOf(GetComponent<Image>().sprite) > 11)
+            {
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    Debug.Log(item + " was given away for " + (giveValue * quantity) + " goodness points!");
+                    gameManager.mainProgress += (giveValue * quantity);
+                    UpdateQuantity(0);
+                }
+                else
+                {
+                    Debug.Log(item + " was given away for " + giveValue + " goodness points!");
+                    gameManager.mainProgress += giveValue;
+                    UpdateQuantity(quantity - 1);
+                }
+
+            }
             else
             {
                 TransferQuantities(quantity, lastParent);
@@ -295,7 +339,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         else if (eventData.button == PointerEventData.InputButton.Right)
         {
             // pick up half
-            if (!dragged)
+            if (!dragged && !DragDisabled())
             {
                 dragged = true;
                 lastParent = transform.parent;
@@ -306,6 +350,38 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 if (quantity > 1)
                 {
                     TransferQuantities((int)Mathf.Floor(quantity / 2), lastParent);
+                }
+            }
+            // if on sell mode, sell either 25 or 5 non-tool items
+            else if (playerInventory.sellMode && imageicons.IndexOf(GetComponent<Image>().sprite) > 11)
+            {
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    int amount = (int) Mathf.Min(25, quantity);
+                    playerInventory.money += sellValue * amount;
+                    UpdateQuantity(quantity - (sellValue * amount));
+                }
+                else
+                {
+                    int amount = (int) Mathf.Min(5, quantity);
+                    playerInventory.money += sellValue * amount;
+                    UpdateQuantity(quantity - (sellValue * amount));
+                }
+            }
+            // if on give mode, sell either 25 or 5 non-tool items
+            else if (playerInventory.giveMode && imageicons.IndexOf(GetComponent<Image>().sprite) > 11)
+            {
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    int amount = (int) Mathf.Min(25, quantity);
+                    gameManager.mainProgress += giveValue * amount;
+                    UpdateQuantity(quantity - (giveValue * amount));
+                }
+                else
+                {
+                    int amount = (int) Mathf.Min(5, quantity);
+                    gameManager.mainProgress += giveValue * amount;
+                    UpdateQuantity(quantity - (giveValue * amount));
                 }
             }
             // drop one
@@ -335,22 +411,22 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                     // if inventory cell, add to inventory
                     if (result.gameObject.name.Contains("GridCell"))
                     {
-                        UpdateQuantity(int.Parse(quantity.text) - 1);
+                        UpdateQuantity(quantity - 1);
                         playerInventory.AddToInventory(item);
                     }
                     else if (result.gameObject.name.Contains("ChickenCell") && item == "Chicken")
                     {
-                        UpdateQuantity(int.Parse(quantity.text) - 1);
+                        UpdateQuantity(quantity - 1);
                         gameManager.AddAnimal(item, 1);
                         result.gameObject.transform.GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(gameManager.chickenCoopInventory[item]);
                     }
                     else if (result.gameObject.name.Contains("PigCell") && item == "Pig")
                     {
-                        UpdateQuantity(int.Parse(quantity.text) - 1);
+                        UpdateQuantity(quantity - 1);
                         gameManager.AddAnimal(item, 1);
                         result.gameObject.transform.GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(gameManager.pigPenInventory);
                     }
-                    if (int.Parse(quantity.text) <= 0)
+                    if (quantity <= 0)
                     {
                         toolTip.SetActive(false);
                         Destroy(this.gameObject);
@@ -367,9 +443,9 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             {
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
-                    Debug.Log(item + " was sold for $" + (sellValue * int.Parse(quantity.text)));
-                    playerInventory.money += (sellValue * int.Parse(quantity.text));
-                    playerInventory.RemoveFromInventory(item, int.Parse(quantity.text));
+                    Debug.Log(item + " was sold for $" + (sellValue * quantity));
+                    playerInventory.money += (sellValue * quantity);
+                    playerInventory.RemoveFromInventory(item, quantity);
                 }
                 else
                 {
@@ -383,9 +459,9 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             {
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
-                    Debug.Log(item + " was given away for " + (giveValue * int.Parse(quantity.text)) + " goodness points!");
-                    gameManager.mainProgress += (giveValue * int.Parse(quantity.text));
-                    playerInventory.RemoveFromInventory(item, int.Parse(quantity.text));
+                    Debug.Log(item + " was given away for " + (giveValue * quantity) + " goodness points!");
+                    gameManager.mainProgress += (giveValue * quantity);
+                    playerInventory.RemoveFromInventory(item, quantity);
                 }
                 else
                 {
@@ -407,7 +483,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             if (playerInventory.sellMode && imageicons.IndexOf(GetComponent<Image>().sprite) > 11)
             {
                 var control = Input.GetKey(KeyCode.LeftShift);
-                int repeat = control == true ? (int) Mathf.Min(25, int.Parse(quantity.text)) : 5;
+                int repeat = control == true ? (int) Mathf.Min(25, quantity) : 5;
                 for (int i = 0; i < repeat; i++)
                 {
                     if (!playerInventory.inventory.ContainsKey(item)) break;
@@ -419,7 +495,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             else if (playerInventory.giveMode && imageicons.IndexOf(GetComponent<Image>().sprite) > 11)
             {
                 var control = Input.GetKey(KeyCode.LeftShift);
-                int repeat = control == true ? (int) Mathf.Min(25, int.Parse(quantity.text)) : 5;
+                int repeat = control == true ? (int) Mathf.Min(25, quantity) : 5;
                 for (int i = 0; i < repeat; i++)
                 {
                     if (!playerInventory.inventory.ContainsKey(item)) break;
@@ -446,7 +522,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             if (eventData.button == PointerEventData.InputButton.Left)
             {
                 if (lastParent.gameObject.name.Contains("GridCell")) playerInventory.RemoveFromInventoryOnly(item, true);
-                else if (lastParent.gameObject.name.Contains("ChickenCell") || lastParent.gameObject.name.Contains("PigCell")) gameManager.AddAnimalNumb(item, 0 - int.Parse(quantity.text));
+                else if (lastParent.gameObject.name.Contains("ChickenCell") || lastParent.gameObject.name.Contains("PigCell")) gameManager.AddAnimalNumb(item, 0 - quantity);
                 dragged = 0;
             }
             // dragging with right click
@@ -458,10 +534,10 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                     GameObject newIcon = Instantiate(playerInventory.inventoryIcon, lastParent);
                     playerInventory.StretchAndFill(newIcon.GetComponent<RectTransform>());
                     newIcon.GetComponent<InventoryIcon>().SetIcon(item);
-                    newIcon.GetComponent<InventoryIcon>().UpdateQuantity((int) Mathf.Floor(int.Parse(quantity.text) / 2f));
+                    newIcon.GetComponent<InventoryIcon>().UpdateQuantity((int) Mathf.Floor(quantity / 2f));
                     if (int.Parse(newIcon.GetComponent<InventoryIcon>().quantity.text) <= 0) Destroy(newIcon);
-                    gameManager.AddAnimalNumb(item, 0 - (int) Mathf.Ceil(int.Parse(quantity.text) / 2f));
-                    UpdateQuantity((int) Mathf.Ceil(int.Parse(quantity.text) / 2f));
+                    gameManager.AddAnimalNumb(item, 0 - (int) Mathf.Ceil(quantity / 2f));
+                    UpdateQuantity((int) Mathf.Ceil(quantity / 2f));
                 }
                 dragged = 1;
             }
@@ -507,8 +583,8 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                             //    if (otherInventoryIcon.item == item && dragFromAnimalShelter)
                             //    {
 
-                            //        playerInventory.AddToInventory(item, int.Parse(quantity.text));
-                            //        otherInventoryIcon.UpdateQuantity(int.Parse(quantity.text));
+                            //        playerInventory.AddToInventory(item, quantity);
+                            //        otherInventoryIcon.UpdateQuantity(quantity);
                             //        Destroy(this.gameObject);
                             //        return;
 
@@ -543,7 +619,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                         {
                             //Right dragging to itself back in Animal Pens. I have no idea how EGGS will react to these changes.
                             var myOtherHalf = lastParent.GetChild(0).GetComponent<InventoryIcon>();
-                            var total = int.Parse(myOtherHalf.quantity.text) + int.Parse(quantity.text);
+                            var total = int.Parse(myOtherHalf.quantity.text) + quantity;
                             UpdateQuantity(total);
                             BUGCREATER = false;
                         }
@@ -566,7 +642,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         if (BUGCREATER == true && lastParent.childCount > 0)
         {
             var myOtherHalf = lastParent.GetChild(0).GetComponent<InventoryIcon>();
-            var total = int.Parse(myOtherHalf.quantity.text) + int.Parse(quantity.text);
+            var total = int.Parse(myOtherHalf.quantity.text) + quantity;
             myOtherHalf.UpdateQuantity(total);
 
             //TODO need  1 more step with pigPenInventory? (testing with pigs generally)
@@ -583,7 +659,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         Debug.Log("new parent: " + lastParent.gameObject.name);
         if (lastParent.gameObject.name.Contains("ChickenCell") || lastParent.gameObject.name.Contains("PigCell"))
         {
-            gameManager.AddAnimal(item, int.Parse(quantity.text));
+            gameManager.AddAnimal(item, quantity);
         }
         // if placed in inventory add back item to inventory dicts
         else if (lastParent.gameObject.name.Contains("GridCell"))
@@ -592,14 +668,14 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             if (playerInventory.inventory.ContainsKey(item))
             {
                 Debugger.Log("Still exists", Debugger.PriorityLevel.Medium);
-                playerInventory.AddToInventory(item, int.Parse(quantity.text));
+                playerInventory.AddToInventory(item, quantity);
                 toolTip.SetActive(false);
                 Destroy(this.gameObject);
                 return;
             }
             else
             {
-                playerInventory.inventory.Add(item, int.Parse(quantity.text));
+                playerInventory.inventory.Add(item, quantity);
                 playerInventory.inventoryIndex.Add(item);
                 playerInventory.inventoryIcons.Add(item, this.gameObject);
             }
