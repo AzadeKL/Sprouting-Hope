@@ -884,20 +884,20 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         UpdateCrops(gridPosition);
     }
 
-    /*public int GetNumPigs()
+    public int GetNumPigs()
     {
-        return pigPenInventory;
+        return chickenCoopUI.transform.GetChild(1).GetChild(0).GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity;
     }
 
     public int GetNumChickens()
     {
-        return chickenCoopInventory["Chicken"];
+        return chickenCoopUI.transform.GetChild(1).GetChild(0).GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity;
     }
 
     public int GetNumEggs()
     {
-        return chickenCoopInventory["Egg"];
-    }*/
+        return chickenCoopUI.transform.GetChild(1).GetChild(1).GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity;
+    }
 
     public void UpdateAnimals()
     {
