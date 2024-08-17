@@ -20,8 +20,6 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 
     // inventory
     public Transform[] newInventory;
-    public Dictionary<string, int> inventory = new Dictionary<string, int>();
-    public Dictionary<string, GameObject> inventoryIcons = new Dictionary<string, GameObject>();
 
 
     // sell mode for when at restaurant
@@ -33,7 +31,6 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
     public int money = 500;
 
 
-    [SerializeField] private GameObject inventoryGrid;
     public GameObject inventoryIcon;
     [SerializeField] private GameObject handIcon;
     [SerializeField] private PlayerTool playerTool;
@@ -48,12 +45,19 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         ISaveable.AddKey(data, "handItem", handItem);
         ISaveable.AddKey(data, "money", money);
 
-        gameData.playerInventoryInventoryKeys = new List<string>();
-        gameData.playerInventoryInventoryValues = new List<int>();
-        foreach (var key_value in inventory)
+        gameData.playerInventoryInventoryItems = new List<string>();
+        gameData.playerInventoryInventoryQuantities = new List<int>();
+        gameData.playerInventoryInventorySlot = new List<int>();
+        foreach (Transform gridslot in newInventory)
         {
-            gameData.playerInventoryInventoryKeys.Add(key_value.Key);
-            gameData.playerInventoryInventoryValues.Add(key_value.Value);
+            if (gridslot.childCount > 0)
+            {
+                InventoryIcon icon = gridslot.GetChild(0).gameObject.GetComponent<InventoryIcon>();
+                Debug.Log("saving " + icon.item);
+                gameData.playerInventoryInventorySlot.Add(Array.IndexOf(newInventory, gridslot));
+                gameData.playerInventoryInventoryItems.Add(icon.item);
+                gameData.playerInventoryInventoryQuantities.Add(icon.quantity);
+            }
         }
     }
 
@@ -78,16 +82,21 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         }
 
         inventoryIndex = new List<string>();
-        inventory = new Dictionary<string, int>();
-        inventoryIcons = new Dictionary<string, GameObject>();
-        if (gameData.playerInventoryInventoryKeys.Count != gameData.playerInventoryInventoryValues.Count)
+        //inventory = new Dictionary<string, int>();
+        //inventoryIcons = new Dictionary<string, GameObject>();
+        if (gameData.playerInventoryInventoryItems.Count != gameData.playerInventoryInventoryQuantities.Count)
         {
             handItem = "";
             return false;
         }
-        for (var i = 0; i < gameData.playerInventoryInventoryKeys.Count; i++)
+        for (var i = 0; i < gameData.playerInventoryInventoryItems.Count; i++)
         {
-            AddToInventory(gameData.playerInventoryInventoryKeys[i], gameData.playerInventoryInventoryValues[i]);
+            InventoryIcon newIcon = Instantiate(inventoryIcon, newInventory[gameData.playerInventoryInventorySlot[i]]).GetComponent<InventoryIcon>();
+            newIcon.InitializeVariables();
+            Debug.Log("initialized");
+            newIcon.SetIcon(gameData.playerInventoryInventoryItems[i]);
+            newIcon.UpdateQuantity(gameData.playerInventoryInventoryQuantities[i]);
+            inventoryChanged.TriggerEvent();
         }
 
         //ChangeHandItem(handItem);
@@ -263,7 +272,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         }
     }
 
-    public void ChangeHandItemToPrevItem()
+    /*public void ChangeHandItemToPrevItem()
     {
         if (handItem == "") return;
 
@@ -271,7 +280,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         int handItemIndex = (inventoryIndex.IndexOf(handItem) - 1 + inventoryIndex.Count) % inventoryIndex.Count;
         if (handItem != inventoryIndex[handItemIndex]) newItem = inventoryIndex[handItemIndex];
         ChangeHandItem(newItem);
-    }
+    }*/
 
     public void UpdateHandItemFromHotbarIndex()
     {

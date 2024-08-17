@@ -94,10 +94,8 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     [SerializeField] private GameObject houseUI;
     public List<TileBase> pigPen;
     [SerializeField] private GameObject pigPenUI;
-    public int pigPenInventory = 0;
     public List<TileBase> chickenCoop;
     [SerializeField] private GameObject chickenCoopUI;
-    public Dictionary<string, int> chickenCoopInventory = new Dictionary<string, int> { { "Chicken", 0 }, { "Egg", 0 } };
     public List<TileBase> storage;
     [SerializeField] private GameObject storageUI;
 
@@ -163,9 +161,12 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         foreach (var key_value in tomatoPlants) gameData.gameManagerPlants.Add(PlantToEntry("Tomato", key_value));
         foreach (var key_value in lentilPlants) gameData.gameManagerPlants.Add(PlantToEntry("Lentil", key_value));
 
-        ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "Chicken", chickenCoopInventory["Chicken"]);
-        ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "Egg", chickenCoopInventory["Egg"]);
-        ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "Pig", pigPenInventory);
+        ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "Chicken",
+            chickenCoopUI.transform.GetChild(1).GetChild(0).childCount > 0 ? chickenCoopUI.transform.GetChild(1).GetChild(0).GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
+        ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "Egg",
+            chickenCoopUI.transform.GetChild(1).GetChild(1).childCount > 0 ? chickenCoopUI.transform.GetChild(1).GetChild(1).GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
+        ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "Pig",
+            chickenCoopUI.transform.GetChild(1).GetChild(0).childCount > 0 ? chickenCoopUI.transform.GetChild(1).GetChild(0).GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
     }
     public bool Load(GameData gameData)
     {
@@ -200,13 +201,32 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             AddCrop(cropName, gridPosition, growthState, startTime, totalTime, false);
         }
 
-        /*foreach (var key_value in gameData.gameManagerAnimalBuildings)
+        foreach (var key_value in gameData.gameManagerAnimalBuildings)
         {
             var parsed = ISaveable.ParseKey(key_value);
             string animal = parsed[0];
-            int count = Convert.ToInt32((string) parsed[1]);
-            AddAnimal(animal, count);
-        }*/
+            int count = Convert.ToInt32((string)parsed[1]);
+            InventoryIcon newIcon = null;
+            switch (animal)
+            {
+                case "Chicken":
+                    newIcon = Instantiate(playerInventory.inventoryIcon, chickenCoopUI.transform.GetChild(1).GetChild(0)).GetComponent<InventoryIcon>();
+                    break;
+                case "Egg":
+                    newIcon = Instantiate(playerInventory.inventoryIcon, chickenCoopUI.transform.GetChild(1).GetChild(1)).GetComponent<InventoryIcon>();
+                    break;
+                case "Pig":
+                    newIcon = Instantiate(playerInventory.inventoryIcon, pigPenUI.transform.GetChild(1).GetChild(0)).GetComponent<InventoryIcon>();
+                    break;
+            }
+            if (newIcon)
+            {
+                newIcon.InitializeVariables();
+                Debug.Log("initialized");
+                newIcon.SetIcon(animal);
+                newIcon.UpdateQuantity(count);
+            }
+        }
 
         return true;
     }
@@ -533,7 +553,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         return chickenCoopUI.transform.GetChild(1).GetChild(0);
     }
 
-    public void AddAnimal(string animal, int amount)
+    /*public void AddAnimal(string animal, int amount)
     {
         Debug.Log("Adding Animal");
         GameObject newIcon;
@@ -595,7 +615,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                 chickenCoopInventory["Egg"] = (int)Mathf.Max(0, chickenCoopInventory["Egg"] + amount);
                 break;
         }
-    }
+    }*/
 
     private void Update()
     {
@@ -864,7 +884,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         UpdateCrops(gridPosition);
     }
 
-    public int GetNumPigs()
+    /*public int GetNumPigs()
     {
         return pigPenInventory;
     }
@@ -877,7 +897,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     public int GetNumEggs()
     {
         return chickenCoopInventory["Egg"];
-    }
+    }*/
 
     public void UpdateAnimals()
     {
