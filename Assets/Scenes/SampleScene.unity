@@ -7526,6 +7526,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   randomizeJumpTimer: 10
+--- !u!224 &94655734 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 7780680691465954608, guid: ff0bb2ebff9c36b45ba820ed5995fef3, type: 3}
+  m_PrefabInstance: {fileID: 4282386496411591670}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &136762378
 GameObject:
   m_ObjectHideFlags: 0
@@ -7580,6 +7585,11 @@ MonoBehaviour:
   - {fileID: 1937560670}
   - {fileID: 245768403}
   playerInventory: {fileID: 1822348387}
+--- !u!224 &186378816 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2971087821661240201, guid: ff0bb2ebff9c36b45ba820ed5995fef3, type: 3}
+  m_PrefabInstance: {fileID: 4282386496411591670}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &201140666 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 941037153923534293, guid: 2f9d5fb8cd5073d4ebc067af200578f2, type: 3}
@@ -7979,6 +7989,11 @@ Transform:
   - {fileID: 1284486926}
   m_Father: {fileID: 136762380}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!224 &247628094 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6352495433589883584, guid: ff0bb2ebff9c36b45ba820ed5995fef3, type: 3}
+  m_PrefabInstance: {fileID: 4282386496411591670}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &247730517
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8844,15 +8859,30 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 354474628}
   m_CullTransparentMesh: 1
+--- !u!224 &368976231 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6818274957002400937, guid: ff0bb2ebff9c36b45ba820ed5995fef3, type: 3}
+  m_PrefabInstance: {fileID: 4282386496411591670}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &393074749 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 373841461533369266, guid: 91f95978f20162e45893d20950b2cf5b, type: 3}
   m_PrefabInstance: {fileID: 1462343026}
   m_PrefabAsset: {fileID: 0}
+--- !u!224 &426164455 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5404168796817061491, guid: ff0bb2ebff9c36b45ba820ed5995fef3, type: 3}
+  m_PrefabInstance: {fileID: 4282386496411591670}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &433941618 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 373841461533369266, guid: 91f95978f20162e45893d20950b2cf5b, type: 3}
   m_PrefabInstance: {fileID: 2072500996}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &453917412 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 407221841919043606, guid: ff0bb2ebff9c36b45ba820ed5995fef3, type: 3}
+  m_PrefabInstance: {fileID: 4282386496411591670}
   m_PrefabAsset: {fileID: 0}
 --- !u!224 &457381391 stripped
 RectTransform:
@@ -10908,6 +10938,11 @@ SpriteMask:
   m_BackSortingOrder: 0
   m_IsCustomRangeActive: 0
   m_SpriteSortPoint: 0
+--- !u!224 &724904952 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2688138077016532769, guid: ff0bb2ebff9c36b45ba820ed5995fef3, type: 3}
+  m_PrefabInstance: {fileID: 4282386496411591670}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &725555777 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8557780698315827984, guid: a308298d7c23be842b9d91d285752e89, type: 3}
@@ -29592,10 +29627,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
+--- !u!224 &1009435248 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4661244379572115375, guid: ff0bb2ebff9c36b45ba820ed5995fef3, type: 3}
+  m_PrefabInstance: {fileID: 4282386496411591670}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1018919153 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 373841461533369266, guid: 91f95978f20162e45893d20950b2cf5b, type: 3}
   m_PrefabInstance: {fileID: 907271694}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &1025910363 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8411797878373747532, guid: ff0bb2ebff9c36b45ba820ed5995fef3, type: 3}
+  m_PrefabInstance: {fileID: 4282386496411591670}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1031562937
 GameObject:
@@ -31452,6 +31497,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7107610559978748362, guid: a308298d7c23be842b9d91d285752e89, type: 3}
   m_PrefabInstance: {fileID: 58905915}
   m_PrefabAsset: {fileID: 0}
+--- !u!224 &1265348055 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1057848153239441875, guid: ff0bb2ebff9c36b45ba820ed5995fef3, type: 3}
+  m_PrefabInstance: {fileID: 4282386496411591670}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1284486925
 GameObject:
   m_ObjectHideFlags: 0
@@ -31934,6 +31984,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   randomizeJumpTimer: 10
+--- !u!224 &1343638241 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5707847288697936072, guid: ff0bb2ebff9c36b45ba820ed5995fef3, type: 3}
+  m_PrefabInstance: {fileID: 4282386496411591670}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1346055114
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -32239,6 +32294,11 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 2
   m_SpriteSortPoint: 0
+--- !u!224 &1371145968 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 974879144337239743, guid: ff0bb2ebff9c36b45ba820ed5995fef3, type: 3}
+  m_PrefabInstance: {fileID: 4282386496411591670}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1383632703
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -37728,6 +37788,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 373841461533369266, guid: 91f95978f20162e45893d20950b2cf5b, type: 3}
   m_PrefabInstance: {fileID: 1885292897}
   m_PrefabAsset: {fileID: 0}
+--- !u!224 &1773727991 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2431415221110807655, guid: ff0bb2ebff9c36b45ba820ed5995fef3, type: 3}
+  m_PrefabInstance: {fileID: 4282386496411591670}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1779212548
 GameObject:
   m_ObjectHideFlags: 0
@@ -37996,6 +38061,19 @@ MonoBehaviour:
   - {fileID: 1404549800}
   - {fileID: 1198524951}
   - {fileID: 331236676}
+  - {fileID: 368976231}
+  - {fileID: 426164455}
+  - {fileID: 453917412}
+  - {fileID: 1009435248}
+  - {fileID: 1025910363}
+  - {fileID: 724904952}
+  - {fileID: 94655734}
+  - {fileID: 1371145968}
+  - {fileID: 1265348055}
+  - {fileID: 1773727991}
+  - {fileID: 186378816}
+  - {fileID: 247628094}
+  - {fileID: 1343638241}
   sellMode: 0
   giveMode: 0
   money: 50

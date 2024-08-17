@@ -61,7 +61,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 playerInventory.FindNextItem(-1);
                 playerInventory.UpdateHandItemFromHotbarIndex();
             }
-            toolTip.SetActive(false);
+            if (toolTip) toolTip.SetActive(false);
             Destroy(this.gameObject);
         }
         quantityText.text = quantity.ToString();
