@@ -886,17 +886,20 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
     public int GetNumPigs()
     {
-        return chickenSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity;
+        if (chickenSlot.childCount > 0) return pigSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity;
+        else return 0;
     }
 
     public int GetNumChickens()
     {
-        return chickenSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity;
+        if (chickenSlot.childCount > 0) return chickenSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity;
+        else return 0;
     }
 
     public int GetNumEggs()
     {
-        return eggSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity;
+        if (eggSlot.childCount > 0) return eggSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity;
+        else return 0;
     }
 
     public void UpdateAnimals()

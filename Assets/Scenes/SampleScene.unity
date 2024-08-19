@@ -7729,6 +7729,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 211653380}
   m_CullTransparentMesh: 1
+--- !u!224 &222731112 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1446596720131723977, guid: a308298d7c23be842b9d91d285752e89, type: 3}
+  m_PrefabInstance: {fileID: 2037671343}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &236078017
 GameObject:
   m_ObjectHideFlags: 0
@@ -9789,8 +9794,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 963a38d88d0dc2d4185ca8ca73f20c7b, type: 2}
   - {fileID: 11400000, guid: 801bb0076952aaf42b6d006932ccf7ca, type: 2}
   - {fileID: 11400000, guid: cd4539a5be5c010478a667babe25fd5e, type: 2}
-  pigPenUI: {fileID: 2024473584}
-  pigPenInventory: 0
+  pigSlot: {fileID: 222731112}
   chickenCoop:
   - {fileID: 11400000, guid: 782a8a3af3ff6eb41a0734b7ee46be5c, type: 2}
   - {fileID: 11400000, guid: e87da80b20409b140bcc3982a1dd6501, type: 2}
@@ -9812,7 +9816,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a18cd96883409154b8d5f317915af2c2, type: 2}
   - {fileID: 11400000, guid: 32368d3d333105047acab9f43322f017, type: 2}
   - {fileID: 11400000, guid: 46a83a599e0ad134db1c204e4d6701cc, type: 2}
-  chickenCoopUI: {fileID: 1779212548}
+  chickenSlot: {fileID: 1801014657}
+  eggSlot: {fileID: 1000355674}
   storage:
   - {fileID: 11400000, guid: 7bcf3e563d66cbc4bada2cd03fb988ff, type: 2}
   - {fileID: 11400000, guid: cab101623885a2b4f840d900957a3ef5, type: 2}
@@ -29542,6 +29547,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 991431011}
   m_CullTransparentMesh: 1
+--- !u!224 &1000355674 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4804169510787990940, guid: a308298d7c23be842b9d91d285752e89, type: 3}
+  m_PrefabInstance: {fileID: 1383632703}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1006831864
 GameObject:
   m_ObjectHideFlags: 0
@@ -30810,11 +30820,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1178626935}
   m_CullTransparentMesh: 1
---- !u!1 &1182112702 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8847086407098192193, guid: ff0bb2ebff9c36b45ba820ed5995fef3, type: 3}
-  m_PrefabInstance: {fileID: 4282386496411591670}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1197204955
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -37845,6 +37850,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4874793771781286537, guid: a308298d7c23be842b9d91d285752e89, type: 3}
   m_PrefabInstance: {fileID: 58905915}
   m_PrefabAsset: {fileID: 0}
+--- !u!224 &1801014657 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1446596720131723977, guid: a308298d7c23be842b9d91d285752e89, type: 3}
+  m_PrefabInstance: {fileID: 1383632703}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1802867095 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2275561893416684730, guid: 066bc6c0a3eeaaa4ebd6c80632d57a29, type: 3}
@@ -38077,7 +38087,6 @@ MonoBehaviour:
   sellMode: 0
   giveMode: 0
   money: 50
-  inventoryGrid: {fileID: 1182112702}
   inventoryIcon: {fileID: 2652448401726263400, guid: c21f85f511d219b44a7bde40ecc9e3ea, type: 3}
   handIcon: {fileID: 1848548496}
   playerTool: {fileID: 1822348388}
