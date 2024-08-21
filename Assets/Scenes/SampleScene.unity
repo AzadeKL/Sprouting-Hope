@@ -9466,9 +9466,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0.048494983
+    y: 0
     width: 1
-    height: 0.90301
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
@@ -9552,6 +9552,7 @@ GameObject:
   m_Component:
   - component: {fileID: 548942055}
   - component: {fileID: 548942054}
+  - component: {fileID: 548942059}
   - component: {fileID: 548942056}
   - component: {fileID: 548942057}
   - component: {fileID: 548942058}
@@ -9765,59 +9766,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b1a0b8c6a6e2e9343af89562f90f3833, type: 2}
   - {fileID: 11400000, guid: 6c30707ce57538f4185d77335f5684c6, type: 2}
   houseUI: {fileID: 1043249260}
-  pigPen:
-  - {fileID: 11400000, guid: c5dede5c94858bf499d6a9812ac9a79b, type: 2}
-  - {fileID: 11400000, guid: bbe64e619b16dc443881da2ec7142e9f, type: 2}
-  - {fileID: 11400000, guid: 0c75563355443284ab4a5b3672d2be60, type: 2}
-  - {fileID: 11400000, guid: 91b5ede2c22d88744b96f973f70b7e3c, type: 2}
-  - {fileID: 11400000, guid: f0213378e3bbb2c4dbdf54eed3417336, type: 2}
-  - {fileID: 11400000, guid: 862894ff4c5673c4fae44474db72f81c, type: 2}
-  - {fileID: 11400000, guid: 863ddace8f9e12e458847481501f484e, type: 2}
-  - {fileID: 11400000, guid: d135938eb5b79c64b9dc3c400b8d4bd4, type: 2}
-  - {fileID: 11400000, guid: 1c620a9e42b11b24c8f8c0aa2467ed2c, type: 2}
-  - {fileID: 11400000, guid: b2a573aadf3f9fa47bc5bcc66c59c7ad, type: 2}
-  - {fileID: 11400000, guid: 2f35336cbbdaadd4e90a6366f91770f0, type: 2}
-  - {fileID: 11400000, guid: 747dee4d8a2acb1488cde2505d3f84f7, type: 2}
-  - {fileID: 11400000, guid: 328b6fb6ee65b0449bc2872ac330acec, type: 2}
-  - {fileID: 11400000, guid: 1d9532baf6ff72b4781c2c3c992d28ae, type: 2}
-  - {fileID: 11400000, guid: ec9127e2d86830241ad288628b5fb5bf, type: 2}
-  - {fileID: 11400000, guid: 25e31f34c9f71f34a995e0e41a2a16b5, type: 2}
-  - {fileID: 11400000, guid: ffd3f1859d5dc934b9f90e4fc3b12d8d, type: 2}
-  - {fileID: 11400000, guid: a47016cd1d95010448f3ba1be9fd0c6c, type: 2}
-  - {fileID: 11400000, guid: 9b27008a2c96be44bbfa5376f9cbd500, type: 2}
-  - {fileID: 11400000, guid: d77b50b23c8312b4280ba462fa487c53, type: 2}
-  - {fileID: 11400000, guid: f3cf59292ab12ae45abb4e59db256f4a, type: 2}
-  - {fileID: 11400000, guid: 5cb079f4b1fddd74182074a9085c14a3, type: 2}
-  - {fileID: 11400000, guid: 406d5859318a7f14aa2dc1ab89718470, type: 2}
-  - {fileID: 11400000, guid: 336b4af43476dea45aec2b139da123ba, type: 2}
-  - {fileID: 11400000, guid: 3fb6a89f32f1d88489c06670318ae217, type: 2}
-  - {fileID: 11400000, guid: 963a38d88d0dc2d4185ca8ca73f20c7b, type: 2}
-  - {fileID: 11400000, guid: 801bb0076952aaf42b6d006932ccf7ca, type: 2}
-  - {fileID: 11400000, guid: cd4539a5be5c010478a667babe25fd5e, type: 2}
-  pigSlot: {fileID: 222731112}
-  chickenCoop:
-  - {fileID: 11400000, guid: 782a8a3af3ff6eb41a0734b7ee46be5c, type: 2}
-  - {fileID: 11400000, guid: e87da80b20409b140bcc3982a1dd6501, type: 2}
-  - {fileID: 11400000, guid: dbb0c8c15b643784c9356551a408985a, type: 2}
-  - {fileID: 11400000, guid: 55f2e917f8b8e3745a353b20fe5322c4, type: 2}
-  - {fileID: 11400000, guid: b1c0d1318dddc704d93067ecb7c8a401, type: 2}
-  - {fileID: 11400000, guid: bf6d46f6e3ea62a4c89554b69251be6c, type: 2}
-  - {fileID: 11400000, guid: 217d4a798767efd4d9af72bb1baaa435, type: 2}
-  - {fileID: 11400000, guid: c0b4d187207ba594aaa1534fe863bc37, type: 2}
-  - {fileID: 11400000, guid: 64ca241369cc67b48a1f311aaa12f5e3, type: 2}
-  - {fileID: 11400000, guid: 593b9de579f6a3247886641af25c3d46, type: 2}
-  - {fileID: 11400000, guid: e9883d59df31738489463e91a809d2f3, type: 2}
-  - {fileID: 11400000, guid: b19914ff2781d3f4d919b70562872361, type: 2}
-  - {fileID: 11400000, guid: ca99a5a9d503d8b4a8c3e7ef4d537c05, type: 2}
-  - {fileID: 11400000, guid: 6109de1028d74f7458b71e0d1b1239bd, type: 2}
-  - {fileID: 11400000, guid: 3cf07972d0671fe438a62696b288c8e8, type: 2}
-  - {fileID: 11400000, guid: b2008eb5b419b9744b09084da333a1ef, type: 2}
-  - {fileID: 11400000, guid: db56139461f6c2c449753ca630fb4aba, type: 2}
-  - {fileID: 11400000, guid: a18cd96883409154b8d5f317915af2c2, type: 2}
-  - {fileID: 11400000, guid: 32368d3d333105047acab9f43322f017, type: 2}
-  - {fileID: 11400000, guid: 46a83a599e0ad134db1c204e4d6701cc, type: 2}
-  chickenSlot: {fileID: 1801014657}
-  eggSlot: {fileID: 1000355674}
   storage:
   - {fileID: 11400000, guid: 7bcf3e563d66cbc4bada2cd03fb988ff, type: 2}
   - {fileID: 11400000, guid: cab101623885a2b4f840d900957a3ef5, type: 2}
@@ -9880,7 +9828,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9de8d58b422426843bb75786dfd71098, type: 2}
   - {fileID: 11400000, guid: 8d2be3c7196b4ba4eb5e9e3e80c36fcb, type: 2}
   storageUI: {fileID: 923583856}
-  EggPrefab: {fileID: 7847931061640037683, guid: d15a10863bf4099409e37adf57a5c918, type: 3}
   plowSounds:
   - {fileID: 8300000, guid: 482ecb07cfcf88b4dbe0755932dd1676, type: 3}
   - {fileID: 8300000, guid: 485e9cafc1c279d4483bf921637e32bd, type: 3}
@@ -9896,6 +9843,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 61b88fc1270147c4281a758e6f9890d5, type: 3}
   - {fileID: 8300000, guid: 009fdecc8c7b9884fa0c2086d098cb49, type: 3}
   - {fileID: 8300000, guid: 7da40b1fa28640d4caf3eee67588a56e, type: 3}
+  animalManager: {fileID: 0}
   escDisabled: 0
 --- !u!4 &548942055
 Transform:
@@ -10071,6 +10019,72 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &548942059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 548942053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b45ea03cc8b40f047a4336821523d0c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pigPen:
+  - {fileID: 11400000, guid: c5dede5c94858bf499d6a9812ac9a79b, type: 2}
+  - {fileID: 11400000, guid: bbe64e619b16dc443881da2ec7142e9f, type: 2}
+  - {fileID: 11400000, guid: 0c75563355443284ab4a5b3672d2be60, type: 2}
+  - {fileID: 11400000, guid: 91b5ede2c22d88744b96f973f70b7e3c, type: 2}
+  - {fileID: 11400000, guid: f0213378e3bbb2c4dbdf54eed3417336, type: 2}
+  - {fileID: 11400000, guid: 862894ff4c5673c4fae44474db72f81c, type: 2}
+  - {fileID: 11400000, guid: 863ddace8f9e12e458847481501f484e, type: 2}
+  - {fileID: 11400000, guid: d135938eb5b79c64b9dc3c400b8d4bd4, type: 2}
+  - {fileID: 11400000, guid: 1c620a9e42b11b24c8f8c0aa2467ed2c, type: 2}
+  - {fileID: 11400000, guid: b2a573aadf3f9fa47bc5bcc66c59c7ad, type: 2}
+  - {fileID: 11400000, guid: 2f35336cbbdaadd4e90a6366f91770f0, type: 2}
+  - {fileID: 11400000, guid: 747dee4d8a2acb1488cde2505d3f84f7, type: 2}
+  - {fileID: 11400000, guid: 328b6fb6ee65b0449bc2872ac330acec, type: 2}
+  - {fileID: 11400000, guid: 1d9532baf6ff72b4781c2c3c992d28ae, type: 2}
+  - {fileID: 11400000, guid: ec9127e2d86830241ad288628b5fb5bf, type: 2}
+  - {fileID: 11400000, guid: 25e31f34c9f71f34a995e0e41a2a16b5, type: 2}
+  - {fileID: 11400000, guid: ffd3f1859d5dc934b9f90e4fc3b12d8d, type: 2}
+  - {fileID: 11400000, guid: a47016cd1d95010448f3ba1be9fd0c6c, type: 2}
+  - {fileID: 11400000, guid: 9b27008a2c96be44bbfa5376f9cbd500, type: 2}
+  - {fileID: 11400000, guid: d77b50b23c8312b4280ba462fa487c53, type: 2}
+  - {fileID: 11400000, guid: f3cf59292ab12ae45abb4e59db256f4a, type: 2}
+  - {fileID: 11400000, guid: 5cb079f4b1fddd74182074a9085c14a3, type: 2}
+  - {fileID: 11400000, guid: 406d5859318a7f14aa2dc1ab89718470, type: 2}
+  - {fileID: 11400000, guid: 336b4af43476dea45aec2b139da123ba, type: 2}
+  - {fileID: 11400000, guid: 3fb6a89f32f1d88489c06670318ae217, type: 2}
+  - {fileID: 11400000, guid: 963a38d88d0dc2d4185ca8ca73f20c7b, type: 2}
+  - {fileID: 11400000, guid: 801bb0076952aaf42b6d006932ccf7ca, type: 2}
+  - {fileID: 11400000, guid: cd4539a5be5c010478a667babe25fd5e, type: 2}
+  chickenCoop:
+  - {fileID: 11400000, guid: 782a8a3af3ff6eb41a0734b7ee46be5c, type: 2}
+  - {fileID: 11400000, guid: e87da80b20409b140bcc3982a1dd6501, type: 2}
+  - {fileID: 11400000, guid: dbb0c8c15b643784c9356551a408985a, type: 2}
+  - {fileID: 11400000, guid: 55f2e917f8b8e3745a353b20fe5322c4, type: 2}
+  - {fileID: 11400000, guid: b1c0d1318dddc704d93067ecb7c8a401, type: 2}
+  - {fileID: 11400000, guid: bf6d46f6e3ea62a4c89554b69251be6c, type: 2}
+  - {fileID: 11400000, guid: 217d4a798767efd4d9af72bb1baaa435, type: 2}
+  - {fileID: 11400000, guid: c0b4d187207ba594aaa1534fe863bc37, type: 2}
+  - {fileID: 11400000, guid: 64ca241369cc67b48a1f311aaa12f5e3, type: 2}
+  - {fileID: 11400000, guid: 593b9de579f6a3247886641af25c3d46, type: 2}
+  - {fileID: 11400000, guid: e9883d59df31738489463e91a809d2f3, type: 2}
+  - {fileID: 11400000, guid: b19914ff2781d3f4d919b70562872361, type: 2}
+  - {fileID: 11400000, guid: ca99a5a9d503d8b4a8c3e7ef4d537c05, type: 2}
+  - {fileID: 11400000, guid: 6109de1028d74f7458b71e0d1b1239bd, type: 2}
+  - {fileID: 11400000, guid: 3cf07972d0671fe438a62696b288c8e8, type: 2}
+  - {fileID: 11400000, guid: b2008eb5b419b9744b09084da333a1ef, type: 2}
+  - {fileID: 11400000, guid: db56139461f6c2c449753ca630fb4aba, type: 2}
+  - {fileID: 11400000, guid: a18cd96883409154b8d5f317915af2c2, type: 2}
+  - {fileID: 11400000, guid: 32368d3d333105047acab9f43322f017, type: 2}
+  - {fileID: 11400000, guid: 46a83a599e0ad134db1c204e4d6701cc, type: 2}
+  pigSlot: {fileID: 222731112}
+  chickenSlot: {fileID: 1801014657}
+  eggSlot: {fileID: 1000355674}
+  EggPrefab: {fileID: 7847931061640037683, guid: d15a10863bf4099409e37adf57a5c918, type: 3}
 --- !u!1 &555502810
 GameObject:
   m_ObjectHideFlags: 0
@@ -38086,7 +38100,7 @@ MonoBehaviour:
   - {fileID: 1343638241}
   sellMode: 0
   giveMode: 0
-  money: 50
+  money: 1000
   inventoryIcon: {fileID: 2652448401726263400, guid: c21f85f511d219b44a7bde40ecc9e3ea, type: 3}
   handIcon: {fileID: 1848548496}
   playerTool: {fileID: 1822348388}

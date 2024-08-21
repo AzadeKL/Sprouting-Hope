@@ -92,21 +92,25 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     public List<TileBase> truck;
     public List<TileBase> house;
     [SerializeField] private GameObject houseUI;
-    public List<TileBase> pigPen;
-    [SerializeField] private Transform pigSlot;
-    public List<TileBase> chickenCoop;
-    [SerializeField] private Transform chickenSlot;
-    [SerializeField] private Transform eggSlot;
+    // public List<TileBase> pigPen;
+    // [SerializeField] private Transform pigSlot;
+    // public List<TileBase> chickenCoop;
+    // [SerializeField] private Transform chickenSlot;
+    // [SerializeField] private Transform eggSlot;
     public List<TileBase> storage;
     [SerializeField] private GameObject storageUI;
 
-    [SerializeField] private GameObject EggPrefab;
+    // [SerializeField] private GameObject EggPrefab;
 
     [Space]
     [Header("Sound Effects")]
     [SerializeField] private List<AudioClip> plowSounds;
     [SerializeField] private List<AudioClip> reapSounds;
     [SerializeField] private List<AudioClip> waterSounds;
+
+    [Space]
+    [Header("AnimalManager")]
+    [SerializeField] private AnimalManager animalManager;
 
     private GameObject toolTip;//UI tooltip 
 
@@ -137,12 +141,14 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         if (seedFactory == null) { seedFactory = GetComponent<SeedFactory>(); }
         progressMeter.maxValue = maxProgress;
         audioSource = GetComponent<AudioSource>();
+        
     }
     private void Start()
     {
         playerInventory = player.GetComponent<PlayerInventory>();
         toolTip = FindObjectOfType<Tooltip>(true).gameObject;
         //Debug.Log("Current showHelpOnNewGameKey is set to: " + PlayerPrefs.GetInt(showHelpOnNewGameKey, 2));
+        animalManager = GetComponent<AnimalManager>();
         bool isNewGame = !SaveSystem.DataManager.instance.Load(this);
         bool showHelpOnNewGame = PlayerPrefs.GetInt(showHelpOnNewGameKey, 1) == 1;
         helpToggle.isOn = showHelpOnNewGame;
@@ -162,12 +168,13 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         foreach (var key_value in tomatoPlants) gameData.gameManagerPlants.Add(PlantToEntry("Tomato", key_value));
         foreach (var key_value in lentilPlants) gameData.gameManagerPlants.Add(PlantToEntry("Lentil", key_value));
 
-        ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "Chicken",
-            chickenSlot.childCount > 0 ? chickenSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
-        ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "Egg",
-            eggSlot.childCount > 0 ? eggSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
-        ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "Pig",
-            pigSlot.childCount > 0 ? pigSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
+        // ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "Chicken",
+        //     chickenSlot.childCount > 0 ? chickenSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
+        // ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "Egg",
+        //     eggSlot.childCount > 0 ? eggSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
+        // ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "Pig",
+        //     pigSlot.childCount > 0 ? pigSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
+        animalManager.Save(gameData);
     }
     public bool Load(GameData gameData)
     {
@@ -202,65 +209,12 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             AddCrop(cropName, gridPosition, growthState, startTime, totalTime, false);
         }
 
-        foreach (var key_value in gameData.gameManagerAnimalBuildings)
-        {
-            var parsed = ISaveable.ParseKey(key_value);
-            string animal = parsed[0];
-            int count = Convert.ToInt32((string)parsed[1]);
-            InventoryIcon newIcon = null;
-            switch (animal)
-            {
-                case "Chicken":
-                    newIcon = Instantiate(playerInventory.inventoryIcon, chickenSlot).GetComponent<InventoryIcon>();
-                    break;
-                case "Egg":
-                    newIcon = Instantiate(playerInventory.inventoryIcon, eggSlot).GetComponent<InventoryIcon>();
-                    break;
-                case "Pig":
-                    newIcon = Instantiate(playerInventory.inventoryIcon, pigSlot).GetComponent<InventoryIcon>();
-                    break;
-            }
-            if (newIcon)
-            {
-                newIcon.InitializeVariables();
-                Debug.Log("initialized");
-                newIcon.SetIcon(animal);
-                newIcon.UpdateQuantity(count);
-            }
-        }
+        animalManager.Load(gameData, playerInventory);
 
         return true;
     }
 
-    /*public void LoadAnimal(string animal, int amount)
-    {
-        Debug.Log("Loading Animal");
-        GameObject newIcon;
-        switch (animal)
-        {
-            case "Chicken":
-                chickenCoopInventory["Chicken"] = (int)Mathf.Max(0, chickenCoopInventory["Chicken"] + amount);
-                newIcon = Instantiate(playerInventory.inventoryIcon, chickenSlot);
-                playerInventory.StretchAndFill(newIcon.GetComponent<RectTransform>());
-                newIcon.GetComponent<InventoryIcon>().SetIcon(animal);
-                newIcon.GetComponent<InventoryIcon>().UpdateQuantity(amount);
-                break;
-            case "Pig":
-                pigPenInventory = (int)Mathf.Max(0, pigPenInventory + amount);
-                newIcon = Instantiate(playerInventory.inventoryIcon, pigSlot);
-                playerInventory.StretchAndFill(newIcon.GetComponent<RectTransform>());
-                newIcon.GetComponent<InventoryIcon>().SetIcon(animal);
-                newIcon.GetComponent<InventoryIcon>().UpdateQuantity(amount);
-                break;
-            case "Egg":
-                chickenCoopInventory["Egg"] = (int)Mathf.Max(0, chickenCoopInventory["Egg"] + amount);
-                newIcon = Instantiate(playerInventory.inventoryIcon, eggSlot);
-                playerInventory.StretchAndFill(newIcon.GetComponent<RectTransform>());
-                newIcon.GetComponent<InventoryIcon>().SetIcon(animal);
-                newIcon.GetComponent<InventoryIcon>().UpdateQuantity(amount);
-                break;
-        }
-    }*/
+
 
     void SetIsModalMode(bool isSet)
     {
@@ -270,7 +224,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
     void UpdateIsModalMode()
     {
-        SetIsModalMode(helpUI.activeSelf || houseUI.activeSelf || chickenSlot.parent.parent.gameObject.activeSelf || inventoryUI.activeSelf || storageUI.activeSelf || pigSlot.parent.parent.gameObject.activeSelf);
+        SetIsModalMode(helpUI.activeSelf || houseUI.activeSelf || inventoryUI.activeSelf || storageUI.activeSelf || animalManager.IsModalMode());
         // If a modal mode is active, disable the pause menu, for the rest of the frame.
         PauseMenu.instance.notAllowed = isModalMode;
     }
@@ -279,13 +233,12 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     {
         ExitInventoryMode();
         helpUI.SetActive(false);
-        pigSlot.parent.parent.gameObject.SetActive(false);
         houseUI.SetActive(false);
         storageUI.SetActive(false);
-        chickenSlot.parent.parent.gameObject.SetActive(false);
         playerInventory.sellMode = false;
         playerInventory.giveMode = false;
         SetIsModalMode(false);
+        animalManager.ExitModalMode();
     }
 
     void EnterInventoryMode()
@@ -506,117 +459,13 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         PlayActionSound(reapSounds[Random.Range(0, reapSounds.Count)]);
     }
 
-    /*public void AddAnimal(string animal, int amount)
-    {
-        Debug.Log("Adding animal: " + animal + " count: " + amount);
-
-        Func<int, Transform, int> UpdateAndCreateIcon = (count, parent) =>
-        {
-            bool wasZero = (count == 0);
-            count = (int)Mathf.Max(0, count + amount);
-            bool isZero = (count == 0);
-            if (wasZero)
-            {
-                if (!isZero)
-                {
-                    GameObject newIcon = Instantiate(playerInventory.inventoryIcon, parent);
-                    playerInventory.StretchAndFill(newIcon.GetComponent<RectTransform>());
-                    newIcon.GetComponent<InventoryIcon>().SetIcon(animal);
-                    newIcon.GetComponent<InventoryIcon>().UpdateQuantity(count);
-                }
-            }
-            if (!wasZero && !isZero)
-            {
-                parent.GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(count);
-            }
-            return count;
-        };
-
-        switch (animal)
-        {
-            case "Chicken":
-                chickenCoopInventory["Chicken"] = UpdateAndCreateIcon(chickenCoopInventory["Chicken"], chickenSlot);
-                break;
-            case "Egg":
-                chickenCoopInventory["Egg"] = UpdateAndCreateIcon(chickenCoopInventory["Egg"], eggSlot);
-                break;
-            case "Pig":
-                pigPenInventory = UpdateAndCreateIcon(pigPenInventory, pigSlot);
-                break;
-            default:
-                Debugger.Log("Unrecognized animal: " + animal);
-                return;
-        }
-    }*/
 
     public Transform GetChickenSlot()
     {
-        return chickenSlot;
+        return animalManager.GetChickenSlot();
     }
 
-    /*public void AddAnimal(string animal, int amount)
-    {
-        Debug.Log("Adding Animal");
-        GameObject newIcon;
-        switch (animal)
-        {
-            case "Chicken":
-                chickenCoopInventory["Chicken"] = (int)Mathf.Max(0, chickenCoopInventory["Chicken"] + amount);
-                if (chickenSlot.childCount == 0 && chickenCoopInventory["Chicken"] > 0)
-                {
-                    newIcon = Instantiate(playerInventory.inventoryIcon, chickenSlot);
-                    newIcon.GetComponent<InventoryIcon>().SetIcon(animal);
-                    newIcon.GetComponent<InventoryIcon>().UpdateQuantity(amount);
-                }
-                else chickenSlot.GetChild(0).GetComponent<InventoryIcon>().UpdateQuantity(chickenCoopInventory["Chicken"]);
-                break;
-            case "Pig":
-                pigPenInventory = (int)Mathf.Max(0, pigPenInventory + amount);
-                if (pigSlot.childCount == 0 && pigPenInventory > 0)
-                {
-                    newIcon = Instantiate(playerInventory.inventoryIcon, pigSlot);
-                    newIcon.GetComponent<InventoryIcon>().SetIcon(animal);
-                    newIcon.GetComponent<InventoryIcon>().UpdateQuantity(amount);
-                }
-                else if (amount != 0)
-                {
-                    //TODO There are places that amount can be ZERO  I would normally just put this check at start and return but because not to change functionallity it is here
-                    pigSlot.GetChild(0).GetComponent<InventoryIcon>().UpdateQuantity(pigPenInventory);
-                }
-                break;
-            case "Egg":
-                chickenCoopInventory["Egg"] = (int)Mathf.Max(0, chickenCoopInventory["Egg"] + amount);
-                if (eggSlot.childCount == 0 && chickenCoopInventory["Egg"] + amount > 0)
-                {
-                    newIcon = Instantiate(playerInventory.inventoryIcon, eggSlot);
-                    newIcon.GetComponent<InventoryIcon>().SetIcon(animal);
-                    newIcon.GetComponent<InventoryIcon>().UpdateQuantity(amount);
-                }
-                else if (amount != 0)
-                {
-                    //TODO There are places that amount can be ZERO  I would normally just put this check at start and return but because not to change functionallity it is here
-                    eggSlot.GetChild(0).GetComponent<InventoryIcon>().UpdateQuantity(chickenCoopInventory["Egg"]);
-                }
-                break;
-        }
-    }
-
-    public void AddAnimalNumb(string animal, int amount)
-    {
-        Debug.Log("Adding Animal dict only");
-        switch (animal)
-        {
-            case "Chicken":
-                chickenCoopInventory["Chicken"] = (int)Mathf.Max(0, chickenCoopInventory["Chicken"] + amount);
-                break;
-            case "Pig":
-                pigPenInventory = (int)Mathf.Max(0, pigPenInventory + amount);
-                break;
-            case "Egg":
-                chickenCoopInventory["Egg"] = (int)Mathf.Max(0, chickenCoopInventory["Egg"] + amount);
-                break;
-        }
-    }*/
+    
 
     private void Update()
     {
@@ -702,22 +551,19 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
                         break;
                     }
-                    else if (chickenCoop.Contains(buildings.GetTile(gridPosition + neighborPosition)))
+                    else if (animalManager.GetChickenCoop().Contains(buildings.GetTile(gridPosition + neighborPosition)))
                     {
                         Debugger.Log("Interacting with Chicken Coop!", Debugger.PriorityLevel.LeastImportant);
 
                         if (interactWBuildingKeyPressed)
                         {
-                            chickenSlot.parent.parent.gameObject.SetActive(true);
+                            animalManager.GetChickenUI().SetActive(true);
                             inventoryUI.SetActive(true);
                         }
                         else
                         {
                             playerWorldCanvas.SetActive(true);
                         }
-
-
-
                         break;
                     }
                     else if (house.Contains(buildings.GetTile(gridPosition + neighborPosition)))
@@ -735,13 +581,13 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
                         break;
                     }
-                    else if (pigPen.Contains(buildings.GetTile(gridPosition + neighborPosition)))
+                    else if (animalManager.GetPigPen().Contains(buildings.GetTile(gridPosition + neighborPosition)))
                     {
                         Debugger.Log("Interacting with Pig Pen!", Debugger.PriorityLevel.LeastImportant);
 
                         if (interactWBuildingKeyPressed)
                         {
-                            pigSlot.parent.parent.gameObject.SetActive(true);
+                            animalManager.GetPigUI().SetActive(true);
                             inventoryUI.SetActive(true);
                         }
                         else
@@ -886,52 +732,22 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
     public int GetNumPigs()
     {
-        if (chickenSlot.childCount > 0) return pigSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity;
-        else return 0;
+        return animalManager.GetNumPigs();
     }
 
     public int GetNumChickens()
     {
-        if (chickenSlot.childCount > 0) return chickenSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity;
-        else return 0;
+        return animalManager.GetNumChickens();
     }
 
     public int GetNumEggs()
     {
-        if (eggSlot.childCount > 0) return eggSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity;
-        else return 0;
+        return animalManager.GetNumEggs();
     }
 
     public void UpdateAnimals()
     {
-        // if at least one chicken in coop, attempt at egg production
-        if (chickenSlot.childCount > 0)
-        {
-            // if no eggs, make new icon for eggs
-            if (eggSlot.childCount == 0)
-            {
-                InventoryIcon newIcon = Instantiate(playerInventory.inventoryIcon, eggSlot).GetComponent<InventoryIcon>();
-                newIcon.InitializeVariables();
-                newIcon.SetIcon("Egg");
-            }
-            // make 0-[# of chickens] eggs
-            InventoryIcon eggIcon = eggSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>();
-            int newEggs = UnityEngine.Random.Range(0, chickenSlot.GetChild(0).GetComponent<InventoryIcon>().quantity + 1);
-            Debug.Log("Making " + newEggs + " eggs!");
-            Debug.Log(eggIcon.quantity);
-            eggIcon.UpdateQuantity(eggIcon.quantity + newEggs);
-        }
-
-        // if at least 2 pigs, attempt at pig production
-        if (pigSlot.childCount > 0 && pigSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity > 1)
-        {
-            InventoryIcon pigIcon = pigSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>();
-            // make 0-[half total pigs] more pigs
-            int newPigs = UnityEngine.Random.Range(0, ((int)Mathf.Floor(pigIcon.quantity / 2)) + 1);
-            Debug.Log("Making " + newPigs + " pigs!");
-            Debug.Log(pigIcon.quantity);
-            pigIcon.UpdateQuantity(pigIcon.quantity + newPigs);
-        }
+        animalManager.UpdateAnimals(playerInventory);
     }
 
     IEnumerator DefaultSoil(Vector3Int gridPosition)
