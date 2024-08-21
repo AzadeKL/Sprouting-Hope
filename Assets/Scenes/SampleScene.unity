@@ -9578,6 +9578,10 @@ MonoBehaviour:
   helpUI: {fileID: 354474628}
   showHelpOnNewGameKey: showHelpOnNewGame
   time: 0
+  time24HFormat:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: 1b746dbb982bd2248b1207004338056f, type: 2}
   timePerTick: 12
   grassMap: {fileID: 818847544}
   farmLand: {fileID: 1544950102}

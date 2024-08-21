@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
     [Header("Time")]
     public float time;
+    [SerializeField] private FloatReference time24HFormat;
     [SerializeField] private float timePerTick;
 
     [Space]
@@ -465,7 +466,18 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         return animalManager.GetChickenSlot();
     }
 
-    
+    private bool GetBuildingOpen(string building)
+    {
+        switch(building)
+        {
+            case "Restaurant":
+                return time24HFormat.Value >= 8f && time24HFormat.Value <= 20f;
+            case "Truck":
+                return time24HFormat.Value >= 8f && time24HFormat.Value <= 20f;
+            default:
+                return false;
+        }
+    }
 
     private void Update()
     {
