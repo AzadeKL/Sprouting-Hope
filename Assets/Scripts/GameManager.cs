@@ -93,15 +93,8 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     public List<TileBase> truck;
     public List<TileBase> house;
     [SerializeField] private GameObject houseUI;
-    // public List<TileBase> pigPen;
-    // [SerializeField] private Transform pigSlot;
-    // public List<TileBase> chickenCoop;
-    // [SerializeField] private Transform chickenSlot;
-    // [SerializeField] private Transform eggSlot;
     public List<TileBase> storage;
     [SerializeField] private GameObject storageUI;
-
-    // [SerializeField] private GameObject EggPrefab;
 
     [Space]
     [Header("Sound Effects")]
@@ -112,6 +105,8 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     [Space]
     [Header("AnimalManager")]
     [SerializeField] private AnimalManager animalManager;
+    [Header("UpgradeManager")]
+    [SerializeField] private UpgradeUnlock upgradeManager;
 
     private GameObject toolTip;//UI tooltip 
 
@@ -150,6 +145,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         toolTip = FindObjectOfType<Tooltip>(true).gameObject;
         //Debug.Log("Current showHelpOnNewGameKey is set to: " + PlayerPrefs.GetInt(showHelpOnNewGameKey, 2));
         animalManager = GetComponent<AnimalManager>();
+        upgradeManager = GetComponent<UpgradeUnlock>();
         bool isNewGame = !SaveSystem.DataManager.instance.Load(this);
         bool showHelpOnNewGame = PlayerPrefs.GetInt(showHelpOnNewGameKey, 1) == 1;
         helpToggle.isOn = showHelpOnNewGame;
@@ -168,7 +164,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         foreach (var key_value in wheatPlants) gameData.gameManagerPlants.Add(PlantToEntry("Wheat", key_value));
         foreach (var key_value in tomatoPlants) gameData.gameManagerPlants.Add(PlantToEntry("Tomato", key_value));
         foreach (var key_value in lentilPlants) gameData.gameManagerPlants.Add(PlantToEntry("Lentil", key_value));
-        
+
         animalManager.Save(gameData);
     }
     public bool Load(GameData gameData)
@@ -480,6 +476,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         if (PauseMenu.instance.IsPaused()) return;
 
         progressMeter.value = mainProgress;
+        upgradeManager.checkUnlock(mainProgress);
         progressMeter.gameObject.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = mainProgress.ToString() + "/" + maxProgress.ToString();
         // if progress meets requirement, win the game (prompt to return to menu or continue playing?)
         if (mainProgress >= maxProgress)
