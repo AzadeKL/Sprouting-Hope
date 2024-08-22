@@ -168,13 +168,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         foreach (var key_value in wheatPlants) gameData.gameManagerPlants.Add(PlantToEntry("Wheat", key_value));
         foreach (var key_value in tomatoPlants) gameData.gameManagerPlants.Add(PlantToEntry("Tomato", key_value));
         foreach (var key_value in lentilPlants) gameData.gameManagerPlants.Add(PlantToEntry("Lentil", key_value));
-
-        // ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "Chicken",
-        //     chickenSlot.childCount > 0 ? chickenSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
-        // ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "Egg",
-        //     eggSlot.childCount > 0 ? eggSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
-        // ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "Pig",
-        //     pigSlot.childCount > 0 ? pigSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
+        
         animalManager.Save(gameData);
     }
     public bool Load(GameData gameData)
