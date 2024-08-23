@@ -12,42 +12,64 @@ public class UpgradeUnlock : MonoBehaviour
 
     [Space]
     [Header("SilverTools")]
-    public List<GameObject> silverTools;
+    // public List<GameObject> silverTools;
+    public List<UpgradeIcon> silverToolsIcons;
     public int unlockSilverTools;
 
     [Space]
     [Header("GoldTools")]
-    public List<GameObject> goldTools;
+    // public List<GameObject> goldTools;
+    public List<UpgradeIcon> goldToolsIcons;
     public int unlockGoldTools;
 
     [Space]
     [Header("Animals")]
-    public GameObject chicken;
-    public GameObject pig;
+    // public GameObject chicken;
+    public UpgradeIcon chickenIcon;
+    // public GameObject pig;
+    public UpgradeIcon pigIcon;
     public int unlockChicken;
     public int unlockPig;
 
     [Space]
     [Header("Crops")]
-    public GameObject lentils;
-    public int unlockLentils;   
+    // public GameObject lentils;
+    public UpgradeIcon lentilsIcon;
+    public int unlockLentils;
+
+
+    void Awake()
+    {
+        //If not disabled, disable all upgrades
+        Debug.Log("Awake");
+        foreach (UpgradeIcon tool in silverToolsIcons)
+        {
+            tool.DisableIcon();
+        }
+        foreach (UpgradeIcon tool in goldToolsIcons)
+        {
+            tool.DisableIcon();
+        }
+        chickenIcon.DisableIcon();
+        pigIcon.DisableIcon();
+        lentilsIcon.DisableIcon();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        //If not disabled, disable all upgrades
-        foreach (GameObject tool in silverTools)
-        {
-            tool.SetActive(false);
-        }
-        foreach (GameObject tool in goldTools)
-        {
-            tool.SetActive(false);
-        }
-        chicken.SetActive(false);
-        pig.SetActive(false);
-        lentils.SetActive(false);
-
-
+        // //If not disabled, disable all upgrades
+        // foreach (UpgradeIcon tool in silverToolsIcons)
+        // {
+        //     tool.Disable();
+        // }
+        // foreach (UpgradeIcon tool in goldToolsIcons)
+        // {
+        //     tool.Disable();
+        // }
+        // chickenIcon.Disable();
+        // pigIcon.Disable();
+        // lentilsIcon.Disable();
     }
 
     // Update is called once per frame
@@ -60,33 +82,33 @@ public class UpgradeUnlock : MonoBehaviour
     {
         if (progress >= unlockSilverTools)
         {
-            foreach (GameObject tool in silverTools)
+            foreach (UpgradeIcon tool in silverToolsIcons)
             {
-                tool.SetActive(true);
+                tool.Enable();
             }
         }
 
         if (progress >= unlockGoldTools)
         {
-            foreach (GameObject tool in goldTools)
+            foreach (UpgradeIcon tool in goldToolsIcons)
             {
-                tool.SetActive(true);
+                tool.Enable();
             }
         }
 
         if (progress >= unlockChicken)
         {
-            chicken.SetActive(true);
+            chickenIcon.Enable();
         }
 
         if (progress >= unlockPig)
         {
-            pig.SetActive(true);
+            pigIcon.Enable();
         }
 
         if (progress >= unlockLentils)
         {
-            lentils.SetActive(true);
+            lentilsIcon.Enable();
         }
     }
 }

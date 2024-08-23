@@ -22,6 +22,12 @@ public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public Transform lastParent;
     private Canvas canvas;
 
+    //Image Manipulation
+    private Image imageIcon;
+    private Color originalColor;
+    public Color disabledColor;
+    private bool isDisabled = false;
+
     public string GenerateDestroyedId()
     {
         return SaveSystem.IDestroyable.GetGameObjectPathWId(gameObject, item);
@@ -34,6 +40,10 @@ public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         canvas = rectTransform.root.GetComponent<Canvas>();
         transform.GetChild(0).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "$" + cost.ToString();
 
+        imageIcon = GetComponent<Image>();
+        originalColor = imageIcon.color;
+        disabledColor = Color.black;
+
         if (SaveSystem.DataManager.instance.IsDestroyedDestroyable(this))
         {
             Destroy(gameObject);
@@ -43,11 +53,16 @@ public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private void Start()
     {
         toolTip = FindObjectOfType<Tooltip>(true).gameObject;
+        // if(isDisabled)
+        // {
+        //     imageIcon.color = disabledColor;
+        // }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         //Debug.Log("hovering " + item);
+        if(isDisabled) return;
         if (upgradeEffect != "") toolTip.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item + "\n" + upgradeEffect;
         else toolTip.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item;
         toolTip.SetActive(true);
@@ -61,6 +76,8 @@ public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void Clicked()
     {
+        if (isDisabled) return;
+
         Debug.Log("clicked " + item);
         if (player.GetComponent<PlayerInventory>().money >= cost)
         {
@@ -100,5 +117,18 @@ public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         /*var oldColor = lastParent.GetComponent<Image>().color;
         oldColor.a = colorAlpha;
         lastParent.GetComponent<Image>().color = oldColor;*/
+    }
+
+    public void Enable()
+    {
+        isDisabled = false;
+        imageIcon.color = originalColor;
+    }
+
+    public void DisableIcon()
+    {
+        isDisabled = true;
+        imageIcon.color = disabledColor;
+        Debug.Log("Disabling " + item);
     }
 }
