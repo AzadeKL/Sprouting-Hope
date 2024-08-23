@@ -1,8 +1,10 @@
 using SaveSystem;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using Image = UnityEngine.UI.Image;
 
 
@@ -24,6 +26,7 @@ public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     //Image Manipulation
     private Image imageIcon;
+    private Button button;
     private Color originalColor;
     public Color disabledColor;
     private bool isDisabled = false;
@@ -43,6 +46,7 @@ public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         imageIcon = GetComponent<Image>();
         originalColor = imageIcon.color;
         disabledColor = Color.black;
+        button = GetComponent<Button>();
 
         if (SaveSystem.DataManager.instance.IsDestroyedDestroyable(this))
         {
@@ -53,16 +57,11 @@ public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private void Start()
     {
         toolTip = FindObjectOfType<Tooltip>(true).gameObject;
-        // if(isDisabled)
-        // {
-        //     imageIcon.color = disabledColor;
-        // }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         //Debug.Log("hovering " + item);
-        if(isDisabled) return;
         if (upgradeEffect != "") toolTip.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item + "\n" + upgradeEffect;
         else toolTip.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item;
         toolTip.SetActive(true);
@@ -76,7 +75,6 @@ public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void Clicked()
     {
-        if (isDisabled) return;
 
         Debug.Log("clicked " + item);
         if (player.GetComponent<PlayerInventory>().money >= cost)
@@ -122,13 +120,39 @@ public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void Enable()
     {
         isDisabled = false;
-        imageIcon.color = originalColor;
+        // imageIcon.color = originalColor;
+        button.interactable = true;
     }
 
     public void DisableIcon()
     {
-        isDisabled = true;
-        imageIcon.color = disabledColor;
+        
         Debug.Log("Disabling " + item);
+        isDisabled = true;
+        // button.interactable = false;
+        // imageIcon.color = disabledColor;
+    }
+
+    void OnEnable()
+    {
+        if (isDisabled)
+        {
+            // imageIcon.color = disabledColor;
+            button.interactable = false;
+        }
+    }
+
+    void OnBecameVisible()
+    {
+        if (isDisabled)
+        {
+            // imageIcon.color = disabledColor;
+            button.interactable = false;
+        }
+        else
+        {
+            // imageIcon.color = originalColor;
+            button.interactable = true;
+        }
     }
 }

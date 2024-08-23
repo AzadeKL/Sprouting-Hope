@@ -10119,9 +10119,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   silverToolsIcons:
+  - {fileID: 2146369190}
   - {fileID: 519236770}
   - {fileID: 1874495703}
-  - {fileID: 2146369190}
   unlockSilverTools: 100
   goldToolsIcons:
   - {fileID: 1073674732}

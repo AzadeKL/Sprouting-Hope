@@ -146,6 +146,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         //Debug.Log("Current showHelpOnNewGameKey is set to: " + PlayerPrefs.GetInt(showHelpOnNewGameKey, 2));
         animalManager = GetComponent<AnimalManager>();
         upgradeManager = GetComponent<UpgradeUnlock>();
+        upgradeManager.disableAll();
         bool isNewGame = !SaveSystem.DataManager.instance.Load(this);
         bool showHelpOnNewGame = PlayerPrefs.GetInt(showHelpOnNewGameKey, 1) == 1;
         helpToggle.isOn = showHelpOnNewGame;

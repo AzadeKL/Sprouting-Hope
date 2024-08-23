@@ -53,7 +53,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             if (gridslot.childCount > 0)
             {
                 InventoryIcon icon = gridslot.GetChild(0).gameObject.GetComponent<InventoryIcon>();
-                Debug.Log("saving " + icon.item);
+                // Debug.Log("saving " + icon.item);
                 gameData.playerInventoryInventorySlot.Add(Array.IndexOf(newInventory, gridslot));
                 gameData.playerInventoryInventoryItems.Add(icon.item);
                 gameData.playerInventoryInventoryQuantities.Add(icon.quantity);
@@ -93,7 +93,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         {
             InventoryIcon newIcon = Instantiate(inventoryIcon, newInventory[gameData.playerInventoryInventorySlot[i]]).GetComponent<InventoryIcon>();
             newIcon.InitializeVariables();
-            Debug.Log("initialized");
+            // Debug.Log("initialized");
             newIcon.SetIcon(gameData.playerInventoryInventoryItems[i]);
             newIcon.UpdateQuantity(gameData.playerInventoryInventoryQuantities[i]);
             inventoryChanged.TriggerEvent();
@@ -125,7 +125,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             {
                 InventoryIcon newIcon = Instantiate(inventoryIcon, gridslot).GetComponent<InventoryIcon>();
                 newIcon.InitializeVariables();
-                Debug.Log("initialized");
+                // Debug.Log("initialized");
                 newIcon.SetIcon(Item);
                 newIcon.UpdateQuantity(Count);
                 inventoryChanged.TriggerEvent();
