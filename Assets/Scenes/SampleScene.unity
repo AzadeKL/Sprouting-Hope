@@ -10122,18 +10122,18 @@ MonoBehaviour:
   - {fileID: 2146369190}
   - {fileID: 519236770}
   - {fileID: 1874495703}
-  unlockSilverTools: 100
+  unlockSilverTools: 2000
   goldToolsIcons:
   - {fileID: 1073674732}
   - {fileID: 1018919156}
   - {fileID: 810128104}
-  unlockGoldTools: 200
+  unlockGoldTools: 6000
   chickenIcon: {fileID: 691102013}
   pigIcon: {fileID: 1955938646}
-  unlockChicken: 175
-  unlockPig: 225
+  unlockChicken: 1000
+  unlockPig: 5000
   lentilsIcon: {fileID: 1770716432}
-  unlockLentils: 144
+  unlockLentils: 1000
 --- !u!1 &555502810
 GameObject:
   m_ObjectHideFlags: 0
