@@ -171,7 +171,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     public bool Load(GameData gameData)
     {
         mainProgress = gameData.gameManagerMainProgress;
-
+        // upgradeManager.checkUnlock(mainProgress);
         foreach (var key_value in gameData.gameManagerTileStates)
         {
             var entry = ISaveable.ParseKey(key_value);
@@ -477,8 +477,8 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         if (PauseMenu.instance.IsPaused()) return;
 
         progressMeter.value = mainProgress;
-        upgradeManager.checkUnlock(mainProgress);
         progressMeter.gameObject.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = mainProgress.ToString() + "/" + maxProgress.ToString();
+        upgradeManager.checkUnlock(mainProgress);
         // if progress meets requirement, win the game (prompt to return to menu or continue playing?)
         if (mainProgress >= maxProgress)
         {

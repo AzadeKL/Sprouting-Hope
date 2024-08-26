@@ -14,6 +14,7 @@ public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public string item;
     [Multiline]
     [SerializeField] private string upgradeEffect;
+    [SerializeField] private string upgradeRequirement;
     [SerializeField] bool tool;
     public int cost;
     private GameObject player;
@@ -57,13 +58,28 @@ public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private void Start()
     {
         toolTip = FindObjectOfType<Tooltip>(true).gameObject;
+
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         //Debug.Log("hovering " + item);
-        if (upgradeEffect != "") toolTip.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item + "\n" + upgradeEffect;
-        else toolTip.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item;
+        if(!isDisabled)
+        {
+            if (upgradeEffect != "")
+            {
+                toolTip.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item + "\n" + upgradeEffect;
+            }
+            else
+            {
+                toolTip.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item;
+            }
+
+        }
+        else
+        {
+            toolTip.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = item + "\n" + "You need " + upgradeRequirement + " goodness to unlock this upgrade";
+        }
         toolTip.SetActive(true);
     }
 
@@ -117,28 +133,26 @@ public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         lastParent.GetComponent<Image>().color = oldColor;*/
     }
 
-    public void Enable()
+    public void EnableIcon()
     {
         isDisabled = false;
         // imageIcon.color = originalColor;
-        button.interactable = true;
     }
 
     public void DisableIcon()
     {
-        
-        Debug.Log("Disabling " + item);
         isDisabled = true;
-        // button.interactable = false;
-        // imageIcon.color = disabledColor;
     }
 
     void OnEnable()
     {
         if (isDisabled)
         {
-            // imageIcon.color = disabledColor;
             button.interactable = false;
+        }
+        else
+        {
+            button.interactable = true;
         }
     }
 
@@ -154,5 +168,10 @@ public class UpgradeIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             // imageIcon.color = originalColor;
             button.interactable = true;
         }
+    }
+
+    public void setUpgradeRequirement(int requirement)
+    {
+        upgradeRequirement = requirement.ToString();
     }
 }

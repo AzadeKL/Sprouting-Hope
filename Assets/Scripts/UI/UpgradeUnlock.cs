@@ -40,36 +40,13 @@ public class UpgradeUnlock : MonoBehaviour
 
     void Awake()
     {
-        // //If not disabled, disable all upgrades
-        // foreach (UpgradeIcon tool in silverToolsIcons)
-        // {
-        //     tool.DisableIcon();
-        // }
-        // foreach (UpgradeIcon tool in goldToolsIcons)
-        // {
-        //     tool.DisableIcon();
-        // }
-        // chickenIcon.DisableIcon();
-        // pigIcon.DisableIcon();
-        // lentilsIcon.DisableIcon();
+
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        // //If not disabled, disable all upgrades
-        // Debug.Log("Start");
-        // foreach (UpgradeIcon tool in silverToolsIcons)
-        // {
-        //     tool.DisableIcon();
-        // }
-        // foreach (UpgradeIcon tool in goldToolsIcons)
-        // {
-        //     tool.DisableIcon();
-        // }
-        // chickenIcon.DisableIcon();
-        // pigIcon.DisableIcon();
-        // lentilsIcon.DisableIcon();
+
     }
 
     // Update is called once per frame
@@ -83,17 +60,23 @@ public class UpgradeUnlock : MonoBehaviour
         Debug.Log("Disable All");
         for (int i = 0; i < silverToolsIcons.Count; i++)
         {
-            Debug.Log("Disable Tool  " + i);
             silverToolsIcons[i].DisableIcon();
-            Debug.Log("Disabled Tool  " + i);
+            silverToolsIcons[i].setUpgradeRequirement(unlockSilverTools);
         }
         for (int i = 0; i < goldToolsIcons.Count; i++)
         {
             goldToolsIcons[i].DisableIcon();
+            goldToolsIcons[i].setUpgradeRequirement(unlockGoldTools);
         }
+        
         chickenIcon.DisableIcon();
+        chickenIcon.setUpgradeRequirement(unlockChicken);
+        
         pigIcon.DisableIcon();
+        pigIcon.setUpgradeRequirement(unlockPig);
+        
         lentilsIcon.DisableIcon();
+        lentilsIcon.setUpgradeRequirement(unlockLentils);
     }
 
     public void checkUnlock(int progress)
@@ -102,7 +85,7 @@ public class UpgradeUnlock : MonoBehaviour
         {
             foreach (UpgradeIcon tool in silverToolsIcons)
             {
-                tool.Enable();
+                tool.EnableIcon();
             }
         }
 
@@ -110,23 +93,23 @@ public class UpgradeUnlock : MonoBehaviour
         {
             foreach (UpgradeIcon tool in goldToolsIcons)
             {
-                tool.Enable();
+                tool.EnableIcon();
             }
         }
 
         if (progress >= unlockChicken)
         {
-            chickenIcon.Enable();
+            chickenIcon.EnableIcon();
         }
 
         if (progress >= unlockPig)
         {
-            pigIcon.Enable();
+            pigIcon.EnableIcon();
         }
 
         if (progress >= unlockLentils)
         {
-            lentilsIcon.Enable();
+            lentilsIcon.EnableIcon();
         }
     }
 }
