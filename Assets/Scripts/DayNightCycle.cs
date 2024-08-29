@@ -22,6 +22,7 @@ public class DayNightCycle : MonoBehaviour, SaveSystem.ISaveable
 
 
     [SerializeField] private GameManager gameManager;
+    [SerializeField] private TownGameManager townGameManager;
 
     [SerializeField] private GameEvent dayChange;
 
@@ -97,8 +98,9 @@ public class DayNightCycle : MonoBehaviour, SaveSystem.ISaveable
         {
             cycleTimer = 0f;
             dayCounter.Value++;
-            gameManager.UpdateAnimals();
+            if (gameManager) gameManager.UpdateAnimals();
+            else townGameManager.UpdateAnimals();
         }
-        gameManager.time = (24 * dayCounter.Value) + time24HFormat.Value;
+        if (gameManager) gameManager.time = (24 * dayCounter.Value) + time24HFormat.Value;
     }
 }

@@ -26,7 +26,7 @@ public class PlayerWalkingSounds : MonoBehaviour
 
 
 
-        if (rb.velocity.sqrMagnitude > Mathf.Epsilon)
+        if (rb.velocity.sqrMagnitude > Mathf.Epsilon && farmLand)
         {
             var result = farmLand.HasTile(farmLand.WorldToCell(playerPosition.position));
 

@@ -9863,7 +9863,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 61b88fc1270147c4281a758e6f9890d5, type: 3}
   - {fileID: 8300000, guid: 009fdecc8c7b9884fa0c2086d098cb49, type: 3}
   - {fileID: 8300000, guid: 7da40b1fa28640d4caf3eee67588a56e, type: 3}
-  animalManager: {fileID: 0}
+  animalManager: {fileID: 548942059}
   upgradeManager: {fileID: 548942060}
   escDisabled: 0
 --- !u!4 &548942055
@@ -10560,6 +10560,7 @@ MonoBehaviour:
     ConstantValue: 1
     Variable: {fileID: 11400000, guid: e581feeb5e30f264bb8c83950014bf56, type: 2}
   gameManager: {fileID: 548942054}
+  townGameManager: {fileID: 0}
   dayChange: {fileID: 0}
 --- !u!1 &622253040
 GameObject:
@@ -38173,6 +38174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9badfc77234d2d8488e39afbf4fb87ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inTown: 0
   handItem: 
   inventoryIndex: []
   hotbar:
@@ -53150,8 +53152,8 @@ SceneRoots:
   m_Roots:
   - {fileID: 619394802}
   - {fileID: 519420032}
-  - {fileID: 1822348384}
   - {fileID: 548942055}
+  - {fileID: 1822348384}
   - {fileID: 1449948599}
   - {fileID: 322422311}
   - {fileID: 803809361}

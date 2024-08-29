@@ -4,12 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-public class GameManager : MonoBehaviour, SaveSystem.ISaveable
+public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
 {
     // Enum for the field states
     private enum DirtFieldState
@@ -34,13 +33,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     [Space]
     [Header("Tilemap")]
     [SerializeField] private Tilemap grassMap;
-    [SerializeField] private Tilemap farmLand;
-    [SerializeField] private Tilemap farmPlants;
     [SerializeField] private Tilemap buildings;
-
-    [Space]
-    [SerializeField] private SeedFactory seedFactory;
-    [SerializeField] private GameObject waterPrefab;
 
     [Space]
     [Header("Player")]
@@ -53,28 +46,15 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     [SerializeField] Color sellInventory;
     [SerializeField] Color giveInventory;
     public Transform playerCenter;
-    [SerializeField] private Transform outliner;
-    [SerializeField] private float itemRange = 3f;
     [SerializeField] private GameObject playerWorldCanvas;
-    [SerializeField] private Image playerActionImage;
-
-    [Space]
-    [Header("GroundTiles")]
-
-    [SerializeField] private TileBase defaultField;
-    [SerializeField] private TileBase plowedField;
-    [SerializeField] private TileBase wateredField;
 
     [Space]
     [Header("Plants")]
     [SerializeField] private float wateringTimeReduction;
-    public List<Tile> wheat;
     [SerializeField] private float wheatGrowTime;
     private Dictionary<Vector3Int, int> wheatPlants = new Dictionary<Vector3Int, int>();
-    public List<Tile> tomato;
     [SerializeField] private float tomatoGrowTime;
     private Dictionary<Vector3Int, int> tomatoPlants = new Dictionary<Vector3Int, int>();
-    public List<Tile> lentil;
     [SerializeField] private float lentilGrowTime;
     private Dictionary<Vector3Int, int> lentilPlants = new Dictionary<Vector3Int, int>();
 
@@ -92,16 +72,8 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     [Header("Buildings")]
     public List<TileBase> restaurant;
     public List<TileBase> truck;
-    public List<TileBase> house;
-    [SerializeField] private GameObject houseUI;
     public List<TileBase> storage;
     [SerializeField] private GameObject storageUI;
-
-    [Space]
-    [Header("Sound Effects")]
-    [SerializeField] private List<AudioClip> plowSounds;
-    [SerializeField] private List<AudioClip> reapSounds;
-    [SerializeField] private List<AudioClip> waterSounds;
 
     [Space]
     [Header("AnimalManager")]
@@ -122,20 +94,13 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         Vector3Int.right,
         Vector3Int.down
     };
-    private bool disableTool = false;
     private bool isModalMode = false;
     public bool escDisabled = false;
-
-    private float itemRangeModifier = 0f;
-    private float timer = 1f;
-    private float timerModifierPercentage = 0f;
-    private float baselineTimerModifierPercentage = 0f;
 
     private AudioSource audioSource;
     private void Awake()
     {
         helpToggle = helpUI.transform.GetChild(2).GetComponent<Toggle>();
-        if (seedFactory == null) { seedFactory = GetComponent<SeedFactory>(); }
         progressMeter.maxValue = maxProgress;
         audioSource = GetComponent<AudioSource>();
         
@@ -217,7 +182,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
     void UpdateIsModalMode()
     {
-        SetIsModalMode(helpUI.activeSelf || houseUI.activeSelf || inventoryUI.activeSelf || storageUI.activeSelf || animalManager.IsModalMode());
+        SetIsModalMode(helpUI.activeSelf || inventoryUI.activeSelf || storageUI.activeSelf || animalManager.IsModalMode());
         // If a modal mode is active, disable the pause menu, for the rest of the frame.
         PauseMenu.instance.notAllowed = isModalMode;
     }
@@ -226,7 +191,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     {
         ExitInventoryMode();
         helpUI.SetActive(false);
-        houseUI.SetActive(false);
         storageUI.SetActive(false);
         playerInventory.sellMode = false;
         playerInventory.giveMode = false;
@@ -272,32 +236,28 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         return seedName.Substring(0, seedName.IndexOf(' '));
     }
 
-    private bool GetCropVarsForCropName(string cropName, ref List<Tile> crop, ref Dictionary<Vector3Int, int> cropPlants)
+    private bool GetCropVarsForCropName(string cropName, ref Dictionary<Vector3Int, int> cropPlants)
     {
         switch (cropName)
         {
             case "Wheat":
-                crop = wheat;
                 cropPlants = wheatPlants;
                 break;
             case "Tomato":
-                crop = tomato;
                 cropPlants = tomatoPlants;
                 break;
             case "Lentils":
-                crop = lentil;
                 cropPlants = lentilPlants;
                 break;
             default:
-                crop = null;
                 cropPlants = null;
                 break;
         }
 
-        return crop != null;
+        return cropPlants != null;
     }
 
-    private bool GetCropVarsAtGridPosition(Vector3Int gridPosition, ref string cropName, ref List<Tile> crop, ref Dictionary<Vector3Int, int> cropPlants)
+    private bool GetCropVarsAtGridPosition(Vector3Int gridPosition, ref string cropName, ref Dictionary<Vector3Int, int> cropPlants)
     {
         cropName = "";
         if (wheatPlants.ContainsKey(gridPosition))
@@ -313,63 +273,16 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             cropName = "Lentils";
         }
 
-        return GetCropVarsForCropName(cropName, ref crop, ref cropPlants);
+        return GetCropVarsForCropName(cropName, ref cropPlants);
     }
 
     private void SetDirtFieldState(Vector3Int gridPosition, DirtFieldState dirtFieldState)
     {
-        TileBase fieldType = null;
-        switch (dirtFieldState)
-        {
-            case DirtFieldState.Default:
-                fieldType = defaultField;
-                break;
-            case DirtFieldState.Plowed:
-                fieldType = plowedField;
-                break;
-            case DirtFieldState.Watered:
-                fieldType = wateredField;
-                break;
-            default:
-                Debug.Log("Unrecognized dirt field state(" + dirtFieldState + ") at position: " + gridPosition);
-                return;
-        }
         Debug.Log("Set dirt field state at position: " + gridPosition + ", dirtFieldState: " + dirtFieldState + " = " + (int)dirtFieldState);
-        if (!tileState.ContainsKey(gridPosition))
-        {
-            tileState.Add(gridPosition, (int)dirtFieldState);
-        }
-        else
+        if (tileState.ContainsKey(gridPosition))
         {
             tileState[gridPosition] = (int)dirtFieldState;
         }
-        farmLand.SetTile(gridPosition, fieldType);
-    }
-
-    private void PlowField(Vector3Int gridPosition)
-    {
-        if (!tileState.ContainsKey(gridPosition) || tileState[gridPosition] < 1)
-        {
-            SetDirtFieldState(gridPosition, DirtFieldState.Plowed);
-            seedFactory.CreateSeed(gridPosition);
-            PlayActionSound(plowSounds[Random.Range(0, plowSounds.Count)]);
-        }
-    }
-
-    private void WaterField(Vector3Int gridPosition)
-    {
-        if (!tileState.ContainsKey(gridPosition) || (tileState[gridPosition] < 1))
-        {
-            Debug.Log("Failed to water crop - grid location not initialized: " + gridPosition);
-            return;
-        }
-
-        if (farmLand.GetTile(gridPosition) == (wateredField)) return;
-
-        if (growTotalTime.ContainsKey(gridPosition)) growTotalTime[gridPosition] *= wateringTimeReduction;
-        SetDirtFieldState(gridPosition, DirtFieldState.Watered);
-        PlayActionSound(waterSounds[Random.Range(0, waterSounds.Count)]);
-        Instantiate(waterPrefab, gridPosition, Quaternion.identity);
     }
 
     private void AddCrop(string cropName, Vector3Int gridPosition, int growthState = 0, float startTime = -1f, float totalTime = 60f, bool useSeed = true)
@@ -380,15 +293,9 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             Debug.Log("Failed to add crop - grid location not initialized: " + gridPosition);
             return;
         }
-        if (farmPlants.HasTile(gridPosition))
-        {
-            Debug.Log("Failed to add cropt - grid location in use: " + gridPosition);
-            return;
-        }
 
-        List<Tile> crop = null;
         Dictionary<Vector3Int, int> cropPlants = null;
-        if (!GetCropVarsForCropName(cropName, ref crop, ref cropPlants))
+        if (!GetCropVarsForCropName(cropName, ref cropPlants))
         {
             Debug.Log("Invalid crop(" + cropName + ") at position: " + gridPosition);
             SetDirtFieldState(gridPosition, DirtFieldState.Default);
@@ -398,7 +305,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         Debug.Log(startTime);
         growStartTime.Add(gridPosition, startTime);
         growTotalTime.Add(gridPosition, totalTime);
-        farmPlants.SetTile(gridPosition, crop[growthState]);
         cropPlants.Add(gridPosition, growthState);
         string seedName = GetSeedName(cropName);
         if (useSeed) playerInventory.RemoveFromInventory(seedName);
@@ -409,9 +315,8 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     public void UpdateCrops(Vector3Int gridPosition)
     {
         string cropName = "";
-        List<Tile> crop = null;
         Dictionary<Vector3Int, int> cropPlants = null;
-        if (!GetCropVarsAtGridPosition(gridPosition, ref cropName, ref crop, ref cropPlants))
+        if (!GetCropVarsAtGridPosition(gridPosition, ref cropName, ref cropPlants))
         {
             Debug.Log("No crop to update at position: " + gridPosition);
             SetDirtFieldState(gridPosition, (DirtFieldState)Mathf.Max(0, tileState[gridPosition] - 1));
@@ -422,34 +327,8 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         Debug.Log(time);
         growStartTime[gridPosition] = time;
         if (cropPlants[gridPosition] < 2) ++cropPlants[gridPosition];
-        farmPlants.SetTile(gridPosition, crop[cropPlants[gridPosition]]);
         if (cropPlants[gridPosition] < 2) StartCoroutine(GrowTime(gridPosition));
         else StartCoroutine(DefaultSoil(gridPosition));
-    }
-
-    private void HarvestCrop(Vector3Int gridPosition)
-    {
-        string cropName = "";
-        List<Tile> crop = null;
-        Dictionary<Vector3Int, int> cropPlants = null;
-        if (!GetCropVarsAtGridPosition(gridPosition, ref cropName, ref crop, ref cropPlants))
-        {
-            Debug.Log("No crop to harvest at position: " + gridPosition);
-            return;
-        }
-        if (cropPlants[gridPosition] < 2)
-        {
-            Debug.Log("Crop(" + cropName + " is too young to harvest at position: " + gridPosition + " growth: " + cropPlants[gridPosition]);
-            return;
-        }
-
-        farmPlants.SetTile(gridPosition, null);
-        growStartTime.Remove(gridPosition);
-        growTotalTime.Remove(gridPosition);
-        cropPlants.Remove(gridPosition);
-        seedFactory.CreateCrop(gridPosition, cropName);
-        Debug.Log("Harvested " + cropName);
-        PlayActionSound(reapSounds[Random.Range(0, reapSounds.Count)]);
     }
 
 
@@ -484,23 +363,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         if (mainProgress >= maxProgress)
         {
             winText.SetActive(true);
-        }
-
-        Vector3 mousepos = Input.mousePosition;
-        mousepos = Camera.main.ScreenToWorldPoint(mousepos);
-        var tilePos = farmLand.WorldToCell(mousepos);
-        var hoveredTile = farmLand.GetTile(tilePos);
-        // Debugger.Log(hoveredTile.name, Debugger.PriorityLevel.Low);
-        if ((tilePos - playerCenter.position).sqrMagnitude < (itemRange + itemRangeModifier) && hoveredTile != null)
-        {
-            outliner.transform.position = tilePos;
-            disableTool = false;
-            outliner.gameObject.SetActive(true);
-        }
-        else
-        {
-            outliner.gameObject.SetActive(false);
-            disableTool = true;
         }
 
         UpdateIsModalMode();
@@ -542,7 +404,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
                         if (interactWBuildingKeyPressed)
                         {
-                            SceneManager.LoadScene("TownScene");
                             inventoryUI.SetActive(true);
                             playerInventory.giveMode = true;
                             inventoryUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().color = giveInventory;
@@ -554,52 +415,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                             playerWorldCanvas.SetActive(true);
                         }
 
-
-                        break;
-                    }
-                    else if (animalManager.GetChickenCoop().Contains(buildings.GetTile(gridPosition + neighborPosition)))
-                    {
-                        Debugger.Log("Interacting with Chicken Coop!", Debugger.PriorityLevel.LeastImportant);
-
-                        if (interactWBuildingKeyPressed)
-                        {
-                            animalManager.GetChickenUI().SetActive(true);
-                            inventoryUI.SetActive(true);
-                        }
-                        else
-                        {
-                            playerWorldCanvas.SetActive(true);
-                        }
-                        break;
-                    }
-                    else if (house.Contains(buildings.GetTile(gridPosition + neighborPosition)))
-                    {
-                        Debugger.Log("Interacting with Farmhouse!", Debugger.PriorityLevel.LeastImportant);
-
-                        if (interactWBuildingKeyPressed)
-                        {
-                            houseUI.SetActive(true);
-                        }
-                        else
-                        {
-                            playerWorldCanvas.SetActive(true);
-                        }
-
-                        break;
-                    }
-                    else if (animalManager.GetPigPen().Contains(buildings.GetTile(gridPosition + neighborPosition)))
-                    {
-                        Debugger.Log("Interacting with Pig Pen!", Debugger.PriorityLevel.LeastImportant);
-
-                        if (interactWBuildingKeyPressed)
-                        {
-                            animalManager.GetPigUI().SetActive(true);
-                            inventoryUI.SetActive(true);
-                        }
-                        else
-                        {
-                            playerWorldCanvas.SetActive(true);
-                        }
 
                         break;
                     }
@@ -618,10 +433,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
                         break;
                     }
-                }
-                else
-                {
-                    playerWorldCanvas.SetActive(false);
                 }
             }
         }
@@ -662,62 +473,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             }
             // The PauseMenu handles Esc key-presses independently.
         }
-
-        // left click to interact with tool to tile
-        if (Input.GetMouseButton(0) && disableTool == false)
-        {
-            if (!inventoryUI.activeSelf && CheckTimer())
-            {
-                timer = 0f;
-                Vector3 mousePosition = Input.mousePosition;
-                mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
-                mousePosition.z = 0;
-                var playerpos = playerCenter.position;
-                playerpos.z = 0;
-                var result = mousePosition - playerpos;
-                result.Normalize();
-                Debugger.Log(result + " mouse direction normalized", Debugger.PriorityLevel.Medium);
-                Vector3Int gridPosition = farmLand.WorldToCell(tilePos);
-                TileBase clickedTile = farmLand.GetTile(gridPosition);
-                // if farmland, check what tool was used
-                string handItem = playerInventory.handItem;
-                if (clickedTile) switch (handItem)
-                    {
-                        // if Shovel equipped, till souil
-                        case "Rusty Shovel":
-                        case "Bronze Shovel":
-                        case "Silver Shovel":
-                        case "Gold Shovel":
-                            PlowField(gridPosition);
-                            StartCoroutine(DefaultSoil(gridPosition));
-                            break;
-                        // if hoe equipped, harvest
-                        case "Rusty Hoe":
-                        case "Bronze Hoe":
-                        case "Silver Hoe":
-                        case "Gold Hoe":
-                            HarvestCrop(gridPosition);
-                            break;
-                        // if watering can equipped, water soil for faster growth
-                        case "Rusty Watering Can":
-                        case "Bronze Watering Can":
-                        case "Silver Watering Can":
-                        case "Gold Watering Can":
-                            WaterField(gridPosition);
-                            break;
-                        // if seeds equipped, plant corresponding seedling
-                        case "Wheat Seeds":
-                        case "Tomato Seeds":
-                        case "Lentils Seeds":
-                            AddCrop(GetCropName(handItem), gridPosition);
-                            break;
-                    }
-            }
-        }
-
-        playerActionImage.fillAmount = CalculateTime() / 1f;
-        playerActionImage.color = Color.Lerp(Color.white, Color.green, playerActionImage.fillAmount);
-        timer += Time.deltaTime;
     }
 
     IEnumerator GrowTime(Vector3Int gridPosition)
@@ -760,70 +515,11 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     {
         float time = 60f;
         yield return new WaitForSeconds(time);
-        if (!wheatPlants.ContainsKey(gridPosition) && !tomatoPlants.ContainsKey(gridPosition) && !lentilPlants.ContainsKey(gridPosition) && !farmPlants.HasTile(gridPosition))
+        if (!wheatPlants.ContainsKey(gridPosition) && !tomatoPlants.ContainsKey(gridPosition) && !lentilPlants.ContainsKey(gridPosition))
         {
             SetDirtFieldState(gridPosition, (DirtFieldState)Mathf.Max(0, tileState[gridPosition] - 1));
             StartCoroutine(DefaultSoil(gridPosition));
         }
-    }
-
-    private bool CheckTimer()
-    {
-        return (CalculateTime() > 1f);
-    }
-
-    private float CalculateTime()
-    {
-        return timer + (1f * timerModifierPercentage);
-    }
-
-    public void HandleHandChange(GameObject item)
-    {
-        if (item == null)
-        {
-            itemRangeModifier = 0;
-            timerModifierPercentage = 0f;
-        }
-        else
-        {
-            var name = item.GetComponent<InventoryIcon>().item;
-            var result = name switch
-            {
-                string a when a.Contains("Rusty") => 1f,
-                string b when b.Contains("Bronze") => 2f,
-                string b when b.Contains("Silver") => 5f,
-                string b when b.Contains("Gold") => 20f,
-                _ => 0f
-            };
-            itemRangeModifier = result;
-
-            var timerModifier = name switch
-            {
-                string a when a.Contains("Rusty") => 0f,
-                string b when b.Contains("Bronze") => 0.2f,
-                string b when b.Contains("Silver") => 0.5f,
-                string b when b.Contains("Gold") => 1f,
-                _ => baselineTimerModifierPercentage
-            };
-            timerModifierPercentage = timerModifier;
-
-            var baseLineModifier = name switch
-            {
-                string a when a.Contains("Rusty Shovel") => 0f,
-                string b when b.Contains("Bronze Shovel") => 0.2f,
-                string b when b.Contains("Silver Shovel") => 0.5f,
-                string b when b.Contains("Gold Shovel") => 1f,
-                _ => 0
-            };
-
-            baselineTimerModifierPercentage = Mathf.Max(baselineTimerModifierPercentage, baseLineModifier);
-        }
-    }
-
-    private void PlayActionSound(AudioClip clip)
-    {
-        float upperValue = Mathf.Lerp(1f, 0.3f, timerModifierPercentage);
-        audioSource.PlayOneShot(clip, Random.Range(0.3f, upperValue));
     }
 
 }

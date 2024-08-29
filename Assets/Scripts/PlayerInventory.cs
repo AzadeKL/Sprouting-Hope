@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 {
 
-
+    [SerializeField] private bool inTown;
     // label of item is currently equipped to hand
     public string handItem = "";
 
@@ -301,7 +301,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             AddToInventory("Rusty Watering Can");
             AddToInventory("Rusty Hoe");
 
-            ChangeHandItem("Rusty Shovel");
+            if (!inTown) ChangeHandItem("Rusty Shovel");
         }
 
     }
@@ -309,43 +309,46 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 
     void Update()
     {
-        // scroll wheel down the hotbar
-        if (Input.GetAxis("Mouse ScrollWheel") > 0)
+        if (!inTown)
         {
-            FindNextItem(-1);
-            UpdateHandItemFromHotbarIndex();
-        }
-        // scroll wheel up the hotbar
-        if (Input.GetAxis("Mouse ScrollWheel") < 0)
-        {
-            FindNextItem(1);
-            UpdateHandItemFromHotbarIndex();
-        }
-        // number keys for specific hotbar slots
-        if (Input.GetKeyUp(KeyCode.Alpha1))
-        {
-            hotbarIndex = 0;
-            UpdateHandItemFromHotbarIndex();
-        }
-        if (Input.GetKeyUp(KeyCode.Alpha2))
-        {
-            hotbarIndex = 1;
-            UpdateHandItemFromHotbarIndex();
-        }
-        if (Input.GetKeyUp(KeyCode.Alpha3))
-        {
-            hotbarIndex = 2;
-            UpdateHandItemFromHotbarIndex();
-        }
-        if (Input.GetKeyUp(KeyCode.Alpha4))
-        {
-            hotbarIndex = 3;
-            UpdateHandItemFromHotbarIndex();
-        }
-        if (Input.GetKeyUp(KeyCode.Alpha5))
-        {
-            hotbarIndex = 4;
-            UpdateHandItemFromHotbarIndex();
+            // scroll wheel down the hotbar
+            if (Input.GetAxis("Mouse ScrollWheel") > 0)
+            {
+                FindNextItem(-1);
+                UpdateHandItemFromHotbarIndex();
+            }
+            // scroll wheel up the hotbar
+            if (Input.GetAxis("Mouse ScrollWheel") < 0)
+            {
+                FindNextItem(1);
+                UpdateHandItemFromHotbarIndex();
+            }
+            // number keys for specific hotbar slots
+            if (Input.GetKeyUp(KeyCode.Alpha1))
+            {
+                hotbarIndex = 0;
+                UpdateHandItemFromHotbarIndex();
+            }
+            if (Input.GetKeyUp(KeyCode.Alpha2))
+            {
+                hotbarIndex = 1;
+                UpdateHandItemFromHotbarIndex();
+            }
+            if (Input.GetKeyUp(KeyCode.Alpha3))
+            {
+                hotbarIndex = 2;
+                UpdateHandItemFromHotbarIndex();
+            }
+            if (Input.GetKeyUp(KeyCode.Alpha4))
+            {
+                hotbarIndex = 3;
+                UpdateHandItemFromHotbarIndex();
+            }
+            if (Input.GetKeyUp(KeyCode.Alpha5))
+            {
+                hotbarIndex = 4;
+                UpdateHandItemFromHotbarIndex();
+            }
         }
     }
 
