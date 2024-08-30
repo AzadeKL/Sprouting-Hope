@@ -511,14 +511,14 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
             var interactWBuildingKeyPressed = Input.GetKeyUp(KeyCode.F);
 
-            Vector3Int gridPosition = buildings.WorldToCell(player.transform.position);
+            Vector3Int gridPosition = buildings.WorldToCell(playerCenter.position);
             foreach (Vector3Int neighborPosition in neighborPositions)
             {
                 if (buildings.HasTile(gridPosition + neighborPosition))
                 {
                     if (restaurant.Contains(buildings.GetTile(gridPosition + neighborPosition)))
                     {
-                        Debugger.Log("Interacting with Restaurant!", Debugger.PriorityLevel.LeastImportant);
+                        Debug.Log("Interacting with Restaurant!");
 
                         if (interactWBuildingKeyPressed)
                         {

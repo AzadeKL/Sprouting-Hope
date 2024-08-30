@@ -16,8 +16,8 @@ public class CameraMovement : MonoBehaviour
     // distance from the center of the screen [Y] to allow camera to follow player
     //[SerializeField] float ClampY = 3.5f;
 
-    
-    [SerializeField] private Tilemap grassMap;
+
+    [SerializeField] private Tilemap boundsMap;
 
     private Vector2 player_prev_position = Vector2.zero;
     private Vector2 worldMin;
@@ -27,10 +27,10 @@ public class CameraMovement : MonoBehaviour
     void Awake()
     {
         // get map boundaries (bottom left, top right)
-        worldMin = grassMap.transform.TransformPoint(grassMap.localBounds.min);
-        worldMax = grassMap.transform.TransformPoint(grassMap.localBounds.max);
-        //Debug.Log("Min: " + worldMin);
-        //Debug.Log("Max: " + worldMax);
+        worldMin = boundsMap.transform.TransformPoint(boundsMap.localBounds.min);
+        worldMax = boundsMap.transform.TransformPoint(boundsMap.localBounds.max);
+        Debug.Log("Min: " + worldMin);
+        Debug.Log("Max: " + worldMax);
     }
     // Update is called once per frame
     void Update()
@@ -41,7 +41,7 @@ public class CameraMovement : MonoBehaviour
             Vector2 delta_position;
             delta_position = (Vector2) player.transform.position - player_prev_position;
             transform.Translate(delta_position);*/
-            transform.position = new Vector3(Mathf.Clamp(player.transform.position.x, worldMin.x + 9, worldMax.x - 9), Mathf.Clamp(player.transform.position.y, worldMin.y + 5, worldMax.y - 5), transform.position.z);
+        transform.position = new Vector3(Mathf.Clamp(player.transform.position.x, worldMin.x + 9, worldMax.x - 20), Mathf.Clamp(player.transform.position.y, worldMin.y + 5, worldMax.y - 5), transform.position.z);
         //}
         player_prev_position = player.transform.position;
     }
