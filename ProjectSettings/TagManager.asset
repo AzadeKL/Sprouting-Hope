@@ -11,6 +11,7 @@ TagManager:
   - Egg
   - Tomato Seeds
   - Lentils Seeds
+  - TutorialPopUp
   layers:
   - Default
   - TransparentFX
