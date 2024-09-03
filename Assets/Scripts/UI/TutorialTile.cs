@@ -1,17 +1,18 @@
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using Unity.VisualScripting;
-    using UnityEngine;
-    using UnityEngine.Events;
+using UnityEngine;
+using UnityEngine.Events;
 
-    public class TutorialTile : MonoBehaviour
+
+public class TutorialTile : MonoBehaviour
     {
         [Header("Tutorial Text")]
         [Multiline,Tooltip("Enter what tutorial should say")]public string tutorialText;
 
         public UnityEvent<string> tutorialEvent;
         public UnityEvent tutorialEventClose;
+
+        [Header("Destroy Settings")]
+        public bool shouldBeDestroyed = false;
+        [Tooltip("Only works when the bool is true")] public float destroyTime = 0.4f;
 
         // Start is called before the first frame update
         void Start()
@@ -41,7 +42,10 @@
             if (other.gameObject.CompareTag("Player"))
             {
                 tutorialEventClose.Invoke();  
-                // Destroy(gameObject, 0.1f);
+                if (shouldBeDestroyed)
+                {
+                    Destroy(gameObject, destroyTime);
+                }
             }
         }
     }

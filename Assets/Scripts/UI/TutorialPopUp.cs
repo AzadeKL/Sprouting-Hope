@@ -1,11 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using Microsoft.Unity.VisualStudio.Editor;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class TutorialPopUp : MonoBehaviour
 {
@@ -21,15 +16,12 @@ public class TutorialPopUp : MonoBehaviour
     public TextMeshProUGUI tutorialTextObject;
 
     [Header("Tutorial PopUp Settings")]
-    public float popUpTime = 5f;
-
-    //Locking Mechanism
-    private bool popUpLock = true;
+    public Vector2 popUpPadding = new Vector2(40, 20);
 
     // Start is called before the first frame update
     void Start()
     {
-        tutorialPopUp.SetActive(false);
+        setVisibility(false);
     }
 
     // Update is called once per frame
@@ -46,35 +38,28 @@ public class TutorialPopUp : MonoBehaviour
     private void setVisibility(bool visibility)
     {
         tutorialPopUp.SetActive(visibility);
-    }
-
-    public bool P()
-    {
-        if (popUpLock)
-        {
-            popUpLock = false;
-            return true;
-        }
-        else return false;
-    }
-
-    public void V()
-    {
-        popUpLock = true;
+        // tutorialTextObject.gameObject.SetActive(visibility);
     }
 
     private void setDimensionsforText()
     {
-        tutorialTextObject.text = tutorialText;
+        tutorialTextObject.SetText(tutorialText);
         tutorialTextObject.ForceMeshUpdate();
         Vector2 textSize = tutorialTextObject.GetRenderedValues(false);
-        RectTransform rt = tutorialPopUp.GetComponent<RectTransform>();
-        rt.sizeDelta = new Vector2(textSize.x + 20, textSize.y + 20);
+        
+        setBox(textSize);
+    }
+
+    private void setBox(Vector2 size)
+    {
+        tutorialPopUp.GetComponent<RectTransform>().sizeDelta = size + popUpPadding;
+        Vector2 tutorialPosition = new Vector2(-(size.x / 2), size.y / 2);
+        tutorialTextObject.rectTransform.localPosition = tutorialPosition;
+        tutorialPopUp.GetComponent<RectTransform>().localPosition = tutorialPosition;
     }
 
     public void showPopUp(string text)
     {
-        // if(!P()) return;
         setText(text);
         setDimensionsforText();
         setVisibility(true);
@@ -82,8 +67,10 @@ public class TutorialPopUp : MonoBehaviour
 
     public void hidePopUp()
     {
-        tutorialPopUp.SetActive(false);
-        // V();
+        tutorialTextObject.SetText("");
+        tutorialTextObject.ForceMeshUpdate();
+        // setDimensionsforText();
+        setVisibility(false);
     }
 
 
