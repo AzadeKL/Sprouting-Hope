@@ -23,6 +23,9 @@ public class CameraMovement : MonoBehaviour
     private Vector2 worldMin;
     private Vector2 worldMax;
 
+    private float height;
+    private float width;
+
 
     void Awake()
     {
@@ -31,6 +34,8 @@ public class CameraMovement : MonoBehaviour
         worldMax = boundsMap.transform.TransformPoint(boundsMap.localBounds.max);
         Debug.Log("Min: " + worldMin);
         Debug.Log("Max: " + worldMax);
+        height = 2f * gameObject.GetComponent<Camera>().orthographicSize;
+        width = height * gameObject.GetComponent<Camera>().aspect;
     }
     // Update is called once per frame
     void Update()
@@ -41,7 +46,8 @@ public class CameraMovement : MonoBehaviour
             Vector2 delta_position;
             delta_position = (Vector2) player.transform.position - player_prev_position;
             transform.Translate(delta_position);*/
-        transform.position = new Vector3(Mathf.Clamp(player.transform.position.x, worldMin.x + 9, worldMax.x - 20), Mathf.Clamp(player.transform.position.y, worldMin.y + 5, worldMax.y - 5), transform.position.z);
+        transform.position = new Vector3(Mathf.Clamp(player.transform.position.x, worldMin.x + width / 2, worldMax.x - width / 2),
+            Mathf.Clamp(player.transform.position.y, worldMin.y + height / 2, worldMax.y - height / 2), transform.position.z);
         //}
         player_prev_position = player.transform.position;
     }
