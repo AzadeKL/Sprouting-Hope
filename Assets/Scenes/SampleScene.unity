@@ -7853,7 +7853,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 911, y: 239}
+  m_AnchoredPosition: {x: 913, y: 239}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &241046219
@@ -7870,9 +7870,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tutorialText: 
   tutorialPopUp: {fileID: 567861352}
-  tutorialTextObject: {fileID: 1958185702}
-  popUpTime: 5
+  backgroundImage: {fileID: 567861354}
+  textObject: {fileID: 1958185702}
   popUpPadding: {x: 40, y: 20}
+  maxWidth: 500
 --- !u!1 &241875308
 GameObject:
   m_ObjectHideFlags: 0
@@ -10409,7 +10410,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: -719064265, guid: f62df9fa2d718d24ca75a43ae1e6aa95, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -10870,13 +10871,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8e4dd7071b3bd04b99bf66b79636109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tutorialText: This is a test
+  tutorialText: This is a test.
   tutorialEvent:
     m_PersistentCalls:
       m_Calls: []
   tutorialEventClose:
     m_PersistentCalls:
       m_Calls: []
+  shouldBeDestroyed: 0
+  destroyTime: 0.4
 --- !u!1 &681399952
 GameObject:
   m_ObjectHideFlags: 0
@@ -30964,13 +30967,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8e4dd7071b3bd04b99bf66b79636109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tutorialText: Different thing to say
+  tutorialText: I have so much to say that it should not really be in a single line
   tutorialEvent:
     m_PersistentCalls:
       m_Calls: []
   tutorialEventClose:
     m_PersistentCalls:
       m_Calls: []
+  shouldBeDestroyed: 0
+  destroyTime: 0.4
 --- !u!61 &1150815588
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -40228,7 +40233,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: ddsfgcxvxcvxcvxcvxcvxccvxv
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -40255,11 +40260,11 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
-  m_fontSizeMin: 18
+  m_fontSizeMin: 32
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
