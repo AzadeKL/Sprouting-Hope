@@ -468,6 +468,14 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     {
         animalManager.AddPigFeed(amount);
     }
+    public int GetChickenFeed()
+    {
+        return animalManager.GetChickenFeed();
+    }
+    public int GetPigFeed()
+    {
+        return animalManager.GetPigFeed();
+    }
 
     private bool GetBuildingOpen(string building)
     {

@@ -20,7 +20,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     [Space]
     public int sellValue;
     public int giveValue;
-    private int feedValue;
+    public int feedValue;
     public Transform lastParent;
 
 
@@ -230,15 +230,79 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     private void TransferQuantities(int amount, Transform parent)
     {
-        if (parent == gameManager.GetPigFeedSlot())
+        if (parent == gameManager.GetPigFeedSlot() && gameManager.GetPigFeed() < 10)
         {
-            gameManager.AddPigFeed(amount * feedValue);
-            UpdateQuantity(quantity - amount);
+            if (10 - gameManager.GetPigFeed() >= amount * feedValue)
+            {
+                gameManager.AddPigFeed(amount * feedValue);
+                UpdateQuantity(quantity - amount);
+            }
+            else
+            {
+                amount -= 10 - gameManager.GetPigFeed();
+                UpdateQuantity(quantity - (10 - gameManager.GetPigFeed()));
+                gameManager.AddPigFeed(10 - gameManager.GetPigFeed());
+                if (parent.childCount > 0)
+                {
+                    InventoryIcon other = parent.GetChild(0).GetComponent<InventoryIcon>();
+                    if (other.item == item)
+                    {
+                        other.UpdateQuantity(other.quantity + amount);
+                        UpdateQuantity(quantity - amount);
+                    }
+                }
+                else if (parent.childCount == 0 && quantity == amount)
+                {
+                    transform.SetParent(parent, true);
+                    rectTransform.localPosition = Vector3.zero;
+                    dragged = false;
+                }
+                else
+                {
+                    InventoryIcon other = Instantiate(this.gameObject, parent).GetComponent<InventoryIcon>();
+                    other.InitializeVariables();
+                    other.SetIcon(item);
+                    other.UpdateQuantity(amount);
+                    UpdateQuantity(quantity - amount);
+                }
+            }
         }
-        else if (parent == gameManager.GetChickenFeedSlot())
+        else if (parent == gameManager.GetChickenFeedSlot() && gameManager.GetChickenFeed() < 10)
         {
-            gameManager.AddChickenFeed(amount * feedValue);
-            UpdateQuantity(quantity - amount);
+            if (10 - gameManager.GetChickenFeed() >= amount * feedValue)
+            {
+                gameManager.AddChickenFeed(amount * feedValue);
+                UpdateQuantity(quantity - amount);
+            }
+            else
+            {
+                amount -= 10 - gameManager.GetChickenFeed();
+                UpdateQuantity(quantity - (10 - gameManager.GetChickenFeed()));
+                gameManager.AddChickenFeed(10 - gameManager.GetChickenFeed());
+                if (parent.childCount > 0)
+                {
+                    InventoryIcon other = parent.GetChild(0).GetComponent<InventoryIcon>();
+                    if (other.item == item)
+                    {
+                        other.UpdateQuantity(other.quantity + amount);
+                        UpdateQuantity(quantity - amount);
+                    }
+                }
+                else if (parent.childCount == 0 && quantity == amount)
+                {
+                    transform.SetParent(parent, true);
+                    rectTransform.localPosition = Vector3.zero;
+                    dragged = false;
+                }
+                else
+                {
+                    InventoryIcon other = Instantiate(this.gameObject, parent).GetComponent<InventoryIcon>();
+                    other.InitializeVariables();
+                    other.SetIcon(item);
+                    other.UpdateQuantity(amount);
+                    UpdateQuantity(quantity - amount);
+                }
+            }
         }
         else if (parent.childCount > 0)
         {
@@ -393,13 +457,13 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             {
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
-                    int amount = (int) Mathf.Min(25, quantity);
+                    int amount = (int)Mathf.Min(25, quantity);
                     playerInventory.money += sellValue * amount;
                     UpdateQuantity(quantity - (sellValue * amount));
                 }
                 else
                 {
-                    int amount = (int) Mathf.Min(5, quantity);
+                    int amount = (int)Mathf.Min(5, quantity);
                     playerInventory.money += sellValue * amount;
                     UpdateQuantity(quantity - (sellValue * amount));
                 }
@@ -409,13 +473,13 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             {
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
-                    int amount = (int) Mathf.Min(25, quantity);
+                    int amount = (int)Mathf.Min(25, quantity);
                     gameManager.mainProgress += giveValue * amount;
                     UpdateQuantity(quantity - (giveValue * amount));
                 }
                 else
                 {
-                    int amount = (int) Mathf.Min(5, quantity);
+                    int amount = (int)Mathf.Min(5, quantity);
                     gameManager.mainProgress += giveValue * amount;
                     UpdateQuantity(quantity - (giveValue * amount));
                 }

@@ -212,6 +212,16 @@ public class AnimalManager : MonoBehaviour
             Debug.Log(eggIcon.quantity);
             eggIcon.UpdateQuantity(eggIcon.quantity + newEggs);
             AddChickenFeed(-1);
+            // if excess feed in slot, convert to feed bar until full or slot empty
+            if (chickenFeedSlot.childCount > 0 && chickenFeedSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().feedValue <= 10 - GetChickenFeed())
+            {
+                InventoryIcon feed = chickenFeedSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>();
+                while (chickenFeedSlot.childCount > 0 || GetChickenFeed() < 10)
+                {
+                    AddChickenFeed(feed.feedValue);
+                    feed.UpdateQuantity(feed.quantity - 1);
+                }
+            }
         }
 
         // if at least 2 pigs, attempt at pig production
@@ -224,6 +234,16 @@ public class AnimalManager : MonoBehaviour
             Debug.Log(pigIcon.quantity);
             pigIcon.UpdateQuantity(pigIcon.quantity + newPigs);
             AddPigFeed(-1);
+            // if excess feed in slot, convert to feed bar until full or slot empty
+            if (pigFeedSlot.childCount > 0 && pigFeedSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().feedValue <= 10 - GetPigFeed())
+            {
+                InventoryIcon feed = pigFeedSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>();
+                while (pigFeedSlot.childCount > 0 || GetPigFeed() < 10)
+                {
+                    AddPigFeed(feed.feedValue);
+                    feed.UpdateQuantity(feed.quantity - 1);
+                }
+            }
         }
     }
 
