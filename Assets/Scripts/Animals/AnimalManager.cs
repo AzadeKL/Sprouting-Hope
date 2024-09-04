@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using SaveSystem;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Tilemaps;
 
 public class AnimalManager : MonoBehaviour
@@ -14,6 +15,13 @@ public class AnimalManager : MonoBehaviour
     [SerializeField] private Transform pigSlot;
     [SerializeField] private Transform chickenSlot;
     [SerializeField] private Transform eggSlot;
+
+    [SerializeField] private Slider pigFeed;
+    [SerializeField] private Slider chickenFeed;
+
+    [SerializeField] private Transform pigFeedSlot;
+    [SerializeField] private Transform chickenFeedSlot;
+
 
     [SerializeField] private GameObject EggPrefab;
 
@@ -57,6 +65,8 @@ public class AnimalManager : MonoBehaviour
             eggSlot.childCount > 0 ? eggSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
         ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "Pig",
             pigSlot.childCount > 0 ? pigSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
+        ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "PigFeed", GetPigFeed());
+        ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "ChickenFeed", GetChickenFeed());
     }
 
     //Load the animals from the SaveData
@@ -78,6 +88,12 @@ public class AnimalManager : MonoBehaviour
                     break;
                 case "Pig":
                     newIcon = Instantiate(playerInventory.inventoryIcon, pigSlot).GetComponent<InventoryIcon>();
+                    break;
+                case "ChickenFeed":
+                    chickenFeed.value = count;
+                    break;
+                case "PigFeed":
+                    pigFeed.value = count;
                     break;
             }
             if (newIcon)
@@ -102,6 +118,18 @@ public class AnimalManager : MonoBehaviour
         return pigSlot;
     }
 
+    //Get the chicken slot
+    public Transform GetChickenFeedSlot()
+    {
+        return chickenFeedSlot;
+    }
+
+    //Get the pig slot
+    public Transform GetPigFeedSlot()
+    {
+        return pigFeedSlot;
+    }
+
     public List<TileBase> GetPigPen()
     {
         return pigPen;
@@ -120,6 +148,28 @@ public class AnimalManager : MonoBehaviour
     public GameObject GetPigUI()
     {
         return pigUI;
+    }
+
+    //Add Pig Feed
+    public void AddPigFeed(int amount)
+    {
+        pigFeed.value = Mathf.Max(pigFeed.value + amount, 0);
+    }
+
+    public int GetPigFeed()
+    {
+        return (int) pigFeed.value;
+    }
+
+    //Add Chicken Feed
+    public void AddChickenFeed(int amount)
+    {
+        chickenFeed.value = Mathf.Max(chickenFeed.value + amount, 0);
+    }
+
+    public int GetChickenFeed()
+    {
+        return (int) chickenFeed.value;
     }
 
     //Get the  number of Pigs
@@ -146,7 +196,7 @@ public class AnimalManager : MonoBehaviour
     public void UpdateAnimals(PlayerInventory playerInventory)
     {
         // if at least one chicken in coop, attempt at egg production
-        if (chickenSlot.childCount > 0)
+        if (chickenSlot.childCount > 0 && GetChickenFeed() > 0)
         {
             // if no eggs, make new icon for eggs
             if (eggSlot.childCount == 0)
@@ -161,10 +211,11 @@ public class AnimalManager : MonoBehaviour
             Debug.Log("Making " + newEggs + " eggs!");
             Debug.Log(eggIcon.quantity);
             eggIcon.UpdateQuantity(eggIcon.quantity + newEggs);
+            AddChickenFeed(-1);
         }
 
         // if at least 2 pigs, attempt at pig production
-        if (pigSlot.childCount > 0 && pigSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity > 1)
+        if (pigSlot.childCount > 0 && pigSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity > 1 && GetPigFeed() > 0)
         {
             InventoryIcon pigIcon = pigSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>();
             // make 0-[half total pigs] more pigs
@@ -172,6 +223,7 @@ public class AnimalManager : MonoBehaviour
             Debug.Log("Making " + newPigs + " pigs!");
             Debug.Log(pigIcon.quantity);
             pigIcon.UpdateQuantity(pigIcon.quantity + newPigs);
+            AddPigFeed(-1);
         }
     }
 

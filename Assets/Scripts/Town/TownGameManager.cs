@@ -72,8 +72,10 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
     [Header("Buildings")]
     public List<TileBase> restaurant;
     public List<TileBase> truck;
-    public List<TileBase> storage;
-    [SerializeField] private GameObject storageUI;
+    public List<TileBase> tools;
+    [SerializeField] private GameObject toolsUI;
+    public List<TileBase> animals;
+    [SerializeField] private GameObject animalsUI;
 
     [Space]
     [Header("AnimalManager")]
@@ -182,7 +184,7 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
 
     void UpdateIsModalMode()
     {
-        SetIsModalMode(helpUI.activeSelf || inventoryUI.activeSelf || storageUI.activeSelf || animalManager.IsModalMode());
+        SetIsModalMode(helpUI.activeSelf || inventoryUI.activeSelf || toolsUI.activeSelf || animalsUI.activeSelf || animalManager.IsModalMode());
         // If a modal mode is active, disable the pause menu, for the rest of the frame.
         PauseMenu.instance.notAllowed = isModalMode;
     }
@@ -191,7 +193,8 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
     {
         ExitInventoryMode();
         helpUI.SetActive(false);
-        storageUI.SetActive(false);
+        toolsUI.SetActive(false);
+        animalsUI.SetActive(false);
         playerInventory.sellMode = false;
         playerInventory.giveMode = false;
         SetIsModalMode(false);
@@ -336,6 +339,26 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
     {
         return animalManager.GetChickenSlot();
     }
+    public Transform GetPigSlot()
+    {
+        return animalManager.GetPigSlot();
+    }
+    public Transform GetChickenFeedSlot()
+    {
+        return animalManager.GetChickenFeedSlot();
+    }
+    public Transform GetPigFeedSlot()
+    {
+        return animalManager.GetPigFeedSlot();
+    }
+    public void AddChickenFeed(int amount)
+    {
+        animalManager.AddChickenFeed(amount);
+    }
+    public void AddPigFeed(int amount)
+    {
+        animalManager.AddPigFeed(amount);
+    }
 
     private bool GetBuildingOpen(string building)
     {
@@ -418,13 +441,28 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
 
                         break;
                     }
-                    else if (storage.Contains(buildings.GetTile(gridPosition + neighborPosition)))
+                    else if (tools.Contains(buildings.GetTile(gridPosition + neighborPosition)))
                     {
-                        Debugger.Log("Interacting with Storage!", Debugger.PriorityLevel.LeastImportant);
+                        Debugger.Log("Interacting with tools!", Debugger.PriorityLevel.LeastImportant);
 
                         if (interactWBuildingKeyPressed)
                         {
-                            storageUI.SetActive(true);
+                            toolsUI.SetActive(true);
+                        }
+                        else
+                        {
+                            playerWorldCanvas.SetActive(true);
+                        }
+
+                        break;
+                    }
+                    else if (animals.Contains(buildings.GetTile(gridPosition + neighborPosition)))
+                    {
+                        Debugger.Log("Interacting with animals!", Debugger.PriorityLevel.LeastImportant);
+
+                        if (interactWBuildingKeyPressed)
+                        {
+                            animalsUI.SetActive(true);
                         }
                         else
                         {
@@ -456,7 +494,7 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
             if (isModalMode)
             {
                 // Inventory may be open with other menus - exit them all
-                if (inventoryUI.activeSelf || storageUI.activeSelf) ExitModalMode();
+                if (inventoryUI.activeSelf || toolsUI.activeSelf || animalsUI.activeSelf) ExitModalMode();
             }
             else
             {

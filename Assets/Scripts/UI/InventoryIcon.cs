@@ -20,6 +20,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     [Space]
     public int sellValue;
     public int giveValue;
+    private int feedValue;
     public Transform lastParent;
 
 
@@ -122,11 +123,13 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 GetComponent<Image>().sprite = imageicons[12];
                 sellValue = 6;
                 giveValue = 90;
+                feedValue = 2;
                 break;
             case "Lentil":
                 GetComponent<Image>().sprite = imageicons[13];
                 sellValue = 10;
                 giveValue = 100;
+                feedValue = 3;
                 break;
             case "Egg":
                 GetComponent<Image>().sprite = imageicons[14];
@@ -168,9 +171,10 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 GetComponent<Image>().sprite = imageicons[21];
                 sellValue = 3;
                 giveValue = 50;
+                feedValue = 1;
                 break;
             default:
-                GetComponent<Image>().sprite = imageicons[22];
+                GetComponent<Image>().sprite = imageicons[24];
                 break;
         }
     }
@@ -226,7 +230,17 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     private void TransferQuantities(int amount, Transform parent)
     {
-        if (parent.childCount > 0)
+        if (parent == gameManager.GetPigFeedSlot())
+        {
+            gameManager.AddPigFeed(amount * feedValue);
+            UpdateQuantity(quantity - amount);
+        }
+        else if (parent == gameManager.GetChickenFeedSlot())
+        {
+            gameManager.AddChickenFeed(amount * feedValue);
+            UpdateQuantity(quantity - amount);
+        }
+        else if (parent.childCount > 0)
         {
             InventoryIcon other = parent.GetChild(0).GetComponent<InventoryIcon>();
             if (other.item == item)
@@ -237,7 +251,6 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
         else if (parent.childCount == 0 && quantity == amount)
         {
-            Debug.Log("bruh");
             transform.SetParent(parent, true);
             rectTransform.localPosition = Vector3.zero;
             dragged = false;
@@ -249,6 +262,21 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             other.SetIcon(item);
             other.UpdateQuantity(amount);
             UpdateQuantity(quantity - amount);
+        }
+    }
+
+    private bool isCrop()
+    {
+        switch (item)
+        {
+            case "Wheat":
+                return true;
+            case "Tomato":
+                return true;
+            case "Lentil":
+                return true;
+            default:
+                return false;
         }
     }
 
@@ -275,7 +303,15 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 }
                 else if (newCell.name.Contains("PigCell") && item == "Pig")
                 {
-                    lastParent = newCell.transform;
+                    lastParent = gameManager.GetPigSlot();
+                }
+                else if (newCell.name.Contains("PigCell") && isCrop())
+                {
+                    lastParent = gameManager.GetPigFeedSlot();
+                }
+                else if (newCell.name.Contains("ChickenCell") && isCrop())
+                {
+                    lastParent = gameManager.GetChickenFeedSlot();
                 }
             }
         }

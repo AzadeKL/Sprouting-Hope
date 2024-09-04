@@ -90,12 +90,9 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
     [Space]
     [Header("Buildings")]
-    public List<TileBase> restaurant;
     public List<TileBase> truck;
     public List<TileBase> house;
     [SerializeField] private GameObject houseUI;
-    public List<TileBase> storage;
-    [SerializeField] private GameObject storageUI;
 
     [Space]
     [Header("Sound Effects")]
@@ -106,8 +103,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     [Space]
     [Header("AnimalManager")]
     [SerializeField] private AnimalManager animalManager;
-    [Header("UpgradeManager")]
-    [SerializeField] private UpgradeUnlock upgradeManager;
 
     private GameObject toolTip;//UI tooltip 
 
@@ -138,7 +133,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         if (seedFactory == null) { seedFactory = GetComponent<SeedFactory>(); }
         progressMeter.maxValue = maxProgress;
         audioSource = GetComponent<AudioSource>();
-        
+
     }
     private void Start()
     {
@@ -146,8 +141,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         toolTip = FindObjectOfType<Tooltip>(true).gameObject;
         //Debug.Log("Current showHelpOnNewGameKey is set to: " + PlayerPrefs.GetInt(showHelpOnNewGameKey, 2));
         animalManager = GetComponent<AnimalManager>();
-        upgradeManager = GetComponent<UpgradeUnlock>();
-        upgradeManager.disableAll();
         bool isNewGame = !SaveSystem.DataManager.instance.Load(this);
         bool showHelpOnNewGame = PlayerPrefs.GetInt(showHelpOnNewGameKey, 1) == 1;
         helpToggle.isOn = showHelpOnNewGame;
@@ -172,7 +165,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     public bool Load(GameData gameData)
     {
         mainProgress = gameData.gameManagerMainProgress;
-        // upgradeManager.checkUnlock(mainProgress);
         foreach (var key_value in gameData.gameManagerTileStates)
         {
             var entry = ISaveable.ParseKey(key_value);
@@ -217,7 +209,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
     void UpdateIsModalMode()
     {
-        SetIsModalMode(helpUI.activeSelf || houseUI.activeSelf || inventoryUI.activeSelf || storageUI.activeSelf || animalManager.IsModalMode());
+        SetIsModalMode(helpUI.activeSelf || houseUI.activeSelf || inventoryUI.activeSelf || animalManager.IsModalMode());
         // If a modal mode is active, disable the pause menu, for the rest of the frame.
         PauseMenu.instance.notAllowed = isModalMode;
     }
@@ -227,7 +219,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         ExitInventoryMode();
         helpUI.SetActive(false);
         houseUI.SetActive(false);
-        storageUI.SetActive(false);
         playerInventory.sellMode = false;
         playerInventory.giveMode = false;
         SetIsModalMode(false);
@@ -457,10 +448,30 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     {
         return animalManager.GetChickenSlot();
     }
+    public Transform GetPigSlot()
+    {
+        return animalManager.GetPigSlot();
+    }
+    public Transform GetChickenFeedSlot()
+    {
+        return animalManager.GetChickenFeedSlot();
+    }
+    public Transform GetPigFeedSlot()
+    {
+        return animalManager.GetPigFeedSlot();
+    }
+    public void AddChickenFeed(int amount)
+    {
+        animalManager.AddChickenFeed(amount);
+    }
+    public void AddPigFeed(int amount)
+    {
+        animalManager.AddPigFeed(amount);
+    }
 
     private bool GetBuildingOpen(string building)
     {
-        switch(building)
+        switch (building)
         {
             case "Restaurant":
                 return time24HFormat.Value >= 8f && time24HFormat.Value <= 20f;
@@ -479,7 +490,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
         progressMeter.value = mainProgress;
         progressMeter.gameObject.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = mainProgress.ToString() + "/" + maxProgress.ToString();
-        upgradeManager.checkUnlock(mainProgress);
         // if progress meets requirement, win the game (prompt to return to menu or continue playing?)
         if (mainProgress >= maxProgress)
         {
@@ -514,110 +524,65 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             Vector3Int gridPosition = buildings.WorldToCell(playerCenter.position);
             foreach (Vector3Int neighborPosition in neighborPositions)
             {
-                if (buildings.HasTile(gridPosition + neighborPosition))
+                if (truck.Contains(buildings.GetTile(gridPosition + neighborPosition)))
                 {
-                    if (restaurant.Contains(buildings.GetTile(gridPosition + neighborPosition)))
+                    Debugger.Log("Interacting with Truck!", Debugger.PriorityLevel.LeastImportant);
+
+                    if (interactWBuildingKeyPressed)
                     {
-                        Debug.Log("Interacting with Restaurant!");
-
-                        if (interactWBuildingKeyPressed)
-                        {
-                            inventoryUI.SetActive(true);
-                            playerInventory.sellMode = true;
-                            inventoryUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().color = sellInventory;
-                            inventoryUIHeaderImage.color = sellInventory;
-                            inventoryUIHeaderTextField.text = "Fresh Food";
-                        }
-                        else
-                        {
-                            playerWorldCanvas.SetActive(true);
-                        }
-
-
-                        break;
+                        SceneManager.LoadScene("TownScene");
                     }
-                    else if (truck.Contains(buildings.GetTile(gridPosition + neighborPosition)))
+                    else
                     {
-                        Debugger.Log("Interacting with Truck!", Debugger.PriorityLevel.LeastImportant);
-
-                        if (interactWBuildingKeyPressed)
-                        {
-                            SceneManager.LoadScene("TownScene");
-                            inventoryUI.SetActive(true);
-                            playerInventory.giveMode = true;
-                            inventoryUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().color = giveInventory;
-                            inventoryUIHeaderImage.color = giveInventory;
-                            inventoryUIHeaderTextField.text = "Donate";
-                        }
-                        else
-                        {
-                            playerWorldCanvas.SetActive(true);
-                        }
-
-
-                        break;
+                        playerWorldCanvas.SetActive(true);
                     }
-                    else if (animalManager.GetChickenCoop().Contains(buildings.GetTile(gridPosition + neighborPosition)))
+                    break;
+                }
+                if (animalManager.GetChickenCoop().Contains(buildings.GetTile(gridPosition + neighborPosition)))
+                {
+                    Debugger.Log("Interacting with Chicken Coop!", Debugger.PriorityLevel.LeastImportant);
+
+                    if (interactWBuildingKeyPressed)
                     {
-                        Debugger.Log("Interacting with Chicken Coop!", Debugger.PriorityLevel.LeastImportant);
-
-                        if (interactWBuildingKeyPressed)
-                        {
-                            animalManager.GetChickenUI().SetActive(true);
-                            inventoryUI.SetActive(true);
-                        }
-                        else
-                        {
-                            playerWorldCanvas.SetActive(true);
-                        }
-                        break;
+                        animalManager.GetChickenUI().SetActive(true);
+                        inventoryUI.SetActive(true);
                     }
-                    else if (house.Contains(buildings.GetTile(gridPosition + neighborPosition)))
+                    else
                     {
-                        Debugger.Log("Interacting with Farmhouse!", Debugger.PriorityLevel.LeastImportant);
-
-                        if (interactWBuildingKeyPressed)
-                        {
-                            houseUI.SetActive(true);
-                        }
-                        else
-                        {
-                            playerWorldCanvas.SetActive(true);
-                        }
-
-                        break;
+                        playerWorldCanvas.SetActive(true);
                     }
-                    else if (animalManager.GetPigPen().Contains(buildings.GetTile(gridPosition + neighborPosition)))
+                    break;
+                }
+                else if (house.Contains(buildings.GetTile(gridPosition + neighborPosition)))
+                {
+                    Debugger.Log("Interacting with Farmhouse!", Debugger.PriorityLevel.LeastImportant);
+
+                    if (interactWBuildingKeyPressed)
                     {
-                        Debugger.Log("Interacting with Pig Pen!", Debugger.PriorityLevel.LeastImportant);
-
-                        if (interactWBuildingKeyPressed)
-                        {
-                            animalManager.GetPigUI().SetActive(true);
-                            inventoryUI.SetActive(true);
-                        }
-                        else
-                        {
-                            playerWorldCanvas.SetActive(true);
-                        }
-
-                        break;
+                        houseUI.SetActive(true);
                     }
-                    else if (storage.Contains(buildings.GetTile(gridPosition + neighborPosition)))
+                    else
                     {
-                        Debugger.Log("Interacting with Storage!", Debugger.PriorityLevel.LeastImportant);
-
-                        if (interactWBuildingKeyPressed)
-                        {
-                            storageUI.SetActive(true);
-                        }
-                        else
-                        {
-                            playerWorldCanvas.SetActive(true);
-                        }
-
-                        break;
+                        playerWorldCanvas.SetActive(true);
                     }
+
+                    break;
+                }
+                else if (animalManager.GetPigPen().Contains(buildings.GetTile(gridPosition + neighborPosition)))
+                {
+                    Debugger.Log("Interacting with Pig Pen!", Debugger.PriorityLevel.LeastImportant);
+
+                    if (interactWBuildingKeyPressed)
+                    {
+                        animalManager.GetPigUI().SetActive(true);
+                        inventoryUI.SetActive(true);
+                    }
+                    else
+                    {
+                        playerWorldCanvas.SetActive(true);
+                    }
+
+                    break;
                 }
                 else
                 {
@@ -645,7 +610,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             if (isModalMode)
             {
                 // Inventory may be open with other menus - exit them all
-                if (inventoryUI.activeSelf || storageUI.activeSelf) ExitModalMode();
+                if (inventoryUI.activeSelf) ExitModalMode();
             }
             else
             {
