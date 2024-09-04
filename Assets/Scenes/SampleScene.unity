@@ -6994,9 +6994,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0.067307696
+    y: 0.01084991
     width: 1
-    height: 0.86538464
+    height: 0.97649187
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
@@ -26623,8 +26623,8 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 1
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 6
+  m_SortingLayerID: 534317391
+  m_SortingOrder: 7
   m_TargetDisplay: 0
 --- !u!1 &865339739
 GameObject:
@@ -26697,9 +26697,9 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 5
+  m_SortingLayerID: 534317391
+  m_SortingLayer: 2
+  m_SortingOrder: 6
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
