@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -72,6 +73,7 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
     [Header("Buildings")]
     public List<TileBase> restaurant;
     public List<TileBase> truck;
+    public List<TileBase> humanitarian;
     public List<TileBase> tools;
     [SerializeField] private GameObject toolsUI;
     public List<TileBase> animals;
@@ -105,7 +107,7 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
         helpToggle = helpUI.transform.GetChild(2).GetComponent<Toggle>();
         progressMeter.maxValue = maxProgress;
         audioSource = GetComponent<AudioSource>();
-        
+
     }
     private void Start()
     {
@@ -362,11 +364,13 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
 
     private bool GetBuildingOpen(string building)
     {
-        switch(building)
+        switch (building)
         {
             case "Restaurant":
                 return time24HFormat.Value >= 8f && time24HFormat.Value <= 20f;
             case "Truck":
+                return time24HFormat.Value >= 8f && time24HFormat.Value <= 20f;
+            case "Humanitarian":
                 return time24HFormat.Value >= 8f && time24HFormat.Value <= 20f;
             default:
                 return false;
@@ -396,7 +400,7 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
 
             var interactWBuildingKeyPressed = Input.GetKeyUp(KeyCode.F);
 
-            Vector3Int gridPosition = buildings.WorldToCell(player.transform.position);
+            Vector3Int gridPosition = buildings.WorldToCell(playerCenter.transform.position);
             foreach (Vector3Int neighborPosition in neighborPositions)
             {
                 if (buildings.HasTile(gridPosition + neighborPosition))
@@ -423,7 +427,19 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
                     }
                     else if (truck.Contains(buildings.GetTile(gridPosition + neighborPosition)))
                     {
-                        Debugger.Log("Interacting with Truck!", Debugger.PriorityLevel.LeastImportant);
+                        if (interactWBuildingKeyPressed)
+                        {
+                            SceneManager.LoadScene("SampleScene");
+                        }
+                        else
+                        {
+                            playerWorldCanvas.SetActive(true);
+                        }
+                        break;
+                    }
+                    else if (humanitarian.Contains(buildings.GetTile(gridPosition + neighborPosition)))
+                    {
+                        Debugger.Log("Interacting with Humanitarian Aid!", Debugger.PriorityLevel.LeastImportant);
 
                         if (interactWBuildingKeyPressed)
                         {
@@ -471,6 +487,10 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
 
                         break;
                     }
+                }
+                else
+                {
+                    playerWorldCanvas.SetActive(false);
                 }
             }
         }
