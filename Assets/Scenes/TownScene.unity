@@ -111218,10 +111218,11 @@ MonoBehaviour:
     goods to the truck that goes to Greenbuds Cares which helps feed the hungry.\r\nSometimes
     your animals give you some goods on a new day. So make sure to check them out.\r\n\r\nWASD
     or arrow keys - Move\nF - Interact\r\nTab - Open/Close Inventory\r\nEsc - Close
-    all windows\n\n1-5, Mouse Wheel - Change Hotbar Selection\r\nLeft Click - Use
-    item\r\nRight Click - Sell/Give 5 items\r\nShift + Left Click -  Sell/Give full
-    stack\r\nShift + Right Click - Sell/Give 25 items\r\nLeft Click drag - Pick up
-    all\r\nRight Click drag - Pick up half\r\n\nH - Open/Close Help (this window)"
+    all windows\n\n1-5, Mouse Wheel - Change Hotbar Selection\r\nLeft Click - Pick
+    up all items from slot\nRight Click - Pick up half items\nLeft Click with item
+    - drop all held items\nRight Click with item - drop one of held item\nShift +
+    Left Click -  Sell/Give full stack\r\nShift + Right Click - Sell/Give 25 items\r\n\nH
+    - Open/Close Help (this window)"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -113735,9 +113736,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0.01084991
-    width: 1
-    height: 0.97649187
+    y: 0.37432188
+    width: 0.3723296
+    height: 0.3254973
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
