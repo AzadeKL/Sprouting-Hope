@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using SaveSystem;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,20 +10,19 @@ public class TutorialPopUp : MonoBehaviour
     [SerializeField, Tooltip("Do not set in Inspector, only to show what will be displayed")] 
     private string tutorialText;
     private string[] tutorialTextList;
-    private bool isVisiable = false;
 
     [Header("Tutorial PopUp References")]
     public GameObject tutorialPopUp;
     public Image backgroundImage;
     public TextMeshProUGUI textObject;
-    private Transform player;
+
+    private Collider2D playerCollider;
 
     [Header("Tutorial PopUp Settings")]
     public Vector2 popUpPadding = new Vector2(40, 20);
     public float maxWidth = 500;
 
     private bool areTutorialActive = true;
-
     private Collider2D lastActiveCollider;
 
     // Start is called before the first frame update
@@ -33,7 +30,7 @@ public class TutorialPopUp : MonoBehaviour
     {
         setVisibility(false);
         textObject.SetText("");
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        playerCollider = GameObject.FindGameObjectWithTag("Player").GetComponent<Collider2D>();
     }
 
     // Update is called once per frame
@@ -44,7 +41,7 @@ public class TutorialPopUp : MonoBehaviour
             areTutorialActive = !areTutorialActive;
             if (areTutorialActive)
             {
-                if (player.gameObject.GetComponent<Collider2D>().IsTouching(lastActiveCollider))
+                if (playerCollider.IsTouching(lastActiveCollider))
                 {
                     showPopUp(tutorialText, lastActiveCollider);
                 }
@@ -78,7 +75,7 @@ public class TutorialPopUp : MonoBehaviour
     //Setting the dimensions of the text
     private void setDimensionsforText()
     {
-        Vector2 textSize = textObject.GetRenderedValues(false);
+        Vector2 textSize;
         while(true)
         {
             tutorialText = tutorialText.Trim();
@@ -143,7 +140,6 @@ public class TutorialPopUp : MonoBehaviour
     {
         textObject.SetText("");
         textObject.ForceMeshUpdate();
-        // setDimensionsforText();
         setVisibility(false);
     }
 

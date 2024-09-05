@@ -3,33 +3,24 @@ using UnityEngine;
 
 public class UpgradeUnlock : MonoBehaviour
 {
-
-    // public GameManager gameManager;
-
-    [Space]
     [Header("SilverTools")]
-    // public List<GameObject> silverTools;
     public List<UpgradeIcon> silverToolsIcons;
     public int unlockSilverTools;
 
     [Space]
     [Header("GoldTools")]
-    // public List<GameObject> goldTools;
     public List<UpgradeIcon> goldToolsIcons;
     public int unlockGoldTools;
 
     [Space]
     [Header("Animals")]
-    // public GameObject chicken;
     public UpgradeIcon chickenIcon;
-    // public GameObject pig;
     public UpgradeIcon pigIcon;
     public int unlockChicken;
     public int unlockPig;
 
     [Space]
     [Header("Crops")]
-    // public GameObject lentils;
     public UpgradeIcon lentilsIcon;
     public int unlockLentils;
 

@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -10,10 +9,6 @@ public class TutorialTile : MonoBehaviour
 
     public UnityEvent<string, Collider2D> tutorialEvent;
     public UnityEvent tutorialEventClose;
-
-    [Header("Destroy Settings")]
-    public bool shouldBeDestroyed = false;
-    [Tooltip("Only works when the bool is true")] public float destroyTime = 0.4f;
 
     public bool isTutorialActive = true;
 
@@ -34,7 +29,7 @@ public class TutorialTile : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            tutorialEvent.Invoke(tutorialText, this.GetComponent<Collider2D>());  
+            tutorialEvent.Invoke(tutorialText, GetComponent<Collider2D>());  
         }
     }
 
