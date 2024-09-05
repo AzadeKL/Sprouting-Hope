@@ -103,4 +103,10 @@ public class DayNightCycle : MonoBehaviour, SaveSystem.ISaveable
         }
         if (gameManager) gameManager.time = (24 * dayCounter.Value) + time24HFormat.Value;
     }
+
+    public bool isDay()
+    {
+        if (time24HFormat.Value < 8f || time24HFormat.Value > 20f) return false;
+        else return true;
+    }
 }

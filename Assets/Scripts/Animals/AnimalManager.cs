@@ -65,6 +65,10 @@ public class AnimalManager : MonoBehaviour
             eggSlot.childCount > 0 ? eggSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
         ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "Pig",
             pigSlot.childCount > 0 ? pigSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
+        ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "PigFeedSlot",
+            pigFeedSlot.childCount > 0 ? pigFeedSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
+        ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "ChickenFeedSlot",
+            chickenFeedSlot.childCount > 0 ? chickenFeedSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
         ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "PigFeed", GetPigFeed());
         ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "ChickenFeed", GetChickenFeed());
     }
@@ -88,6 +92,12 @@ public class AnimalManager : MonoBehaviour
                     break;
                 case "Pig":
                     newIcon = Instantiate(playerInventory.inventoryIcon, pigSlot).GetComponent<InventoryIcon>();
+                    break;
+                case "PigFeedSlot":
+                    newIcon = Instantiate(playerInventory.inventoryIcon, pigFeedSlot).GetComponent<InventoryIcon>();
+                    break;
+                case "ChickenFeedSlot":
+                    newIcon = Instantiate(playerInventory.inventoryIcon, chickenFeedSlot).GetComponent<InventoryIcon>();
                     break;
                 case "ChickenFeed":
                     chickenFeed.value = count;
