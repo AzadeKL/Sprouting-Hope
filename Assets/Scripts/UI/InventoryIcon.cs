@@ -364,6 +364,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 else if (newCell.name.Contains("ChickenCell") && item == "Chicken")
                 {
                     lastParent = gameManager.GetChickenSlot();
+                    gameManager.ChangeBuildingState("Chicken Coop", true);
                 }
                 else if (newCell.name.Contains("PigCell") && item == "Pig")
                 {
@@ -372,6 +373,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 else if (newCell.name.Contains("PigCell") && isCrop())
                 {
                     lastParent = gameManager.GetPigFeedSlot();
+                    gameManager.ChangeBuildingState("Pig Pen", true);
                 }
                 else if (newCell.name.Contains("ChickenCell") && isCrop())
                 {
@@ -388,6 +390,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 lastParent = transform.parent;
                 transform.SetParent(rectTransform.root, true);
                 toolTip.SetActive(false);
+                if (item == "chicken" && lastParent == gameManager.GetChickenSlot()) gameManager.ChangeBuildingState("Chicken Coop", false);
             }
             // drop item full
             else if (obstructedSlot)
@@ -445,6 +448,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 lastParent = transform.parent;
                 transform.SetParent(rectTransform.root, true);
                 toolTip.SetActive(false);
+                if (item == "chicken" && lastParent == gameManager.GetChickenSlot() && quantity < 2) gameManager.ChangeBuildingState("Chicken Coop", false);
 
                 // only split item if more than one
                 if (quantity > 1)
