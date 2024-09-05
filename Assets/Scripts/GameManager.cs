@@ -490,12 +490,89 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         }
     }
 
+    public void ChangeBuildingState(string building, bool full)
+    {
+        List<TileBase> chickenCoop = animalManager.chickenCoop;
+        List<TileBase> PigPen = animalManager.pigPen;
+
+        Debug.Log("Finding building " + building);
+        string newbuilding;
+        switch (building)
+        {
+            case "Chicken Coop":
+                if (full)
+                {
+                    building = "Chicken Coop_EMPTY_";
+                    newbuilding = "Chicken Coop_FULL_";
+                }
+                else
+                {
+                    building = "Chicken Coop_FULL_";
+                    newbuilding = "Chicken Coop_EMPTY_";
+                }
+                for (int i = 0; i < 15; i++)
+                {
+                    TileBase oldTile = null;
+                    TileBase newTile = null;
+                    foreach (TileBase tile in animalManager.chickenCoop)
+                    {
+                        if (tile.name == building + i.ToString())
+                        {
+                            oldTile = tile;
+                        }
+                        else if (tile.name == newbuilding + i.ToString())
+                        {
+                            newTile = tile;
+                        }
+                        if (oldTile && newTile)
+                        {
+                            buildings.SwapTile(oldTile, newTile);
+                            break;
+                        }
+                    }
+                }
+                break;
+            case "Pig Pen":
+                if (full)
+                {
+                    building = "Trough-Empty_";
+                    newbuilding = "Trough-Filled_";
+                }
+                else
+                {
+                    building = "Trough-Filled_";
+                    newbuilding = "Trough-Empty_";
+                }
+                for (int i = 0; i < 10; i++)
+                {
+                    TileBase oldTile = null;
+                    TileBase newTile = null;
+                    foreach (TileBase tile in animalManager.pigPen)
+                    {
+                        if (tile.name == building + i.ToString())
+                        {
+                            oldTile = tile;
+                        }
+                        else if (tile.name == newbuilding + i.ToString())
+                        {
+                            newTile = tile;
+                        }
+                        if (oldTile && newTile)
+                        {
+                            buildings.SwapTile(oldTile, newTile);
+                            break;
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
     private void Update()
     {
         // Check if the game is paused
         //Debugger.Log("Pause state: " + PauseMenu.instance.IsPaused());
         if (PauseMenu.instance.IsPaused()) return;
-
         progressMeter.value = mainProgress;
         progressMeter.gameObject.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = mainProgress.ToString() + "/" + maxProgress.ToString();
         // if progress meets requirement, win the game (prompt to return to menu or continue playing?)
@@ -549,7 +626,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
                 if (animalManager.GetChickenCoop().Contains(buildings.GetTile(gridPosition + neighborPosition)))
                 {
                     Debugger.Log("Interacting with Chicken Coop!", Debugger.PriorityLevel.LeastImportant);
-
                     if (interactWBuildingKeyPressed)
                     {
                         animalManager.GetChickenUI().SetActive(true);

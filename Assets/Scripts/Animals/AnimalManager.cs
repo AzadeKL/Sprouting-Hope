@@ -254,6 +254,10 @@ public class AnimalManager : MonoBehaviour
                     feed.UpdateQuantity(feed.quantity - 1);
                 }
             }
+            if (GetPigFeed() == 0)
+            {
+                gameObject.GetComponent<GameManager>().ChangeBuildingState("Pig Pen", false);
+            }
         }
     }
 
