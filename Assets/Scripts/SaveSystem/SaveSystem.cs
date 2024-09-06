@@ -25,6 +25,9 @@ namespace SaveSystem
         public string sceneName;
         public int sceneIndex;
 
+        // All scenes
+        public int gameManagerMainProgress = 0;
+
         public List<string> dayNightCycleData = new List<string>();
 
         public List<string> playerInventoryData = new List<string>();
@@ -32,11 +35,14 @@ namespace SaveSystem
         public List<int> playerInventoryInventoryQuantities = new List<int>();
         public List<int> playerInventoryInventorySlot = new List<int>();
 
-        public int gameManagerMainProgress = 0;
-        public List<string> gameManagerTileStates = new List<string>();
-        public List<string> gameManagerPlants = new List<string>();
-        public List<string> gameManagerAnimalBuildings = new List<string>();
+        // Farm scene
+        public List<string> farmGameManagerTileStates = new List<string>();
+        public List<string> farmGameManagerPlants = new List<string>();
+        public List<string> farmGameManagerAnimalBuildings = new List<string>();
 
+        // Town scene
+
+        // Destroyed objects
         public List<string> destroyedObjectIds = new List<string>();
     }
 

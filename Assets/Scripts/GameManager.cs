@@ -152,18 +152,18 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
 
         foreach (var tile in tileState)
         {
-            ISaveable.AddKey(gameData.gameManagerTileStates, tile.Key, tile.Value);
+            ISaveable.AddKey(gameData.farmGameManagerTileStates, tile.Key, tile.Value);
         }
 
         Func<string, KeyValuePair<Vector3Int, int>, string> PlantToEntry = (plantName, point) => string.Join(":", plantName, SaveSystem.ISaveable.Vector3IntToString(point.Key), point.Value, growStartTime[point.Key], growTotalTime[point.Key]);
-        foreach (var key_value in wheatPlants) gameData.gameManagerPlants.Add(PlantToEntry("Wheat", key_value));
-        foreach (var key_value in tomatoPlants) gameData.gameManagerPlants.Add(PlantToEntry("Tomato", key_value));
-        foreach (var key_value in lentilPlants) gameData.gameManagerPlants.Add(PlantToEntry("Lentil", key_value));
+        foreach (var key_value in wheatPlants) gameData.farmGameManagerPlants.Add(PlantToEntry("Wheat", key_value));
+        foreach (var key_value in tomatoPlants) gameData.farmGameManagerPlants.Add(PlantToEntry("Tomato", key_value));
+        foreach (var key_value in lentilPlants) gameData.farmGameManagerPlants.Add(PlantToEntry("Lentil", key_value));
     }
     public bool Load(GameData gameData)
     {
         mainProgress = gameData.gameManagerMainProgress;
-        foreach (var key_value in gameData.gameManagerTileStates)
+        foreach (var key_value in gameData.farmGameManagerTileStates)
         {
             var entry = ISaveable.ParseKey(key_value);
             var gridPosition = ISaveable.Vector3IntFromString(entry[0]);
@@ -180,7 +180,7 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         }
 
         Debug.Log("Loading plants");
-        foreach (var entry in gameData.gameManagerPlants)
+        foreach (var entry in gameData.farmGameManagerPlants)
         {
             Debug.Log("Loading plants: " + entry);
             var parsed = entry.Split(':');

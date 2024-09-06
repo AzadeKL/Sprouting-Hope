@@ -62,24 +62,24 @@ public class AnimalManager : MonoBehaviour, SaveSystem.ISaveable
     //Add the animals to the SaveData
     public void Save(GameData gameData)
     {
-        ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "Chicken",
+        ISaveable.AddKey(gameData.farmGameManagerAnimalBuildings, "Chicken",
             chickenSlot.childCount > 0 ? chickenSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
-        ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "Egg",
+        ISaveable.AddKey(gameData.farmGameManagerAnimalBuildings, "Egg",
             eggSlot.childCount > 0 ? eggSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
-        ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "Pig",
+        ISaveable.AddKey(gameData.farmGameManagerAnimalBuildings, "Pig",
             pigSlot.childCount > 0 ? pigSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
-        ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "PigFeedSlot",
+        ISaveable.AddKey(gameData.farmGameManagerAnimalBuildings, "PigFeedSlot",
             pigFeedSlot.childCount > 0 ? pigFeedSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
-        ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "ChickenFeedSlot",
+        ISaveable.AddKey(gameData.farmGameManagerAnimalBuildings, "ChickenFeedSlot",
             chickenFeedSlot.childCount > 0 ? chickenFeedSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
-        ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "PigFeed", GetPigFeed());
-        ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "ChickenFeed", GetChickenFeed());
+        ISaveable.AddKey(gameData.farmGameManagerAnimalBuildings, "PigFeed", GetPigFeed());
+        ISaveable.AddKey(gameData.farmGameManagerAnimalBuildings, "ChickenFeed", GetChickenFeed());
     }
 
     //Load the animals from the SaveData
     public bool Load(GameData gameData)
     {
-        foreach (var key_value in gameData.gameManagerAnimalBuildings)
+        foreach (var key_value in gameData.farmGameManagerAnimalBuildings)
         {
             var parsed = ISaveable.ParseKey(key_value);
             string animal = parsed[0];
