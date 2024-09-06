@@ -159,8 +159,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
         foreach (var key_value in wheatPlants) gameData.gameManagerPlants.Add(PlantToEntry("Wheat", key_value));
         foreach (var key_value in tomatoPlants) gameData.gameManagerPlants.Add(PlantToEntry("Tomato", key_value));
         foreach (var key_value in lentilPlants) gameData.gameManagerPlants.Add(PlantToEntry("Lentil", key_value));
-
-        animalManager.Save(gameData);
     }
     public bool Load(GameData gameData)
     {
@@ -193,8 +191,6 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
             float totalTime = (float)Convert.ToDouble(parsed[4]);
             AddCrop(cropName, gridPosition, growthState, startTime, totalTime, false);
         }
-
-        animalManager.Load(gameData, playerInventory);
 
         return true;
     }

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Tilemaps;
 
-public class AnimalManager : MonoBehaviour
+public class AnimalManager : MonoBehaviour, SaveSystem.ISaveable
 {
     [Header("Buildings")]
     public List<TileBase> pigPen;
@@ -28,13 +28,16 @@ public class AnimalManager : MonoBehaviour
     private GameObject chickenUI;
     private GameObject pigUI;
 
-
+    private PlayerInventory playerInventory;
 
     // Start is called before the first frame update
     void Start()
     {
+        playerInventory = GameObject.Find("Player").GetComponent<PlayerInventory>();
         chickenUI = chickenSlot.parent.parent.gameObject;
         pigUI = pigSlot.parent.parent.gameObject;
+
+        SaveSystem.DataManager.instance.Load(this);
     }
 
     // Update is called once per frame
@@ -74,7 +77,7 @@ public class AnimalManager : MonoBehaviour
     }
 
     //Load the animals from the SaveData
-    public void Load(GameData gameData, PlayerInventory playerInventory)
+    public bool Load(GameData gameData)
     {
         foreach (var key_value in gameData.gameManagerAnimalBuildings)
         {
@@ -82,6 +85,7 @@ public class AnimalManager : MonoBehaviour
             string animal = parsed[0];
             int count = System.Convert.ToInt32((string)parsed[1]);
             InventoryIcon newIcon = null;
+            //Debug.Log("Loading animal: " + animal + " count: " + count);
             switch (animal)
             {
                 case "Chicken":
@@ -114,6 +118,8 @@ public class AnimalManager : MonoBehaviour
                 newIcon.UpdateQuantity(count);
             }
         }
+
+        return true;
     }
 
     //Get the chicken slot
