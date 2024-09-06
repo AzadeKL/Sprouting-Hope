@@ -36,11 +36,16 @@ namespace SaveSystem
         public List<int> playerInventoryInventorySlot = new List<int>();
 
         // Farm scene
+        public float farmSaveTime = 0;
+        public int farmSaveDay = 0;
+
         public List<string> farmGameManagerTileStates = new List<string>();
         public List<string> farmGameManagerPlants = new List<string>();
         public List<string> farmGameManagerAnimalBuildings = new List<string>();
 
         // Town scene
+        public float townSaveTime = 0;
+        public int townSaveDay = 0;
 
         // Destroyed objects
         public List<string> destroyedObjectIds = new List<string>();

@@ -21,10 +21,6 @@ public class DayNightCycle : MonoBehaviour, SaveSystem.ISaveable
     [SerializeField] private FloatReference time24HFormat;
     [SerializeField] private FloatReference dayCounter;
 
-
-    [SerializeField] private GameManager gameManager;
-    [SerializeField] private TownGameManager townGameManager;
-
     [SerializeField] private GameEvent dayChange;
 
     private float cycleTimer;
@@ -105,16 +101,15 @@ public class DayNightCycle : MonoBehaviour, SaveSystem.ISaveable
         {
             cycleTimer = 0f;
             dayCounter.Value++;
-            if (gameManager) gameManager.UpdateAnimals();
-            else townGameManager.UpdateAnimals();
         }
         time = (24 * dayCounter.Value) + time24HFormat.Value;
-        if (gameManager) gameManager.time = time;
     }
+
     public int GetDay()
     {
         return (int)dayCounter.Value;
     }
+
     public float GetTime()
     {
         return time;

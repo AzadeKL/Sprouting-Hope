@@ -27,7 +27,9 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
     [SerializeField] private string showHelpOnNewGameKey = "showHelpOnNewGame";
 
     [Header("Time")]
-    public float time;
+    private DayNightCycle dayNightCycle;
+    private float time;
+    private int day;
     [SerializeField] private FloatReference time24HFormat;
     [SerializeField] private float timePerTick;
 
@@ -111,6 +113,7 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
     }
     private void Start()
     {
+        dayNightCycle = GameObject.Find("Global Light 2D").GetComponent<DayNightCycle>();
         playerInventory = player.GetComponent<PlayerInventory>();
         toolTip = FindObjectOfType<Tooltip>(true).gameObject;
         //Debug.Log("Current showHelpOnNewGameKey is set to: " + PlayerPrefs.GetInt(showHelpOnNewGameKey, 2));
@@ -118,6 +121,11 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
         upgradeManager = GetComponent<UpgradeUnlock>();
         upgradeManager.disableAll();
         bool isNewGame = !SaveSystem.DataManager.instance.Load(this);
+        if (isNewGame)
+        {
+            time = dayNightCycle.GetTime();
+            day = dayNightCycle.GetDay();
+        }
         bool showHelpOnNewGame = PlayerPrefs.GetInt(showHelpOnNewGameKey, 1) == 1;
         helpToggle.isOn = showHelpOnNewGame;
         helpUI.SetActive(isNewGame && showHelpOnNewGame);
@@ -125,6 +133,9 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
     public void Save(GameData gameData)
     {
         gameData.gameManagerMainProgress = mainProgress;
+
+        gameData.townSaveTime = time;
+        gameData.townSaveDay = day;
 
         gameData.farmGameManagerTileStates = new List<string>();
         foreach (var tile in tileState)
@@ -143,6 +154,10 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
     {
         mainProgress = gameData.gameManagerMainProgress;
         // upgradeManager.checkUnlock(mainProgress);
+
+        time = gameData.townSaveTime;
+        day = gameData.townSaveDay;
+
         foreach (var key_value in gameData.farmGameManagerTileStates)
         {
             var entry = ISaveable.ParseKey(key_value);
@@ -382,6 +397,11 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
         //Debugger.Log("Pause state: " + PauseMenu.instance.IsPaused());
         if (PauseMenu.instance.IsPaused()) return;
 
+        int last_day = day;
+        time = dayNightCycle.GetTime();
+        day = dayNightCycle.GetDay();
+        for (int i = last_day; i < day; ++i) NewDay();
+
         progressMeter.value = mainProgress;
         progressMeter.gameObject.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = mainProgress.ToString() + "/" + maxProgress.ToString();
         upgradeManager.checkUnlock(mainProgress);
@@ -563,7 +583,7 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
         return animalManager.GetNumEggs();
     }
 
-    public void UpdateAnimals()
+    private void NewDay()
     {
         animalManager.UpdateAnimals(playerInventory);
     }
