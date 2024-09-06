@@ -12,6 +12,7 @@ TagManager:
   - Tomato Seeds
   - Lentils Seeds
   - TutorialPopUp
+  - TutorialPopUp
   layers:
   - Default
   - TransparentFX
