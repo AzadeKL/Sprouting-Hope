@@ -393,7 +393,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 if (item == "chicken" && lastParent == gameManager.GetChickenSlot()) gameManager.ChangeBuildingState("Chicken Coop", false);
             }
             // drop item full
-            else if (obstructedSlot)
+            else if (obstructedSlot && !DragDisabled())
             {
                 obstructedSlot.GetChild(0).GetComponent<InventoryIcon>().TransferQuantities(obstructedSlot.GetChild(0).GetComponent<InventoryIcon>().quantity, lastParent);
                 TransferQuantities(quantity, obstructedSlot);
@@ -433,7 +433,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 }
 
             }
-            else
+            else if (!DragDisabled())
             {
                 TransferQuantities(quantity, lastParent);
                 dragged = false;
@@ -489,7 +489,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 }
             }
             // drop one
-            else
+            else if (!DragDisabled())
             {
                 // if item slot contains other item type or not clicking grid, return one back to original slot
                 TransferQuantities(1, lastParent);
