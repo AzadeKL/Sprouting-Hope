@@ -14,7 +14,7 @@ namespace SaveSystem
 {
     public class DataManager : MonoBehaviour
     {
-        private GameData gameData;
+        private GameData gameData = new GameData();
 
         [SerializeField]
         private string autoSaveDirectory;
@@ -65,19 +65,14 @@ namespace SaveSystem
 
         public bool HasLoadedGameData()
         {
-            return gameData != null;
-        }
-
-        public bool HasCurrentSceneData()
-        {
-            return (gameData != null) && (gameData.sceneIndex == SceneManager.GetActiveScene().buildIndex);
+            return (gameData != null) && (gameData.sceneIndex >= 0);
         }
 
         public bool Load(ISaveable saveable)
         {
             //Debugger.Log("Loading class: " + saveable.GetType().Name);
             //Debugger.Log("instance.HasCurrentSceneData(): " + instance.HasCurrentSceneData());
-            if (!instance.HasCurrentSceneData())
+            if (!instance.HasLoadedGameData())
             {
                 //Debugger.Log("Loading disabled for class: " + saveable.GetType().Name);
                 return false;
@@ -106,7 +101,7 @@ namespace SaveSystem
 
         public void ResetGameData()
         {
-            gameData = null;
+            gameData = new GameData();
         }
 
         private bool UpdateGameData()
@@ -116,16 +111,13 @@ namespace SaveSystem
             {
                 return false;
             }
-            List<string> destroyedObjectIds = null;
-            if (gameData != null) destroyedObjectIds = gameData.destroyedObjectIds;
-            gameData = new GameData();
+            if (gameData == null) gameData = new GameData();
             gameData.sceneName = SceneManager.GetActiveScene().name;
             gameData.sceneIndex = SceneManager.GetActiveScene().buildIndex;
             foreach (var obj in saveableObjs)
             {
                 obj.Save(gameData);
             }
-            if (destroyedObjectIds != null) gameData.destroyedObjectIds = destroyedObjectIds;
             return true;
         }
 

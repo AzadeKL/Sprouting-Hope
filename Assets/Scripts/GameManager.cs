@@ -150,15 +150,18 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     {
         gameData.gameManagerMainProgress = mainProgress;
 
+        gameData.farmGameManagerTileStates = new List<string>();
         foreach (var tile in tileState)
         {
             ISaveable.AddKey(gameData.farmGameManagerTileStates, tile.Key, tile.Value);
         }
 
+        gameData.farmGameManagerPlants = new List<string>();
+        var data = gameData.farmGameManagerPlants;
         Func<string, KeyValuePair<Vector3Int, int>, string> PlantToEntry = (plantName, point) => string.Join(":", plantName, SaveSystem.ISaveable.Vector3IntToString(point.Key), point.Value, growStartTime[point.Key], growTotalTime[point.Key]);
-        foreach (var key_value in wheatPlants) gameData.farmGameManagerPlants.Add(PlantToEntry("Wheat", key_value));
-        foreach (var key_value in tomatoPlants) gameData.farmGameManagerPlants.Add(PlantToEntry("Tomato", key_value));
-        foreach (var key_value in lentilPlants) gameData.farmGameManagerPlants.Add(PlantToEntry("Lentil", key_value));
+        foreach (var key_value in wheatPlants) data.Add(PlantToEntry("Wheat", key_value));
+        foreach (var key_value in tomatoPlants) data.Add(PlantToEntry("Tomato", key_value));
+        foreach (var key_value in lentilPlants) data.Add(PlantToEntry("Lentil", key_value));
     }
     public bool Load(GameData gameData)
     {

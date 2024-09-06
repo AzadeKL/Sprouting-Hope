@@ -4,6 +4,7 @@ using SaveSystem;
 using System;
 using static UnityEngine.Rendering.DebugUI;
 using Unity.Collections.LowLevel.Unsafe;
+using System.Collections.Generic;
 
 public class DayNightCycle : MonoBehaviour, SaveSystem.ISaveable
 {
@@ -30,6 +31,7 @@ public class DayNightCycle : MonoBehaviour, SaveSystem.ISaveable
 
     public void Save(GameData gameData)
     {
+        gameData.dayNightCycleData = new List<string>();
         var data = gameData.dayNightCycleData;
         ISaveable.AddKey(data, "cycleTimer", cycleTimer);
         ISaveable.AddKey(data, "dayCounter", dayCounter.Value);

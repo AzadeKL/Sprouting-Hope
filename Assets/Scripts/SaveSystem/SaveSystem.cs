@@ -22,8 +22,8 @@ namespace SaveSystem
     [System.Serializable]
     public class GameData
     {
+        public int sceneIndex = -1;
         public string sceneName;
-        public int sceneIndex;
 
         // All scenes
         public int gameManagerMainProgress = 0;

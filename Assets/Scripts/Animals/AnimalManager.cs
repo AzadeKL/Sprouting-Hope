@@ -62,18 +62,20 @@ public class AnimalManager : MonoBehaviour, SaveSystem.ISaveable
     //Add the animals to the SaveData
     public void Save(GameData gameData)
     {
-        ISaveable.AddKey(gameData.farmGameManagerAnimalBuildings, "Chicken",
+        gameData.farmGameManagerAnimalBuildings = new List<string>();
+        var data = gameData.farmGameManagerAnimalBuildings;
+        ISaveable.AddKey(data, "Chicken",
             chickenSlot.childCount > 0 ? chickenSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
-        ISaveable.AddKey(gameData.farmGameManagerAnimalBuildings, "Egg",
+        ISaveable.AddKey(data, "Egg",
             eggSlot.childCount > 0 ? eggSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
-        ISaveable.AddKey(gameData.farmGameManagerAnimalBuildings, "Pig",
+        ISaveable.AddKey(data, "Pig",
             pigSlot.childCount > 0 ? pigSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
-        ISaveable.AddKey(gameData.farmGameManagerAnimalBuildings, "PigFeedSlot",
+        ISaveable.AddKey(data, "PigFeedSlot",
             pigFeedSlot.childCount > 0 ? pigFeedSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
-        ISaveable.AddKey(gameData.farmGameManagerAnimalBuildings, "ChickenFeedSlot",
+        ISaveable.AddKey(data, "ChickenFeedSlot",
             chickenFeedSlot.childCount > 0 ? chickenFeedSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
-        ISaveable.AddKey(gameData.farmGameManagerAnimalBuildings, "PigFeed", GetPigFeed());
-        ISaveable.AddKey(gameData.farmGameManagerAnimalBuildings, "ChickenFeed", GetChickenFeed());
+        ISaveable.AddKey(data, "PigFeed", GetPigFeed());
+        ISaveable.AddKey(data, "ChickenFeed", GetChickenFeed());
     }
 
     //Load the animals from the SaveData

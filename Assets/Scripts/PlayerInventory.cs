@@ -41,6 +41,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
     private GameObject toolTip;//Ui tool tip
     public void Save(GameData gameData)
     {
+        gameData.playerInventoryData = new List<string>();
         var data = gameData.playerInventoryData;
         ISaveable.AddKey(data, "handItem", handItem);
         ISaveable.AddKey(data, "money", money);
