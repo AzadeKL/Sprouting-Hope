@@ -156,6 +156,8 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     }
     public void Save(GameData gameData)
     {
+        Debug.Log("Saving FarmGameManager");
+
         gameData.gameManagerMainProgress = mainProgress;
 
         gameData.farmSaveTime = time;
@@ -176,6 +178,8 @@ public class GameManager : MonoBehaviour, SaveSystem.ISaveable
     }
     public bool Load(GameData gameData)
     {
+        Debug.Log("Loading FarmGameManager");
+
         mainProgress = gameData.gameManagerMainProgress;
 
         time = gameData.farmSaveTime;

@@ -132,6 +132,8 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
     }
     public void Save(GameData gameData)
     {
+        Debug.Log("Saving TownGameManager");
+
         gameData.gameManagerMainProgress = mainProgress;
 
         gameData.townSaveTime = time;
@@ -152,6 +154,8 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
     }
     public bool Load(GameData gameData)
     {
+        Debug.Log("Loading TownGameManager");
+
         mainProgress = gameData.gameManagerMainProgress;
         // upgradeManager.checkUnlock(mainProgress);
 
