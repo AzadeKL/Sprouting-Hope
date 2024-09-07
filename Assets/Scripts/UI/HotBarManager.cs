@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class HotBarManager : MonoBehaviour
 {
     [SerializeField] private GameEvent handChanged;
-    [SerializeField] private FarmGameManager farmGameManager;
     [SerializeField] private PlayerInventory playerInventory;
 
     [SerializeField] private List<Image> hotbarSelectedImages;
