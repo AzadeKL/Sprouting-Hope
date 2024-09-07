@@ -82,8 +82,6 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
     [SerializeField] private GameObject animalsUI;
 
     [Space]
-    [Header("AnimalManager")]
-    [SerializeField] private AnimalManager animalManager;
     [Header("UpgradeManager")]
     [SerializeField] private UpgradeUnlock upgradeManager;
 
@@ -117,7 +115,6 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
         playerInventory = player.GetComponent<PlayerInventory>();
         toolTip = FindObjectOfType<Tooltip>(true).gameObject;
         //Debug.Log("Current showHelpOnNewGameKey is set to: " + PlayerPrefs.GetInt(showHelpOnNewGameKey, 2));
-        animalManager = GetComponent<AnimalManager>();
         upgradeManager = GetComponent<UpgradeUnlock>();
         upgradeManager.disableAll();
         bool isNewGame = !SaveSystem.DataManager.instance.Load(this);
@@ -204,7 +201,7 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
 
     void UpdateIsModalMode()
     {
-        SetIsModalMode(helpUI.activeSelf || inventoryUI.activeSelf || toolsUI.activeSelf || animalsUI.activeSelf || animalManager.IsModalMode());
+        SetIsModalMode(helpUI.activeSelf || inventoryUI.activeSelf || toolsUI.activeSelf || animalsUI.activeSelf);
         // If a modal mode is active, disable the pause menu, for the rest of the frame.
         PauseMenu.instance.notAllowed = isModalMode;
     }
@@ -218,7 +215,6 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
         playerInventory.sellMode = false;
         playerInventory.giveMode = false;
         SetIsModalMode(false);
-        animalManager.ExitModalMode();
     }
 
     void EnterInventoryMode()
@@ -352,32 +348,6 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
         if (cropPlants[gridPosition] < 2) ++cropPlants[gridPosition];
         if (cropPlants[gridPosition] < 2) StartCoroutine(GrowTime(gridPosition));
         else StartCoroutine(DefaultSoil(gridPosition));
-    }
-
-
-    public Transform GetChickenSlot()
-    {
-        return animalManager.GetChickenSlot();
-    }
-    public Transform GetPigSlot()
-    {
-        return animalManager.GetPigSlot();
-    }
-    public Transform GetChickenFeedSlot()
-    {
-        return animalManager.GetChickenFeedSlot();
-    }
-    public Transform GetPigFeedSlot()
-    {
-        return animalManager.GetPigFeedSlot();
-    }
-    public void AddChickenFeed(int amount)
-    {
-        animalManager.AddChickenFeed(amount);
-    }
-    public void AddPigFeed(int amount)
-    {
-        animalManager.AddPigFeed(amount);
     }
 
     private bool GetBuildingOpen(string building)
@@ -572,24 +542,8 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
         UpdateCrops(gridPosition);
     }
 
-    public int GetNumPigs()
-    {
-        return animalManager.GetNumPigs();
-    }
-
-    public int GetNumChickens()
-    {
-        return animalManager.GetNumChickens();
-    }
-
-    public int GetNumEggs()
-    {
-        return animalManager.GetNumEggs();
-    }
-
     private void NewDay()
     {
-        animalManager.UpdateAnimals(playerInventory);
     }
 
     IEnumerator DefaultSoil(Vector3Int gridPosition)
