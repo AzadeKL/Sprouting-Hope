@@ -28,6 +28,7 @@ public class DayNightCycle : MonoBehaviour, SaveSystem.ISaveable
     [SerializeField] private GameEvent dayChange;
 
     private float cycleTimer;
+    private float time;
 
     public void Save(GameData gameData)
     {
@@ -35,6 +36,7 @@ public class DayNightCycle : MonoBehaviour, SaveSystem.ISaveable
         var data = gameData.dayNightCycleData;
         ISaveable.AddKey(data, "cycleTimer", cycleTimer);
         ISaveable.AddKey(data, "dayCounter", dayCounter.Value);
+        ISaveable.AddKey(data, "time", time);
     }
 
     public bool Load(GameData gameData)
@@ -49,6 +51,9 @@ public class DayNightCycle : MonoBehaviour, SaveSystem.ISaveable
                     break;
                 case "dayCounter":
                     dayCounter.Value = (float)Convert.ToDouble(parsed[1]);
+                    break;
+                case "time":
+                    time = (float)Convert.ToDouble(parsed[1]);
                     break;
                 default:
                     Debugger.Log("Invalid key for class (" + this.GetType().Name + "): " + key_value);
@@ -103,7 +108,16 @@ public class DayNightCycle : MonoBehaviour, SaveSystem.ISaveable
             if (gameManager) gameManager.UpdateAnimals();
             else townGameManager.UpdateAnimals();
         }
-        if (gameManager) gameManager.time = (24 * dayCounter.Value) + time24HFormat.Value;
+        time = (24 * dayCounter.Value) + time24HFormat.Value;
+        if (gameManager) gameManager.time = time;
+    }
+    public int GetDay()
+    {
+        return (int)dayCounter.Value;
+    }
+    public float GetTime()
+    {
+        return time;
     }
 
     public bool isDay()
