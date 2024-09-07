@@ -24,7 +24,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public Transform lastParent;
 
 
-    private GameManager gameManager;
+    private FarmGameManager farmGameManager;
     private PlayerInventory playerInventory;
     private GameObject toolTip;
 
@@ -48,7 +48,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void InitializeVariables()
     {
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        farmGameManager = GameObject.Find("GameManager").GetComponent<FarmGameManager>();
         playerInventory = GameObject.Find("Player").GetComponent<PlayerInventory>();
     }
 
@@ -225,18 +225,18 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     private void TransferQuantities(int amount, Transform parent)
     {
-        if (parent == gameManager.GetPigFeedSlot() && gameManager.GetPigFeed() < 10)
+        if (parent == farmGameManager.GetPigFeedSlot() && farmGameManager.GetPigFeed() < 10)
         {
-            if (10 - gameManager.GetPigFeed() >= amount * feedValue)
+            if (10 - farmGameManager.GetPigFeed() >= amount * feedValue)
             {
-                gameManager.AddPigFeed(amount * feedValue);
+                farmGameManager.AddPigFeed(amount * feedValue);
                 UpdateQuantity(quantity - amount);
             }
             else
             {
-                amount -= 10 - gameManager.GetPigFeed();
-                UpdateQuantity(quantity - (10 - gameManager.GetPigFeed()));
-                gameManager.AddPigFeed(10 - gameManager.GetPigFeed());
+                amount -= 10 - farmGameManager.GetPigFeed();
+                UpdateQuantity(quantity - (10 - farmGameManager.GetPigFeed()));
+                farmGameManager.AddPigFeed(10 - farmGameManager.GetPigFeed());
                 if (parent.childCount > 0)
                 {
                     InventoryIcon other = parent.GetChild(0).GetComponent<InventoryIcon>();
@@ -262,18 +262,18 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 }
             }
         }
-        else if (parent == gameManager.GetChickenFeedSlot() && gameManager.GetChickenFeed() < 10)
+        else if (parent == farmGameManager.GetChickenFeedSlot() && farmGameManager.GetChickenFeed() < 10)
         {
-            if (10 - gameManager.GetChickenFeed() >= amount * feedValue)
+            if (10 - farmGameManager.GetChickenFeed() >= amount * feedValue)
             {
-                gameManager.AddChickenFeed(amount * feedValue);
+                farmGameManager.AddChickenFeed(amount * feedValue);
                 UpdateQuantity(quantity - amount);
             }
             else
             {
-                amount -= 10 - gameManager.GetChickenFeed();
-                UpdateQuantity(quantity - (10 - gameManager.GetChickenFeed()));
-                gameManager.AddChickenFeed(10 - gameManager.GetChickenFeed());
+                amount -= 10 - farmGameManager.GetChickenFeed();
+                UpdateQuantity(quantity - (10 - farmGameManager.GetChickenFeed()));
+                farmGameManager.AddChickenFeed(10 - farmGameManager.GetChickenFeed());
                 if (parent.childCount > 0)
                 {
                     InventoryIcon other = parent.GetChild(0).GetComponent<InventoryIcon>();
@@ -358,21 +358,21 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 }
                 else if (newCell.name.Contains("ChickenCell") && item == "Chicken")
                 {
-                    lastParent = gameManager.GetChickenSlot();
-                    gameManager.ChangeBuildingState("Chicken Coop", true);
+                    lastParent = farmGameManager.GetChickenSlot();
+                    farmGameManager.ChangeBuildingState("Chicken Coop", true);
                 }
                 else if (newCell.name.Contains("PigCell") && item == "Pig")
                 {
-                    lastParent = gameManager.GetPigSlot();
+                    lastParent = farmGameManager.GetPigSlot();
                 }
                 else if (newCell.name.Contains("PigCell") && isCrop())
                 {
-                    lastParent = gameManager.GetPigFeedSlot();
-                    gameManager.ChangeBuildingState("Pig Pen", true);
+                    lastParent = farmGameManager.GetPigFeedSlot();
+                    farmGameManager.ChangeBuildingState("Pig Pen", true);
                 }
                 else if (newCell.name.Contains("ChickenCell") && isCrop())
                 {
-                    lastParent = gameManager.GetChickenFeedSlot();
+                    lastParent = farmGameManager.GetChickenFeedSlot();
                 }
             }
         }
@@ -385,7 +385,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 lastParent = transform.parent;
                 transform.SetParent(rectTransform.root, true);
                 toolTip.SetActive(false);
-                if (item == "chicken" && lastParent == gameManager.GetChickenSlot()) gameManager.ChangeBuildingState("Chicken Coop", false);
+                if (item == "chicken" && lastParent == farmGameManager.GetChickenSlot()) farmGameManager.ChangeBuildingState("Chicken Coop", false);
             }
             // drop item full
             else if (obstructedSlot && !DragDisabled())
@@ -417,13 +417,13 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
                     Debug.Log(item + " was given away for " + (giveValue * quantity) + " goodness points!");
-                    gameManager.mainProgress += (giveValue * quantity);
+                    farmGameManager.mainProgress += (giveValue * quantity);
                     UpdateQuantity(0);
                 }
                 else
                 {
                     Debug.Log(item + " was given away for " + giveValue + " goodness points!");
-                    gameManager.mainProgress += giveValue;
+                    farmGameManager.mainProgress += giveValue;
                     UpdateQuantity(quantity - 1);
                 }
 
@@ -443,7 +443,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 lastParent = transform.parent;
                 transform.SetParent(rectTransform.root, true);
                 toolTip.SetActive(false);
-                if (item == "chicken" && lastParent == gameManager.GetChickenSlot() && quantity < 2) gameManager.ChangeBuildingState("Chicken Coop", false);
+                if (item == "chicken" && lastParent == farmGameManager.GetChickenSlot() && quantity < 2) farmGameManager.ChangeBuildingState("Chicken Coop", false);
 
                 // only split item if more than one
                 if (quantity > 1)
@@ -473,13 +473,13 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
                     int amount = (int)Mathf.Min(25, quantity);
-                    gameManager.mainProgress += giveValue * amount;
+                    farmGameManager.mainProgress += giveValue * amount;
                     UpdateQuantity(quantity - (giveValue * amount));
                 }
                 else
                 {
                     int amount = (int)Mathf.Min(5, quantity);
-                    gameManager.mainProgress += giveValue * amount;
+                    farmGameManager.mainProgress += giveValue * amount;
                     UpdateQuantity(quantity - (giveValue * amount));
                 }
             }
@@ -516,14 +516,14 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                     else if (result.gameObject.name.Contains("ChickenCell") && item == "Chicken")
                     {
                         UpdateQuantity(quantity - 1);
-                        gameManager.AddAnimal(item, 1);
-                        result.gameObject.transform.GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(gameManager.chickenCoopInventory[item]);
+                        farmGameManager.AddAnimal(item, 1);
+                        result.gameObject.transform.GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(farmGameManager.chickenCoopInventory[item]);
                     }
                     else if (result.gameObject.name.Contains("PigCell") && item == "Pig")
                     {
                         UpdateQuantity(quantity - 1);
-                        gameManager.AddAnimal(item, 1);
-                        result.gameObject.transform.GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(gameManager.pigPenInventory);
+                        farmGameManager.AddAnimal(item, 1);
+                        result.gameObject.transform.GetChild(0).gameObject.GetComponent<InventoryIcon>().UpdateQuantity(farmGameManager.pigPenInventory);
                     }
                     if (quantity <= 0)
                     {
@@ -559,13 +559,13 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
                     Debug.Log(item + " was given away for " + (giveValue * quantity) + " goodness points!");
-                    gameManager.mainProgress += (giveValue * quantity);
+                    farmGameManager.mainProgress += (giveValue * quantity);
                     playerInventory.RemoveFromInventory(item, quantity);
                 }
                 else
                 {
                     Debug.Log(item + " was given away for " + giveValue + " goodness points!");
-                    gameManager.mainProgress += giveValue;
+                    farmGameManager.mainProgress += giveValue;
                     playerInventory.RemoveFromInventory(item);
                 }
 
@@ -600,7 +600,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                     if (!playerInventory.inventory.ContainsKey(item)) break;
 
                     playerInventory.RemoveFromInventory(item);
-                    gameManager.mainProgress += giveValue;
+                    farmGameManager.mainProgress += giveValue;
                 }
             }
 
@@ -621,7 +621,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             if (eventData.button == PointerEventData.InputButton.Left)
             {
                 if (lastParent.gameObject.name.Contains("GridCell")) playerInventory.RemoveFromInventoryOnly(item, true);
-                else if (lastParent.gameObject.name.Contains("ChickenCell") || lastParent.gameObject.name.Contains("PigCell")) gameManager.AddAnimalNumb(item, 0 - quantity);
+                else if (lastParent.gameObject.name.Contains("ChickenCell") || lastParent.gameObject.name.Contains("PigCell")) farmGameManager.AddAnimalNumb(item, 0 - quantity);
                 dragged = 0;
             }
             // dragging with right click
@@ -635,7 +635,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                     newIcon.GetComponent<InventoryIcon>().SetIcon(item);
                     newIcon.GetComponent<InventoryIcon>().UpdateQuantity((int) Mathf.Floor(quantity / 2f));
                     if (int.Parse(newIcon.GetComponent<InventoryIcon>().quantity.text) <= 0) Destroy(newIcon);
-                    gameManager.AddAnimalNumb(item, 0 - (int) Mathf.Ceil(quantity / 2f));
+                    farmGameManager.AddAnimalNumb(item, 0 - (int) Mathf.Ceil(quantity / 2f));
                     UpdateQuantity((int) Mathf.Ceil(quantity / 2f));
                 }
                 dragged = 1;
@@ -746,7 +746,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
             //TODO need  1 more step with pigPenInventory? (testing with pigs generally)
 
-            Debugger.Log("BUGCREATER Check total is  " + total + " but gamemanager value for PIGS is " + gameManager.pigPenInventory, Debugger.PriorityLevel.MustShown);
+            Debugger.Log("BUGCREATER Check total is  " + total + " but gamemanager value for PIGS is " + farmGameManager.pigPenInventory, Debugger.PriorityLevel.MustShown);
 
             Destroy(gameObject);
             return;
@@ -758,7 +758,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         Debug.Log("new parent: " + lastParent.gameObject.name);
         if (lastParent.gameObject.name.Contains("ChickenCell") || lastParent.gameObject.name.Contains("PigCell"))
         {
-            gameManager.AddAnimal(item, quantity);
+            farmGameManager.AddAnimal(item, quantity);
         }
         // if placed in inventory add back item to inventory dicts
         else if (lastParent.gameObject.name.Contains("GridCell"))

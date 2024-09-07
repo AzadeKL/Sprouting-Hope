@@ -7,16 +7,16 @@ public class VisualiseChickens : MonoBehaviour
 
     [SerializeField] private PlayerInventory playerInventory;
 
-    private GameManager gameManager;
+    private FarmGameManager farmGameManager;
 
     private void Awake()
     {
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        farmGameManager = GameObject.Find("GameManager").GetComponent<FarmGameManager>();
     }
 
     private void Update()
     {
-        var chickenOrEgg = Mathf.CeilToInt(gameManager.GetNumChickens() / 4) + gameManager.GetNumEggs() / 10;
+        var chickenOrEgg = Mathf.CeilToInt(farmGameManager.GetNumChickens() / 4) + farmGameManager.GetNumEggs() / 10;
 
         for (int i = 0; i < pigSprites.Count; i++)
         {

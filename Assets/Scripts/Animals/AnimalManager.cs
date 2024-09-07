@@ -4,6 +4,7 @@ using SaveSystem;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Tilemaps;
+using DG.Tweening.Core.Easing;
 
 public class AnimalManager : MonoBehaviour, SaveSystem.ISaveable
 {
@@ -28,11 +29,13 @@ public class AnimalManager : MonoBehaviour, SaveSystem.ISaveable
     private GameObject chickenUI;
     private GameObject pigUI;
 
+    private FarmGameManager farmGameManager;
     private PlayerInventory playerInventory;
 
     // Start is called before the first frame update
     void Start()
     {
+        farmGameManager = GameObject.Find("GameManager").GetComponent<FarmGameManager>();
         playerInventory = GameObject.Find("Player").GetComponent<PlayerInventory>();
         chickenUI = chickenSlot.parent.parent.gameObject;
         pigUI = pigSlot.parent.parent.gameObject;
@@ -264,7 +267,7 @@ public class AnimalManager : MonoBehaviour, SaveSystem.ISaveable
             }
             if (GetPigFeed() == 0)
             {
-                gameObject.GetComponent<GameManager>().ChangeBuildingState("Pig Pen", false);
+                farmGameManager.ChangeBuildingState("Pig Pen", false);
             }
         }
     }

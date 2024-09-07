@@ -10,7 +10,7 @@ using UnityEngine.UI;
 using Random = UnityEngine.Random;
 using UnityEngine.Serialization;
 
-public class GameManager : MonoBehaviour, SaveSystem.ISaveable
+public class FarmGameManager : MonoBehaviour, SaveSystem.ISaveable
 {
     //[SerializeField] private float farmingrange = 1f;
 
