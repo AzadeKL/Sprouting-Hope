@@ -57,11 +57,6 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         quantity = amount;
         if (quantity <= 0)
         {
-            if (playerInventory.hotbar[playerInventory.hotbarIndex].transform == transform.parent)
-            {
-                playerInventory.FindNextItem(-1);
-                playerInventory.UpdateHandItemFromHotbarIndex();
-            }
             if (toolTip) toolTip.SetActive(false);
             Destroy(this.gameObject);
         }
