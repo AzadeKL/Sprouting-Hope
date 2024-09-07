@@ -11,17 +11,6 @@ using Random = UnityEngine.Random;
 
 public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
 {
-    // Enum for the field states
-    private enum DirtFieldState
-    {
-        Default,
-        Plowed,
-        Watered,
-        NumDirtFieldStates
-    }
-
-    //[SerializeField] private float farmingrange = 1f;
-
     public GameObject helpUI;
     private Toggle helpToggle;
     [SerializeField] private string showHelpOnNewGameKey = "showHelpOnNewGame";
@@ -52,19 +41,6 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
     [SerializeField] private GameObject playerWorldCanvas;
 
     [Space]
-    [Header("Plants")]
-    [SerializeField] private float wateringTimeReduction;
-    [SerializeField] private float wheatGrowTime;
-    private Dictionary<Vector3Int, int> wheatPlants = new Dictionary<Vector3Int, int>();
-    [SerializeField] private float tomatoGrowTime;
-    private Dictionary<Vector3Int, int> tomatoPlants = new Dictionary<Vector3Int, int>();
-    [SerializeField] private float lentilGrowTime;
-    private Dictionary<Vector3Int, int> lentilPlants = new Dictionary<Vector3Int, int>();
-
-    private Dictionary<Vector3Int, float> growStartTime = new Dictionary<Vector3Int, float>();
-    private Dictionary<Vector3Int, float> growTotalTime = new Dictionary<Vector3Int, float>();
-
-    [Space]
     [Header("Main Objective")]
     public int mainProgress;
     [SerializeField] private GameObject winText;
@@ -86,10 +62,6 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
     [SerializeField] private UpgradeUnlock upgradeManager;
 
     private GameObject toolTip;//UI tooltip 
-
-
-    private Dictionary<Vector3Int, int> tileState = new Dictionary<Vector3Int, int>();
-
 
     private Vector3Int[] neighborPositions =
     {
@@ -135,19 +107,6 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
 
         gameData.townSaveTime = time;
         gameData.townSaveDay = day;
-
-        gameData.farmGameManagerTileStates = new List<string>();
-        foreach (var tile in tileState)
-        {
-            ISaveable.AddKey(gameData.farmGameManagerTileStates, tile.Key, tile.Value);
-        }
-
-        gameData.farmGameManagerPlants = new List<string>();
-        var data = gameData.farmGameManagerPlants;
-        Func<string, KeyValuePair<Vector3Int, int>, string> PlantToEntry = (plantName, point) => string.Join(":", plantName, SaveSystem.ISaveable.Vector3IntToString(point.Key), point.Value, growStartTime[point.Key], growTotalTime[point.Key]);
-        foreach (var key_value in wheatPlants) gameData.farmGameManagerPlants.Add(PlantToEntry("Wheat", key_value));
-        foreach (var key_value in tomatoPlants) gameData.farmGameManagerPlants.Add(PlantToEntry("Tomato", key_value));
-        foreach (var key_value in lentilPlants) gameData.farmGameManagerPlants.Add(PlantToEntry("Lentil", key_value));
     }
     public bool Load(GameData gameData)
     {
@@ -158,35 +117,6 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
 
         time = gameData.townSaveTime;
         day = gameData.townSaveDay;
-
-        foreach (var key_value in gameData.farmGameManagerTileStates)
-        {
-            var entry = ISaveable.ParseKey(key_value);
-            var gridPosition = ISaveable.Vector3IntFromString(entry[0]);
-            int fieldState = Convert.ToInt32(entry[1]);
-            if (IsDirtFieldState(fieldState))
-            {
-                SetDirtFieldState(gridPosition, (DirtFieldState)fieldState);
-            }
-            else
-            {
-                // Field is a crop field
-                SetDirtFieldState(gridPosition, DirtFieldState.Plowed);
-            }
-        }
-
-        Debug.Log("Loading plants");
-        foreach (var entry in gameData.farmGameManagerPlants)
-        {
-            Debug.Log("Loading plants: " + entry);
-            var parsed = entry.Split(':');
-            string cropName = parsed[0];
-            Vector3Int gridPosition = SaveSystem.ISaveable.Vector3IntFromString(parsed[1]);
-            int growthState = Convert.ToInt32(parsed[2]);
-            float startTime = (float)Convert.ToDouble(parsed[3]);
-            float totalTime = (float)Convert.ToDouble(parsed[4]);
-            AddCrop(cropName, gridPosition, growthState, startTime, totalTime, false);
-        }
 
         return true;
     }
@@ -238,116 +168,6 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
     {
         //Debug.Log("Setting showHelpOnNewGameKey to: " + ((helpToggle.isOn) ? 1 : 0));
         PlayerPrefs.SetInt(showHelpOnNewGameKey, (helpToggle.isOn) ? 1 : 0);
-    }
-
-    private static bool IsDirtFieldState(int state)
-    {
-        return (state >= 0) && (state < (int)DirtFieldState.NumDirtFieldStates);
-    }
-
-    private static string GetSeedName(string cropName)
-    {
-        return cropName + " Seeds";
-    }
-
-    private static string GetCropName(string seedName)
-    {
-        return seedName.Substring(0, seedName.IndexOf(' '));
-    }
-
-    private bool GetCropVarsForCropName(string cropName, ref Dictionary<Vector3Int, int> cropPlants)
-    {
-        switch (cropName)
-        {
-            case "Wheat":
-                cropPlants = wheatPlants;
-                break;
-            case "Tomato":
-                cropPlants = tomatoPlants;
-                break;
-            case "Lentils":
-                cropPlants = lentilPlants;
-                break;
-            default:
-                cropPlants = null;
-                break;
-        }
-
-        return cropPlants != null;
-    }
-
-    private bool GetCropVarsAtGridPosition(Vector3Int gridPosition, ref string cropName, ref Dictionary<Vector3Int, int> cropPlants)
-    {
-        cropName = "";
-        if (wheatPlants.ContainsKey(gridPosition))
-        {
-            cropName = "Wheat";
-        }
-        else if (tomatoPlants.ContainsKey(gridPosition))
-        {
-            cropName = "Tomato";
-        }
-        else if (lentilPlants.ContainsKey(gridPosition))
-        {
-            cropName = "Lentils";
-        }
-
-        return GetCropVarsForCropName(cropName, ref cropPlants);
-    }
-
-    private void SetDirtFieldState(Vector3Int gridPosition, DirtFieldState dirtFieldState)
-    {
-        Debug.Log("Set dirt field state at position: " + gridPosition + ", dirtFieldState: " + dirtFieldState + " = " + (int)dirtFieldState);
-        if (tileState.ContainsKey(gridPosition))
-        {
-            tileState[gridPosition] = (int)dirtFieldState;
-        }
-    }
-
-    private void AddCrop(string cropName, Vector3Int gridPosition, int growthState = 0, float startTime = -1f, float totalTime = 60f, bool useSeed = true)
-    {
-        Debug.Log("Adding crop(" + cropName + ") at position: " + gridPosition + ", growth: " + growthState);
-        if (!tileState.ContainsKey(gridPosition) || (tileState[gridPosition] < 1))
-        {
-            Debug.Log("Failed to add crop - grid location not initialized: " + gridPosition);
-            return;
-        }
-
-        Dictionary<Vector3Int, int> cropPlants = null;
-        if (!GetCropVarsForCropName(cropName, ref cropPlants))
-        {
-            Debug.Log("Invalid crop(" + cropName + ") at position: " + gridPosition);
-            SetDirtFieldState(gridPosition, DirtFieldState.Default);
-            return;
-        }
-        if (startTime < 0) startTime = time;
-        Debug.Log(startTime);
-        growStartTime.Add(gridPosition, startTime);
-        growTotalTime.Add(gridPosition, totalTime);
-        cropPlants.Add(gridPosition, growthState);
-        string seedName = GetSeedName(cropName);
-        if (useSeed) playerInventory.RemoveFromInventory(seedName);
-        StartCoroutine(GrowTime(gridPosition));
-        Debug.Log("Planted " + seedName);
-    }
-
-    public void UpdateCrops(Vector3Int gridPosition)
-    {
-        string cropName = "";
-        Dictionary<Vector3Int, int> cropPlants = null;
-        if (!GetCropVarsAtGridPosition(gridPosition, ref cropName, ref cropPlants))
-        {
-            Debug.Log("No crop to update at position: " + gridPosition);
-            SetDirtFieldState(gridPosition, (DirtFieldState)Mathf.Max(0, tileState[gridPosition] - 1));
-            return;
-        }
-
-        Debug.Log(cropName + " is growing!");
-        Debug.Log(time);
-        growStartTime[gridPosition] = time;
-        if (cropPlants[gridPosition] < 2) ++cropPlants[gridPosition];
-        if (cropPlants[gridPosition] < 2) StartCoroutine(GrowTime(gridPosition));
-        else StartCoroutine(DefaultSoil(gridPosition));
     }
 
     private bool GetBuildingOpen(string building)
@@ -526,35 +346,7 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
         }
     }
 
-    IEnumerator GrowTime(Vector3Int gridPosition)
-    {
-        if (!growTotalTime.ContainsKey(gridPosition)) growTotalTime.Add(gridPosition, 60f);
-        // set growth time by plant type
-        if (wheatPlants.ContainsKey(gridPosition)) growTotalTime[gridPosition] = wheatGrowTime / timePerTick;
-        else if (tomatoPlants.ContainsKey(gridPosition)) growTotalTime[gridPosition] = tomatoGrowTime / timePerTick;
-        else if (lentilPlants.ContainsKey(gridPosition)) growTotalTime[gridPosition] = lentilGrowTime / timePerTick;
-
-        Debug.Log("Waiting for time to pass...");
-        yield return new WaitUntil(() => time - growStartTime[gridPosition] >= growTotalTime[gridPosition]);
-        Debug.Log(time + " = " + growStartTime[gridPosition] + " + " + growTotalTime[gridPosition]);
-
-        SetDirtFieldState(gridPosition, DirtFieldState.Plowed);
-        UpdateCrops(gridPosition);
-    }
-
     private void NewDay()
     {
     }
-
-    IEnumerator DefaultSoil(Vector3Int gridPosition)
-    {
-        float time = 60f;
-        yield return new WaitForSeconds(time);
-        if (!wheatPlants.ContainsKey(gridPosition) && !tomatoPlants.ContainsKey(gridPosition) && !lentilPlants.ContainsKey(gridPosition))
-        {
-            SetDirtFieldState(gridPosition, (DirtFieldState)Mathf.Max(0, tileState[gridPosition] - 1));
-            StartCoroutine(DefaultSoil(gridPosition));
-        }
-    }
-
 }
