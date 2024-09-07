@@ -41,7 +41,8 @@ namespace SaveSystem
 
         public List<string> farmGameManagerTileStates = new List<string>();
         public List<string> farmGameManagerPlants = new List<string>();
-        public List<string> farmGameManagerAnimalBuildings = new List<string>();
+
+        public List<string> farmAnimalManager = new List<string>();
 
         // Town scene
         public float townSaveTime = 0;

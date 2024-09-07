@@ -62,8 +62,8 @@ public class AnimalManager : MonoBehaviour, SaveSystem.ISaveable
     //Add the animals to the SaveData
     public void Save(GameData gameData)
     {
-        gameData.farmGameManagerAnimalBuildings = new List<string>();
-        var data = gameData.farmGameManagerAnimalBuildings;
+        gameData.farmAnimalManager = new List<string>();
+        var data = gameData.farmAnimalManager;
         ISaveable.AddKey(data, "Chicken",
             chickenSlot.childCount > 0 ? chickenSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
         ISaveable.AddKey(data, "Egg",
@@ -81,7 +81,7 @@ public class AnimalManager : MonoBehaviour, SaveSystem.ISaveable
     //Load the animals from the SaveData
     public bool Load(GameData gameData)
     {
-        foreach (var key_value in gameData.farmGameManagerAnimalBuildings)
+        foreach (var key_value in gameData.farmAnimalManager)
         {
             var parsed = ISaveable.ParseKey(key_value);
             string animal = parsed[0];
