@@ -833,6 +833,8 @@ public class FarmGameManager : MonoBehaviour, SaveSystem.ISaveable
 
                     if (interactWBuildingKeyPressed)
                     {
+                        // TODO: Find an event that triggers right before scene unload
+                        SaveSystem.DataManager.instance.UpdateAndSaveToFile();
                         SceneManager.LoadScene("TownScene");
                     }
                     else

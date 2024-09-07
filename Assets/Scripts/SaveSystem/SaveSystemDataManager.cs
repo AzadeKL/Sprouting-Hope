@@ -53,10 +53,7 @@ namespace SaveSystem
                 return;
             }
             updateCounter = updatesPerSave;
-            if (UpdateGameData())
-            {
-                SaveToFile();
-            }
+            UpdateAndSaveToFile();
         }
         private void OnApplicationQuit()
         {
@@ -84,6 +81,14 @@ namespace SaveSystem
         public int GetLastSceneIndex()
         {
             return gameData.sceneIndex;
+        }
+
+        public void UpdateAndSaveToFile()
+        {
+            if (UpdateGameData())
+            {
+                SaveToFile();
+            }
         }
 
         public void SaveToFile()
