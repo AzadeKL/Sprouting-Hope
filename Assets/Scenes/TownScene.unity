@@ -112506,8 +112506,6 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 1
     Variable: {fileID: 11400000, guid: e581feeb5e30f264bb8c83950014bf56, type: 2}
-  gameManager: {fileID: 0}
-  townGameManager: {fileID: 1840948559}
   dayChange: {fileID: 0}
 --- !u!114 &1537532285
 MonoBehaviour:
@@ -113804,9 +113802,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0.37432188
-    width: 0.3723296
-    height: 0.3254973
+    y: 0.067307696
+    width: 1
+    height: 0.86538464
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
@@ -114134,7 +114132,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   helpUI: {fileID: 639124442}
   showHelpOnNewGameKey: showHelpOnNewGame
-  time: 0
   time24HFormat:
     UseConstant: 1
     ConstantValue: 0
@@ -114151,10 +114148,6 @@ MonoBehaviour:
   giveInventory: {r: 0.15294118, g: 0.8392157, b: 0.08235294, a: 1}
   playerCenter: {fileID: 1697807251}
   playerWorldCanvas: {fileID: 399110044}
-  wateringTimeReduction: 0.5
-  wheatGrowTime: 150
-  tomatoGrowTime: 165
-  lentilGrowTime: 135
   mainProgress: 0
   winText: {fileID: 475869370}
   maxProgress: 10000
@@ -114849,7 +114842,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6c7fe210d1f905a41b24115e91f00831, type: 2}
   - {fileID: 11400000, guid: aa1850554f2339e4c9092a739fdf596d, type: 2}
   animalsUI: {fileID: 1732272739}
-  animalManager: {fileID: 1840948562}
   upgradeManager: {fileID: 1840948561}
   escDisabled: 0
 --- !u!4 &1840948560
