@@ -39,8 +39,7 @@ namespace SaveSystem
         public float farmSaveTime = 0;
         public int farmSaveDay = 0;
 
-        public List<string> farmGameManagerTileStates = new List<string>();
-        public List<string> farmGameManagerPlants = new List<string>();
+        public List<string> farmGameManagerFields = new List<string>();
 
         public List<string> farmAnimalManager = new List<string>();
 
