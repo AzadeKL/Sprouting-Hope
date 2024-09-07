@@ -112506,8 +112506,6 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 1
     Variable: {fileID: 11400000, guid: e581feeb5e30f264bb8c83950014bf56, type: 2}
-  gameManager: {fileID: 0}
-  townGameManager: {fileID: 1840948559}
   dayChange: {fileID: 0}
 --- !u!114 &1537532285
 MonoBehaviour:
@@ -113429,6 +113427,158 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 941037153923534293, guid: 2f9d5fb8cd5073d4ebc067af200578f2, type: 3}
   m_PrefabInstance: {fileID: 1650480470}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1672339813
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1672339816}
+  - component: {fileID: 1672339815}
+  - component: {fileID: 1672339814}
+  m_Layer: 0
+  m_Name: Music
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!82 &1672339814
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1672339813}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: -5396817623103883131, guid: 26a21470da74cf540a0024c8fe4b3445, type: 2}
+  m_audioClip: {fileID: 8300000, guid: 0480a289f2878154e86d1e8a5137a838, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 0.3
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &1672339815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1672339813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84bea1dbbcac15445bc35ea8a6dc9789, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentTime:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: 1b746dbb982bd2248b1207004338056f, type: 2}
+  musicDatas:
+  - {fileID: 11400000, guid: 6784f3ddeb30956459a07a176048a2c3, type: 2}
+  - {fileID: 11400000, guid: ebcc292a5bbf0ae438854e8389bb4922, type: 2}
+  dayToNightChangeTime: 6
+  nightToDayChangeTime: 18
+  defaultMusicVolume: 1
+  fadeOutTimer: 1
+--- !u!4 &1672339816
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1672339813}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1684298746
 GameObject:
   m_ObjectHideFlags: 0
@@ -113804,9 +113954,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0.37432188
-    width: 0.3723296
-    height: 0.3254973
+    y: 0.067307696
+    width: 1
+    height: 0.86538464
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
@@ -114134,7 +114284,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   helpUI: {fileID: 639124442}
   showHelpOnNewGameKey: showHelpOnNewGame
-  time: 0
   time24HFormat:
     UseConstant: 1
     ConstantValue: 0
@@ -114151,10 +114300,6 @@ MonoBehaviour:
   giveInventory: {r: 0.15294118, g: 0.8392157, b: 0.08235294, a: 1}
   playerCenter: {fileID: 1697807251}
   playerWorldCanvas: {fileID: 399110044}
-  wateringTimeReduction: 0.5
-  wheatGrowTime: 150
-  tomatoGrowTime: 165
-  lentilGrowTime: 135
   mainProgress: 0
   winText: {fileID: 475869370}
   maxProgress: 10000
@@ -114849,7 +114994,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6c7fe210d1f905a41b24115e91f00831, type: 2}
   - {fileID: 11400000, guid: aa1850554f2339e4c9092a739fdf596d, type: 2}
   animalsUI: {fileID: 1732272739}
-  animalManager: {fileID: 1840948562}
   upgradeManager: {fileID: 1840948561}
   escDisabled: 0
 --- !u!4 &1840948560
@@ -121198,3 +121342,4 @@ SceneRoots:
   - {fileID: 6713833322103016114}
   - {fileID: 1913265434}
   - {fileID: 1826964215}
+  - {fileID: 1672339816}

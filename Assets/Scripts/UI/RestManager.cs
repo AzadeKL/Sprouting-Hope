@@ -10,7 +10,7 @@ public class RestManager : MonoBehaviour
     [SerializeField]
     private GameObject player;
     [SerializeField]
-    private GameManager gameManager;
+    private FarmGameManager farmGameManager;
     [SerializeField]
     private GameObject RestUIPanelMain;
     [SerializeField]
@@ -31,7 +31,7 @@ public class RestManager : MonoBehaviour
 
     IEnumerator Resting()
     {
-        gameManager.escDisabled = true;
+        farmGameManager.escDisabled = true;
         HidePlayer();
         DOVirtual.Float(0, 1, 1f, x => volumeEffect.weight = x).SetUpdate(true);
         yield return new WaitForSeconds(restTimer);
@@ -44,7 +44,7 @@ public class RestManager : MonoBehaviour
     {
         RestUIPanelMain.SetActive(false);
         RestUIPanelMain.transform.GetChild(0).gameObject.SetActive(true);
-        gameManager.escDisabled = false;
+        farmGameManager.escDisabled = false;
     }
 
     private void HidePlayer()

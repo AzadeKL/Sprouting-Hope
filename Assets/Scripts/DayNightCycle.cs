@@ -4,6 +4,7 @@ using SaveSystem;
 using System;
 using static UnityEngine.Rendering.DebugUI;
 using Unity.Collections.LowLevel.Unsafe;
+using System.Collections.Generic;
 
 public class DayNightCycle : MonoBehaviour, SaveSystem.ISaveable
 {
@@ -20,19 +21,18 @@ public class DayNightCycle : MonoBehaviour, SaveSystem.ISaveable
     [SerializeField] private FloatReference time24HFormat;
     [SerializeField] private FloatReference dayCounter;
 
-
-    [SerializeField] private GameManager gameManager;
-    [SerializeField] private TownGameManager townGameManager;
-
     [SerializeField] private GameEvent dayChange;
 
     private float cycleTimer;
+    private float time;
 
     public void Save(GameData gameData)
     {
+        gameData.dayNightCycleData = new List<string>();
         var data = gameData.dayNightCycleData;
         ISaveable.AddKey(data, "cycleTimer", cycleTimer);
         ISaveable.AddKey(data, "dayCounter", dayCounter.Value);
+        ISaveable.AddKey(data, "time", time);
     }
 
     public bool Load(GameData gameData)
@@ -47,6 +47,9 @@ public class DayNightCycle : MonoBehaviour, SaveSystem.ISaveable
                     break;
                 case "dayCounter":
                     dayCounter.Value = (float)Convert.ToDouble(parsed[1]);
+                    break;
+                case "time":
+                    time = (float)Convert.ToDouble(parsed[1]);
                     break;
                 default:
                     Debugger.Log("Invalid key for class (" + this.GetType().Name + "): " + key_value);
@@ -98,10 +101,18 @@ public class DayNightCycle : MonoBehaviour, SaveSystem.ISaveable
         {
             cycleTimer = 0f;
             dayCounter.Value++;
-            if (gameManager) gameManager.UpdateAnimals();
-            else townGameManager.UpdateAnimals();
         }
-        if (gameManager) gameManager.time = (24 * dayCounter.Value) + time24HFormat.Value;
+        time = (24 * dayCounter.Value) + time24HFormat.Value;
+    }
+
+    public int GetDay()
+    {
+        return (int)dayCounter.Value;
+    }
+
+    public float GetTime()
+    {
+        return time;
     }
 
     public bool isDay()

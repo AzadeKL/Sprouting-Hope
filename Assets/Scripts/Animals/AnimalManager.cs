@@ -4,8 +4,9 @@ using SaveSystem;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Tilemaps;
+using DG.Tweening.Core.Easing;
 
-public class AnimalManager : MonoBehaviour
+public class AnimalManager : MonoBehaviour, SaveSystem.ISaveable
 {
     [Header("Buildings")]
     public List<TileBase> pigPen;
@@ -28,13 +29,18 @@ public class AnimalManager : MonoBehaviour
     private GameObject chickenUI;
     private GameObject pigUI;
 
-
+    private FarmGameManager farmGameManager;
+    private PlayerInventory playerInventory;
 
     // Start is called before the first frame update
     void Start()
     {
+        farmGameManager = GameObject.Find("GameManager").GetComponent<FarmGameManager>();
+        playerInventory = GameObject.Find("Player").GetComponent<PlayerInventory>();
         chickenUI = chickenSlot.parent.parent.gameObject;
         pigUI = pigSlot.parent.parent.gameObject;
+
+        SaveSystem.DataManager.instance.Load(this);
     }
 
     // Update is called once per frame
@@ -59,29 +65,32 @@ public class AnimalManager : MonoBehaviour
     //Add the animals to the SaveData
     public void Save(GameData gameData)
     {
-        ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "Chicken",
+        gameData.farmAnimalManager = new List<string>();
+        var data = gameData.farmAnimalManager;
+        ISaveable.AddKey(data, "Chicken",
             chickenSlot.childCount > 0 ? chickenSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
-        ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "Egg",
+        ISaveable.AddKey(data, "Egg",
             eggSlot.childCount > 0 ? eggSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
-        ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "Pig",
+        ISaveable.AddKey(data, "Pig",
             pigSlot.childCount > 0 ? pigSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
-        ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "PigFeedSlot",
+        ISaveable.AddKey(data, "PigFeedSlot",
             pigFeedSlot.childCount > 0 ? pigFeedSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
-        ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "ChickenFeedSlot",
+        ISaveable.AddKey(data, "ChickenFeedSlot",
             chickenFeedSlot.childCount > 0 ? chickenFeedSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity : 0);
-        ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "PigFeed", GetPigFeed());
-        ISaveable.AddKey(gameData.gameManagerAnimalBuildings, "ChickenFeed", GetChickenFeed());
+        ISaveable.AddKey(data, "PigFeed", GetPigFeed());
+        ISaveable.AddKey(data, "ChickenFeed", GetChickenFeed());
     }
 
     //Load the animals from the SaveData
-    public void Load(GameData gameData, PlayerInventory playerInventory)
+    public bool Load(GameData gameData)
     {
-        foreach (var key_value in gameData.gameManagerAnimalBuildings)
+        foreach (var key_value in gameData.farmAnimalManager)
         {
             var parsed = ISaveable.ParseKey(key_value);
             string animal = parsed[0];
             int count = System.Convert.ToInt32((string)parsed[1]);
             InventoryIcon newIcon = null;
+            //Debug.Log("Loading animal: " + animal + " count: " + count);
             switch (animal)
             {
                 case "Chicken":
@@ -114,6 +123,8 @@ public class AnimalManager : MonoBehaviour
                 newIcon.UpdateQuantity(count);
             }
         }
+
+        return true;
     }
 
     //Get the chicken slot
@@ -256,7 +267,7 @@ public class AnimalManager : MonoBehaviour
             }
             if (GetPigFeed() == 0)
             {
-                gameObject.GetComponent<GameManager>().ChangeBuildingState("Pig Pen", false);
+                farmGameManager.ChangeBuildingState("Pig Pen", false);
             }
         }
     }

@@ -22,8 +22,11 @@ namespace SaveSystem
     [System.Serializable]
     public class GameData
     {
+        public int sceneIndex = -1;
         public string sceneName;
-        public int sceneIndex;
+
+        // All scenes
+        public int gameManagerMainProgress = 0;
 
         public List<string> dayNightCycleData = new List<string>();
 
@@ -32,11 +35,19 @@ namespace SaveSystem
         public List<int> playerInventoryInventoryQuantities = new List<int>();
         public List<int> playerInventoryInventorySlot = new List<int>();
 
-        public int gameManagerMainProgress = 0;
-        public List<string> gameManagerTileStates = new List<string>();
-        public List<string> gameManagerPlants = new List<string>();
-        public List<string> gameManagerAnimalBuildings = new List<string>();
+        // Farm scene
+        public float farmSaveTime = 0;
+        public int farmSaveDay = 0;
 
+        public List<string> farmGameManagerFields = new List<string>();
+
+        public List<string> farmAnimalManager = new List<string>();
+
+        // Town scene
+        public float townSaveTime = 0;
+        public int townSaveDay = 0;
+
+        // Destroyed objects
         public List<string> destroyedObjectIds = new List<string>();
     }
 
