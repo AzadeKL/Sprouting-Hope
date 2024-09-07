@@ -25,6 +25,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
 
     private FarmGameManager farmGameManager;
+    private TownGameManager townGameManager;
     private PlayerInventory playerInventory;
     private GameObject toolTip;
 
@@ -49,6 +50,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void InitializeVariables()
     {
         farmGameManager = GameObject.Find("GameManager").GetComponent<FarmGameManager>();
+        townGameManager = GameObject.Find("GameManager").GetComponent<TownGameManager>();
         playerInventory = GameObject.Find("Player").GetComponent<PlayerInventory>();
     }
 
@@ -417,13 +419,13 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
                     Debug.Log(item + " was given away for " + (giveValue * quantity) + " goodness points!");
-                    farmGameManager.mainProgress += (giveValue * quantity);
+                    townGameManager.mainProgress += (giveValue * quantity);
                     UpdateQuantity(0);
                 }
                 else
                 {
                     Debug.Log(item + " was given away for " + giveValue + " goodness points!");
-                    farmGameManager.mainProgress += giveValue;
+                    townGameManager.mainProgress += giveValue;
                     UpdateQuantity(quantity - 1);
                 }
 
