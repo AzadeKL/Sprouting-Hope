@@ -30,7 +30,8 @@ namespace SaveSystem
 
         public List<string> dayNightCycleData = new List<string>();
 
-        public List<string> playerInventoryData = new List<string>();
+        public int playerInventoryMoney = 0;
+        public int playerInventoryHotbarIndex = -1;
         public List<string> playerInventoryInventoryItems = new List<string>();
         public List<int> playerInventoryInventoryQuantities = new List<int>();
         public List<int> playerInventoryInventorySlot = new List<int>();

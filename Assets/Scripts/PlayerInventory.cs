@@ -37,10 +37,8 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
     private GameObject toolTip;//Ui tool tip
     public void Save(GameData gameData)
     {
-        gameData.playerInventoryData = new List<string>();
-        var data = gameData.playerInventoryData;
-        ISaveable.AddKey(data, "hotbarIndex", hotbarIndex);
-        ISaveable.AddKey(data, "money", money);
+        gameData.playerInventoryMoney = money;
+        if (!disableHandItemAndHotbar) gameData.playerInventoryHotbarIndex = hotbarIndex;
 
         gameData.playerInventoryInventoryItems = new List<string>();
         gameData.playerInventoryInventoryQuantities = new List<int>();
@@ -60,22 +58,8 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 
     public bool Load(GameData gameData)
     {
-        foreach (var key_value in gameData.playerInventoryData)
-        {
-            var parsed = ISaveable.ParseKey(key_value);
-            switch (parsed[0])
-            {
-                case "hotbarIndex":
-                    hotbarIndex = Convert.ToInt32(parsed[1]);
-                    break;
-                case "money":
-                    money = Convert.ToInt32(parsed[1]);
-                    break;
-                default:
-                    Debugger.Log("Invalid key for class (" + this.GetType().Name + "): " + key_value);
-                    break;
-            }
-        }
+        money = gameData.playerInventoryMoney ;
+        if (!disableHandItemAndHotbar) hotbarIndex = gameData.playerInventoryHotbarIndex;
 
         if (gameData.playerInventoryInventoryItems.Count != gameData.playerInventoryInventoryQuantities.Count)
         {
@@ -143,10 +127,15 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         }
     }
 
-    public string GetHandItemName()
+    private string GetHotbarItemName(int hotbarIndex)
     {
         var icon = GetHotbarIcon(hotbarIndex);
-        return (icon != null) ? icon.item :  "";
+        return (icon != null) ? icon.item : "";
+    }
+
+    public string GetHandItemName()
+    {
+        return GetHotbarItemName(hotbarIndex);
     }
 
     public int GetSelectedHotbarIndex()
@@ -156,6 +145,8 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 
     public void SetHandItem(int hotbarIndex)
     {
+        if (disableHandItemAndHotbar) return;
+
         this.hotbarIndex = (hotbarIndex >= hotbar.Count) ? -1 : hotbarIndex;
 
         var icon = GetHotbarIcon(this.hotbarIndex);
@@ -180,6 +171,8 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 
     public void SetHandItem(string item)
     {
+        if (disableHandItemAndHotbar) return;
+
         int index = -1;
 
         if (item != "")
@@ -200,19 +193,6 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         SetHandItem(index);
     }
 
-    private string GetHotbarItemName(int hotbarIndex)
-    {
-        return ((hotbarIndex >= 0) && (hotbar[hotbarIndex].transform.childCount > 0)) ? hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item : "";
-    }
-
-    private void UpdateHandItemFromHotbarIndex()
-    {
-        string newItem = "";
-        if ((hotbarIndex >= 0) && (hotbar[hotbarIndex].transform.childCount > 0)) newItem = hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item;
-
-        SetHandItem(newItem);
-    }
-
     void Start()
     {
         toolTip = FindObjectOfType<Tooltip>(true).gameObject;
@@ -231,55 +211,53 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 
     void Update()
     {
-        if (!disableHandItemAndHotbar)
+        if (disableHandItemAndHotbar) return;
+
+        // scroll wheel down the hotbar
+        if (Input.GetAxis("Mouse ScrollWheel") > 0)
         {
-            // scroll wheel down the hotbar
-            if (Input.GetAxis("Mouse ScrollWheel") > 0)
-            {
-                FindNextItem(-1);
-                UpdateHandItemFromHotbarIndex();
-            }
-            // scroll wheel up the hotbar
-            if (Input.GetAxis("Mouse ScrollWheel") < 0)
-            {
-                FindNextItem(1);
-                UpdateHandItemFromHotbarIndex();
-            }
-            // number keys for specific hotbar slots
-            if (Input.GetKeyUp(KeyCode.Alpha1))
-            {
-                hotbarIndex = 0;
-                UpdateHandItemFromHotbarIndex();
-            }
-            if (Input.GetKeyUp(KeyCode.Alpha2))
-            {
-                hotbarIndex = 1;
-                UpdateHandItemFromHotbarIndex();
-            }
-            if (Input.GetKeyUp(KeyCode.Alpha3))
-            {
-                hotbarIndex = 2;
-                UpdateHandItemFromHotbarIndex();
-            }
-            if (Input.GetKeyUp(KeyCode.Alpha4))
-            {
-                hotbarIndex = 3;
-                UpdateHandItemFromHotbarIndex();
-            }
-            if (Input.GetKeyUp(KeyCode.Alpha5))
-            {
-                hotbarIndex = 4;
-                UpdateHandItemFromHotbarIndex();
-            }
+            SetNextHotbarItem(-1);
+        }
+        // scroll wheel up the hotbar
+        if (Input.GetAxis("Mouse ScrollWheel") < 0)
+        {
+            SetNextHotbarItem(1);
+        }
+        // number keys for specific hotbar slots
+        if (Input.GetKeyUp(KeyCode.Alpha1))
+        {
+            SetHandItem(0);
+        }
+        if (Input.GetKeyUp(KeyCode.Alpha2))
+        {
+            SetHandItem(1);
+        }
+        if (Input.GetKeyUp(KeyCode.Alpha3))
+        {
+            SetHandItem(2);
+        }
+        if (Input.GetKeyUp(KeyCode.Alpha4))
+        {
+            SetHandItem(3);
+        }
+        if (Input.GetKeyUp(KeyCode.Alpha5))
+        {
+            SetHandItem(4);
         }
     }
 
-    public void FindNextItem(int direction, int tryCount = 0)
+    public void SetNextHotbarItem(int direction)
     {
-        hotbarIndex = (hotbarIndex + direction + hotbar.Count) % hotbar.Count;
-        if (hotbar[hotbarIndex].transform.childCount > 0) return;
-        if (tryCount > hotbar.Count) return;
-        FindNextItem(direction, tryCount + 1);
+        for (int i = 1; i < hotbar.Count; i++)
+        {
+            int index = (hotbarIndex + hotbar.Count + i * direction) % hotbar.Count;
+            var icon = GetHotbarIcon(index);
+            if (icon != null)
+            {
+                SetHandItem(index);
+                return;
+            }
+        }
     }
 
     private InventoryIcon GetHotbarIcon(int index)
