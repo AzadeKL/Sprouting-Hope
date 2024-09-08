@@ -363,6 +363,7 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
                                     playerInventory.gameObject.transform.position = hardwareReturn.position;
                                     break;
                             }
+                            camera.indoor = false;
                         }
                         else
                         {
