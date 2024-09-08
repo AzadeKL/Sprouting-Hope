@@ -26,6 +26,8 @@ public class CameraMovement : MonoBehaviour
     private float height;
     private float width;
 
+    public bool indoor = false;
+
 
     void Awake()
     {
@@ -46,8 +48,9 @@ public class CameraMovement : MonoBehaviour
             Vector2 delta_position;
             delta_position = (Vector2) player.transform.position - player_prev_position;
             transform.Translate(delta_position);*/
-        transform.position = new Vector3(Mathf.Clamp(player.transform.position.x, worldMin.x + width / 2, worldMax.x - width / 2),
+        if (!indoor) transform.position = new Vector3(Mathf.Clamp(player.transform.position.x, worldMin.x + width / 2, worldMax.x - width / 2),
             Mathf.Clamp(player.transform.position.y, worldMin.y + height / 2, worldMax.y - height / 2), transform.position.z);
+        else transform.position = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
         //}
         player_prev_position = player.transform.position;
     }

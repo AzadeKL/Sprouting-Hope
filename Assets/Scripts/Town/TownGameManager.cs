@@ -15,6 +15,9 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
     private Toggle helpToggle;
     [SerializeField] private string showHelpOnNewGameKey = "showHelpOnNewGame";
 
+    [Header("DEBUG")]
+    [SerializeField] private bool allowTP;
+
     [Header("Time")]
     private DayNightCycle dayNightCycle;
     private float time;
@@ -31,6 +34,7 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
     [Header("Player")]
     public GameObject player;
     private PlayerInventory playerInventory;
+    [SerializeField] private CameraMovement camera;
     public GameObject inventoryUI;
     public Image inventoryUIHeaderImage;
     public TextMeshProUGUI inventoryUIHeaderTextField;
@@ -56,6 +60,18 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
     [SerializeField] private GameObject toolsUI;
     public List<TileBase> animals;
     [SerializeField] private GameObject animalsUI;
+
+    [Space]
+    [Header("IndoorCoordinates")]
+    [SerializeField] TileBase exitBuilding;
+
+    [SerializeField] private string inBuilding;
+    [SerializeField] private Transform aidTP;
+    [SerializeField] private Transform hardwareTP;
+    [SerializeField] private Transform restaurantTP;
+    [SerializeField] private Transform aidReturn;
+    [SerializeField] private Transform hardwareReturn;
+    [SerializeField] private Transform restaurantReturn;
 
     [Space]
     [Header("UpgradeManager")]
@@ -224,11 +240,20 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
 
                         if (interactWBuildingKeyPressed)
                         {
-                            inventoryUI.SetActive(true);
-                            playerInventory.sellMode = true;
-                            inventoryUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().color = sellInventory;
-                            inventoryUIHeaderImage.color = sellInventory;
-                            inventoryUIHeaderTextField.text = "Fresh Food";
+                            if (allowTP)
+                            {
+                                playerInventory.gameObject.transform.position = restaurantTP.position;
+                                inBuilding = "Restaurant";
+                                camera.indoor = true;
+                            }
+                            else
+                            {
+                                inventoryUI.SetActive(true);
+                                playerInventory.sellMode = true;
+                                inventoryUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().color = sellInventory;
+                                inventoryUIHeaderImage.color = sellInventory;
+                                inventoryUIHeaderTextField.text = "Fresh Food";
+                            }
                         }
                         else
                         {
@@ -240,6 +265,8 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
                     }
                     else if (truck.Contains(buildings.GetTile(gridPosition + neighborPosition)))
                     {
+                        Debugger.Log("Interacting with Truck!", Debugger.PriorityLevel.LeastImportant);
+
                         if (interactWBuildingKeyPressed)
                         {
                             // TODO: Find an event that triggers right before scene unload
@@ -258,11 +285,20 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
 
                         if (interactWBuildingKeyPressed)
                         {
-                            inventoryUI.SetActive(true);
-                            playerInventory.giveMode = true;
-                            inventoryUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().color = giveInventory;
-                            inventoryUIHeaderImage.color = giveInventory;
-                            inventoryUIHeaderTextField.text = "Donate";
+                            if (allowTP)
+                            {
+                                playerInventory.gameObject.transform.position = aidTP.position;
+                                inBuilding = "Aid";
+                                camera.indoor = true;
+                            }
+                            else
+                            {
+                                inventoryUI.SetActive(true);
+                                playerInventory.giveMode = true;
+                                inventoryUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().color = giveInventory;
+                                inventoryUIHeaderImage.color = giveInventory;
+                                inventoryUIHeaderTextField.text = "Donate";
+                            }
                         }
                         else
                         {
@@ -278,7 +314,16 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
 
                         if (interactWBuildingKeyPressed)
                         {
-                            toolsUI.SetActive(true);
+                            if (allowTP)
+                            {
+                                playerInventory.gameObject.transform.position = hardwareTP.position;
+                                inBuilding = "Hardware";
+                                camera.indoor = true;
+                            }
+                            else
+                            {
+                                toolsUI.SetActive(true);
+                            }
                         }
                         else
                         {
@@ -301,6 +346,28 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
                         }
 
                         break;
+                    }
+                    else if (exitBuilding == buildings.GetTile(gridPosition + neighborPosition))
+                    {
+                        if (interactWBuildingKeyPressed)
+                        {
+                            switch (inBuilding)
+                            {
+                                case "Aid":
+                                    playerInventory.gameObject.transform.position = aidReturn.position;
+                                    break;
+                                case "Restaurant":
+                                    playerInventory.gameObject.transform.position = restaurantReturn.position;
+                                    break;
+                                case "Hardware":
+                                    playerInventory.gameObject.transform.position = hardwareReturn.position;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            playerWorldCanvas.SetActive(true);
+                        }
                     }
                 }
                 else
