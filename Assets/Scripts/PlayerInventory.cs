@@ -2,12 +2,13 @@ using SaveSystem;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 {
-
-    [SerializeField] private bool inTown;
+    [FormerlySerializedAs("inTown")]
+    [SerializeField] private bool disableHandItemAndHotbar = false;
     // label of item is currently equipped to hand
     public string handItem = "";
 
@@ -307,7 +308,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             AddToInventory("Rusty Watering Can");
             AddToInventory("Rusty Hoe");
 
-            if (!inTown) SetHandItem("Rusty Shovel");
+            if (!disableHandItemAndHotbar) SetHandItem("Rusty Shovel");
         }
 
     }
@@ -315,7 +316,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 
     void Update()
     {
-        if (!inTown)
+        if (!disableHandItemAndHotbar)
         {
             // scroll wheel down the hotbar
             if (Input.GetAxis("Mouse ScrollWheel") > 0)
