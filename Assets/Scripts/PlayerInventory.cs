@@ -19,7 +19,6 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
     // inventory
     public Transform[] newInventory;
 
-
     // sell mode for when at restaurant
     public bool sellMode = false;
 
@@ -27,7 +26,6 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
     public bool giveMode = false;
 
     public int money = 500;
-
 
     public GameObject inventoryIcon;
     [SerializeField] private GameObject handIcon;
@@ -59,7 +57,6 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             }
         }
     }
-
 
     public bool Load(GameData gameData)
     {
@@ -147,96 +144,6 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         }
     }
 
-    /*public void AddToInventory(string Item, int Count = 1)
-    {
-        //Debug.Log(Item);
-        if (inventory.ContainsKey(Item))
-        {
-            inventory[Item] += Count;
-            inventoryIcons[Item].GetComponent<InventoryIcon>().UpdateQuantity(inventory[Item]);
-        }
-        else
-        {
-            inventory.Add(Item, Count);
-            inventoryIndex.Add(Item);
-            int i = 0;
-            while (inventoryGrid.transform.GetChild(i).transform.childCount != 0) i++;
-            GameObject newIcon = Instantiate(inventoryIcon, inventoryGrid.transform.GetChild(i).transform);
-            newIcon.GetComponent<InventoryIcon>().SetIcon(Item);
-            newIcon.GetComponent<InventoryIcon>().UpdateQuantity(inventory[Item]);
-            inventoryIcons.Add(Item, newIcon);
-        }
-        inventoryChanged.TriggerEvent();
-        //Debug.Log(Item + ", " + inventory[Item]);
-    }
-
-    // remove one of said item from the inventory, if last item was removed, remove the spot from the grid
-    public void RemoveFromInventory(string Item, int Count = 1)
-    {
-        // failsafe check in case inventory doesn't have requested item
-        if (inventory.ContainsKey(Item))
-        {
-            // subtract quantity of item by 1
-            inventory[Item] -= Count;
-            inventoryIcons[Item].GetComponent<InventoryIcon>().UpdateQuantity(inventory[Item]);
-
-            // if item slot is empty, remove from the dicts and lists and ui panel
-            if (inventory[Item] == 0)
-            {
-                toolTip.SetActive(false);
-                GameObject icon = inventoryIcons[Item];
-                inventoryIcons.Remove(Item);
-                GameObject parent = icon.transform.parent.gameObject;
-                //GameObject newParent = Instantiate(parent, parent.transform.parent);
-                Destroy(parent.transform.GetChild(0).gameObject);
-                //Destroy(parent);
-                inventory.Remove(Item);
-                inventoryIndex.Remove(Item);
-
-                // update hand icon in case holding last item used (like using last seed)
-                if (handItem == Item) { ChangeHandItemToPrevItem(); Debug.Log("changing hands"); }
-            }
-        }
-        inventoryChanged.TriggerEvent();
-    }
-
-    // remove said item from the inventory for dragging and other inventories
-    public void RemoveFromInventoryOnly(string Item, bool full)
-    {
-        Debugger.Log("Dragging", Debugger.PriorityLevel.LeastImportant);
-        // left click take all items from inventory, removing from dicts
-        if (full)
-        {
-            if (handItem == Item) { ChangeHandItemToPrevItem(); Debug.Log("changing hands"); }
-            toolTip.SetActive(false);
-            GameObject icon = inventoryIcons[Item];
-            inventoryIcons.Remove(Item);
-            inventory.Remove(Item);
-            inventoryIndex.Remove(Item);
-        }
-        // right click take (bigger) half items from inventory
-        else
-        {
-            toolTip.SetActive(false);
-            GameObject icon = inventoryIcons[Item];
-            //Debug.Log(Mathf.Ceil(inventory[Item] / 2f));
-            //Debug.Log(Mathf.Floor(inventory[Item] / 2f));
-
-            if ((int) Mathf.Floor(inventory[Item] / 2f) == 0)
-            {
-                RemoveFromInventoryOnly(Item, true);
-                return;
-            }
-
-            icon.GetComponent<InventoryIcon>().UpdateQuantity((int) Mathf.Ceil(inventory[Item] / 2f));
-            inventory[Item] = (int) Mathf.Floor(inventory[Item] / 2f);
-            inventoryIcons[Item] = Instantiate(inventoryIcon, icon.GetComponent<InventoryIcon>().lastParent);
-            inventoryIcons[Item].GetComponent<InventoryIcon>().SetIcon(Item);
-            inventoryIcons[Item].GetComponent<InventoryIcon>().UpdateQuantity(inventory[Item]);
-        }
-        inventoryChanged.TriggerEvent();
-    }*/
-
     public int GetSelectedHotbarIndex()
     {
         return hotbarIndex;
@@ -261,7 +168,6 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             return;
         }
 
-
         // change hand icon to item icon to display what is currently in hand
         handIcon.GetComponent<Image>().enabled = true;
         handIcon.GetComponent<Image>().sprite = hotbar[hotbarIndex].transform.GetChild(0).gameObject.GetComponent<Image>().sprite;
@@ -278,16 +184,6 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             }
         }
     }
-
-    /*public void ChangeHandItemToPrevItem()
-    {
-        if (handItem == "") return;
-
-        string newItem = "";
-        int handItemIndex = (inventoryIndex.IndexOf(handItem) - 1 + inventoryIndex.Count) % inventoryIndex.Count;
-        if (handItem != inventoryIndex[handItemIndex]) newItem = inventoryIndex[handItemIndex];
-        SetHandItem(newItem);
-    }*/
 
     private void UpdateHandItemFromHotbarIndex()
     {
@@ -312,7 +208,6 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         }
 
     }
-
 
     void Update()
     {
@@ -359,8 +254,6 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         }
     }
 
-
-
     public void FindNextItem(int direction, int tryCount = 0)
     {
         hotbarIndex = (hotbarIndex + direction + hotbar.Count) % hotbar.Count;
@@ -368,7 +261,6 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         if (tryCount > hotbar.Count) return;
         FindNextItem(direction, tryCount + 1);
     }
-
 
     public List<InventoryIcon> GetHotbarItems()
     {
@@ -385,7 +277,6 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             {
                 list.Add(null);
             }
-
 
         }
         return list;
