@@ -11,9 +11,6 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
     // label of item is currently equipped to hand
     public string handItem = "";
 
-    // hotbar that can scroll through
-    public List<string> inventoryIndex;
-
     // hotbar
     [SerializeField] private List<GameObject> hotbar;
     private int hotbarIndex;
@@ -82,9 +79,6 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             }
         }
 
-        inventoryIndex = new List<string>();
-        //inventory = new Dictionary<string, int>();
-        //inventoryIcons = new Dictionary<string, GameObject>();
         if (gameData.playerInventoryInventoryItems.Count != gameData.playerInventoryInventoryQuantities.Count)
         {
             handItem = "";
