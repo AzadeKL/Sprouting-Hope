@@ -3,18 +3,17 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.U2D;
 using UnityEngine.UI;
 
 public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 {
     [FormerlySerializedAs("inTown")]
     [SerializeField] private bool disableHandItemAndHotbar = false;
-    // label of item is currently equipped to hand
-    public string handItem = "";
 
     // hotbar
+    [SerializeField] private int hotbarIndex = -1; // Index of current hand item
     [SerializeField] private List<GameObject> hotbar;
-    private int hotbarIndex;
 
     // inventory
     public Transform[] newInventory;
@@ -31,7 +30,8 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
     [SerializeField] private GameObject handIcon;
     [SerializeField] private PlayerTool playerTool;
 
-    [SerializeField] private GameEvent handChanged;
+    [FormerlySerializedAs("handChanged")]
+    [SerializeField] private GameEvent handItemChanged;
     [SerializeField] private GameEvent inventoryChanged;
 
     private GameObject toolTip;//Ui tool tip
@@ -39,7 +39,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
     {
         gameData.playerInventoryData = new List<string>();
         var data = gameData.playerInventoryData;
-        ISaveable.AddKey(data, "handItem", handItem);
+        ISaveable.AddKey(data, "hotbarIndex", hotbarIndex);
         ISaveable.AddKey(data, "money", money);
 
         gameData.playerInventoryInventoryItems = new List<string>();
@@ -65,8 +65,8 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             var parsed = ISaveable.ParseKey(key_value);
             switch (parsed[0])
             {
-                case "handItem":
-                    handItem = parsed[1];
+                case "hotbarIndex":
+                    hotbarIndex = Convert.ToInt32(parsed[1]);
                     break;
                 case "money":
                     money = Convert.ToInt32(parsed[1]);
@@ -79,7 +79,6 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 
         if (gameData.playerInventoryInventoryItems.Count != gameData.playerInventoryInventoryQuantities.Count)
         {
-            handItem = "";
             return false;
         }
         for (var i = 0; i < gameData.playerInventoryInventoryItems.Count; i++)
@@ -92,7 +91,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             inventoryChanged.TriggerEvent();
         }
 
-        //SetHandItem(handItem);
+        SetHandItem(hotbarIndex);
 
         return true;
     }
@@ -144,6 +143,12 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         }
     }
 
+    public string GetHandItemName()
+    {
+        var icon = GetHotbarIcon(hotbarIndex);
+        return (icon != null) ? icon.item :  "";
+    }
+
     public int GetSelectedHotbarIndex()
     {
         return hotbarIndex;
@@ -151,38 +156,53 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
 
     public void SetHandItem(int hotbarIndex)
     {
-        this.hotbarIndex = hotbarIndex;
-        UpdateHandItemFromHotbarIndex();
-    }
+        this.hotbarIndex = (hotbarIndex >= hotbar.Count) ? -1 : hotbarIndex;
 
-    public void SetHandItem(string Item)
-    {
-        handItem = Item;
-
-        // if nothing in hand, do not show image
-        if (Item == "")
+        var icon = GetHotbarIcon(this.hotbarIndex);
+        if (icon == null)
         {
             handIcon.GetComponent<Image>().enabled = false;
+            handIcon.GetComponent<Image>().sprite = null;
             playerTool.visual.enabled = false;
-            handChanged.TriggerEvent(null);
-            return;
+            playerTool.visual.sprite = null;
+        }
+        else
+        {
+            var sprite = icon.GetComponent<Image>().sprite;
+            handIcon.GetComponent<Image>().enabled = true;
+            handIcon.GetComponent<Image>().sprite = sprite;
+            playerTool.visual.enabled = true;
+            playerTool.visual.sprite = sprite;
         }
 
-        // change hand icon to item icon to display what is currently in hand
-        handIcon.GetComponent<Image>().enabled = true;
-        handIcon.GetComponent<Image>().sprite = hotbar[hotbarIndex].transform.GetChild(0).gameObject.GetComponent<Image>().sprite;
-        playerTool.visual.enabled = true;
-        playerTool.visual.sprite = hotbar[hotbarIndex].transform.GetChild(0).gameObject.GetComponent<Image>().sprite;
-        handChanged.TriggerEvent(hotbar[hotbarIndex].transform.GetChild(0).gameObject);
+        handItemChanged.TriggerEvent();
+    }
 
-        for (int i = 0; i < hotbar.Count; ++i)
+    public void SetHandItem(string item)
+    {
+        int index = -1;
+
+        if (item != "")
         {
-            if (hotbar[i].transform.childCount > 0 && hotbar[i].transform.GetChild(0).GetComponent<InventoryIcon>().item == handItem)
+            for (int i = 0; i < hotbar.Count; ++i)
             {
-                hotbarIndex = i;
-                break;
+                if (hotbar[i].transform.childCount <= 0) continue;
+                var icon = hotbar[i].transform.GetChild(0).GetComponent<InventoryIcon>();
+                if ((icon == null) || (icon.quantity <= 0)) continue;
+                if (icon.item == item)
+                {
+                    index = i;
+                    break;
+                }
             }
         }
+
+        SetHandItem(index);
+    }
+
+    private string GetHotbarItemName(int hotbarIndex)
+    {
+        return ((hotbarIndex >= 0) && (hotbar[hotbarIndex].transform.childCount > 0)) ? hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item : "";
     }
 
     private void UpdateHandItemFromHotbarIndex()
@@ -262,29 +282,18 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         FindNextItem(direction, tryCount + 1);
     }
 
+    private InventoryIcon GetHotbarIcon(int index)
+    {
+        if ((index < 0) || (index >= hotbar.Count)) return null;
+        if (hotbar[index].transform.childCount <= 0) return null;
+        var icon = hotbar[index].transform.GetChild(0).GetComponent<InventoryIcon>();
+        return (icon.quantity > 0)  ? icon : null;
+    }
+
     public List<InventoryIcon> GetHotbarItems()
     {
-        var list = new List<InventoryIcon>();
-        foreach (var item in hotbar)
-        {
-            if (item.transform.childCount > 0)
-            {
-                var icon = item.transform.GetChild(0).GetComponent<InventoryIcon>();
-                if (icon.quantity <= 0)
-                {
-                    list.Add(null);
-                }
-                else
-                {
-                    list.Add(icon);
-                }
-            }
-            else
-            {
-                list.Add(null);
-            }
-
-        }
+        var list = new List<InventoryIcon>(hotbar.Count);
+        for (var i = 0; i < hotbar.Count; i++) list.Add(GetHotbarIcon(i));
         return list;
     }
 }

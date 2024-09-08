@@ -949,7 +949,7 @@ public class FarmGameManager : MonoBehaviour, SaveSystem.ISaveable
                 Vector3Int gridPosition = farmLand.WorldToCell(tilePos);
                 TileBase clickedTile = farmLand.GetTile(gridPosition);
                 // if farmland, check what tool was used
-                string handItem = playerInventory.handItem;
+                string handItem = playerInventory.GetHandItemName();
                 if (clickedTile) switch (handItem)
                     {
                         // if Shovel equipped, till souil
