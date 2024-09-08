@@ -6560,9 +6560,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9b1ac18e7b7f964ebf47214eeffb8c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  handChanged: {fileID: 11400000, guid: 38b3eee96365b2046ae19c4c54c014fc, type: 2}
-  playerInventory: {fileID: 1822348387}
-  hotbarSelectedImages:
+  selectedItemChanged: {fileID: 11400000, guid: 38b3eee96365b2046ae19c4c54c014fc, type: 2}
+  hotbarUser: {fileID: 1822348387}
+  itemImages:
   - {fileID: 1476501579}
   - {fileID: 502816388}
   - {fileID: 1960788829}
@@ -6583,14 +6583,11 @@ MonoBehaviour:
   gameEvent: {fileID: 11400000, guid: 38b3eee96365b2046ae19c4c54c014fc, type: 2}
   onEventTriggered:
     m_PersistentCalls:
-      m_Calls: []
-  onEventTriggeredWithParameter:
-    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 555502814}
         m_TargetAssemblyTypeName: HotBarManager, Assembly-CSharp
-        m_MethodName: OnHandChanged
-        m_Mode: 0
+        m_MethodName: OnSelectionChanged
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -6599,6 +6596,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onEventTriggeredWithParameter:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &555502816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6617,7 +6617,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 555502814}
         m_TargetAssemblyTypeName: HotBarManager, Assembly-CSharp
-        m_MethodName: OnInventoryChanged
+        m_MethodName: OnAvailableItemsChanged
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -32999,7 +32999,7 @@ PrefabInstance:
       objectReference: {fileID: 555502814}
     - target: {fileID: 4892186777328739501, guid: 066bc6c0a3eeaaa4ebd6c80632d57a29, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ChangeHandItem
+      value: SelectItem
       objectReference: {fileID: 0}
     - target: {fileID: 4892186777328739501, guid: 066bc6c0a3eeaaa4ebd6c80632d57a29, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -33233,7 +33233,7 @@ PrefabInstance:
       objectReference: {fileID: 555502814}
     - target: {fileID: 4892186777328739501, guid: 066bc6c0a3eeaaa4ebd6c80632d57a29, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ChangeHandItem
+      value: SelectItem
       objectReference: {fileID: 0}
     - target: {fileID: 4892186777328739501, guid: 066bc6c0a3eeaaa4ebd6c80632d57a29, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -34272,7 +34272,7 @@ PrefabInstance:
       objectReference: {fileID: 555502814}
     - target: {fileID: 4892186777328739501, guid: 066bc6c0a3eeaaa4ebd6c80632d57a29, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ChangeHandItem
+      value: SelectItem
       objectReference: {fileID: 0}
     - target: {fileID: 4892186777328739501, guid: 066bc6c0a3eeaaa4ebd6c80632d57a29, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -40005,7 +40005,6 @@ MonoBehaviour:
   - {fileID: 1783417337}
   - {fileID: 1404549799}
   - {fileID: 1198524950}
-  hotbarIndex: 0
   newInventory:
   - {fileID: 1966816148}
   - {fileID: 853325669}
@@ -41058,7 +41057,7 @@ PrefabInstance:
       objectReference: {fileID: 555502814}
     - target: {fileID: 4892186777328739501, guid: 066bc6c0a3eeaaa4ebd6c80632d57a29, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ChangeHandItem
+      value: SelectItem
       objectReference: {fileID: 0}
     - target: {fileID: 4892186777328739501, guid: 066bc6c0a3eeaaa4ebd6c80632d57a29, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -41421,7 +41420,7 @@ PrefabInstance:
       objectReference: {fileID: 555502814}
     - target: {fileID: 4892186777328739501, guid: 066bc6c0a3eeaaa4ebd6c80632d57a29, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ChangeHandItem
+      value: SelectItem
       objectReference: {fileID: 0}
     - target: {fileID: 4892186777328739501, guid: 066bc6c0a3eeaaa4ebd6c80632d57a29, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName

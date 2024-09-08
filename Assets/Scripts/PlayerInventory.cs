@@ -15,8 +15,8 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
     public List<string> inventoryIndex;
 
     // hotbar
-    public List<GameObject> hotbar;
-    public int hotbarIndex;
+    [SerializeField] private List<GameObject> hotbar;
+    private int hotbarIndex;
 
     // inventory
     public Transform[] newInventory;
@@ -100,7 +100,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             inventoryChanged.TriggerEvent();
         }
 
-        //ChangeHandItem(handItem);
+        //SetHandItem(handItem);
 
         return true;
     }
@@ -242,7 +242,18 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         inventoryChanged.TriggerEvent();
     }*/
 
-    public void ChangeHandItem(string Item)
+    public int GetSelectedHotbarIndex()
+    {
+        return hotbarIndex;
+    }
+
+    public void SetHandItem(int hotbarIndex)
+    {
+        this.hotbarIndex = hotbarIndex;
+        UpdateHandItemFromHotbarIndex();
+    }
+
+    public void SetHandItem(string Item)
     {
         handItem = Item;
 
@@ -280,15 +291,15 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         string newItem = "";
         int handItemIndex = (inventoryIndex.IndexOf(handItem) - 1 + inventoryIndex.Count) % inventoryIndex.Count;
         if (handItem != inventoryIndex[handItemIndex]) newItem = inventoryIndex[handItemIndex];
-        ChangeHandItem(newItem);
+        SetHandItem(newItem);
     }*/
 
-    public void UpdateHandItemFromHotbarIndex()
+    private void UpdateHandItemFromHotbarIndex()
     {
         string newItem = "";
         if ((hotbarIndex >= 0) && (hotbar[hotbarIndex].transform.childCount > 0)) newItem = hotbar[hotbarIndex].transform.GetChild(0).GetComponent<InventoryIcon>().item;
 
-        ChangeHandItem(newItem);
+        SetHandItem(newItem);
     }
 
     void Start()
@@ -302,7 +313,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
             AddToInventory("Rusty Watering Can");
             AddToInventory("Rusty Hoe");
 
-            if (!inTown) ChangeHandItem("Rusty Shovel");
+            if (!inTown) SetHandItem("Rusty Shovel");
         }
 
     }
@@ -364,7 +375,7 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
     }
 
 
-    public List<InventoryIcon> GetHotBarItems()
+    public List<InventoryIcon> GetHotbarItems()
     {
         var list = new List<InventoryIcon>();
         foreach (var item in hotbar)

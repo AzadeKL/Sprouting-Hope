@@ -575,7 +575,7 @@ public class InventoryIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             // put selected item in hand
             else if (!playerInventory.sellMode && !playerInventory.giveMode)
             {
-                playerInventory.ChangeHandItem(item);
+                playerInventory.SetHandItem(item);
                 Debugger.Log("Value of dragged is= " + dragged, Debugger.PriorityLevel.MustShown);
             }
         }

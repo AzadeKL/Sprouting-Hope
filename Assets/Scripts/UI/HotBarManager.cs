@@ -1,95 +1,116 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
+using UnityEngine.XR;
 
+// TODO: Correct "HotBar" to "Hotbar"
 public class HotBarManager : MonoBehaviour
 {
-    [SerializeField] private GameEvent handChanged;
-    [SerializeField] private PlayerInventory playerInventory;
+    [FormerlySerializedAs("handChanged")]
+    [SerializeField] private GameEvent selectedItemChanged;
+    // TODO: Replace PlayerInventory with HotbarUser (interface)
+    [SerializeField] private PlayerInventory hotbarUser;
 
-    [SerializeField] private List<Image> hotbarSelectedImages;
-
+    [FormerlySerializedAs("hotbarSelectedImages")]
+    [SerializeField] private List<Image> itemImages;
+    private int selectedIndex = -1;
 
     private void Start()
     {
-        GetIcons();
-        foreach (var item in hotbarSelectedImages)
+        UpdateAvailableItems();
+        DeselectAllItems();
+        GetNewSelection();
+    }
+
+    private void DeselectAllItems()
+    {
+        foreach (var item in itemImages)
         {
             item.enabled = false;
         }
     }
 
-    private void GetIcons()
+    private void UpdateAvailableItems()
     {
-        List<InventoryIcon> icons = playerInventory.GetHotBarItems();
+        List<InventoryIcon> icons = hotbarUser.GetHotbarItems();
 
-        for (int i = 0; i < icons.Count; i++)
+        for (int i = 0; i < Math.Min(icons.Count, itemImages.Count); i++)
         {
 
             if (icons[i] == null || icons[i].quantity <= 0)
             {
-                var childImage = hotbarSelectedImages[i].transform.GetChild(0).GetComponentInChildren<Image>(true);
+                var childImage = itemImages[i].transform.GetChild(0).GetComponentInChildren<Image>(true);
                 childImage.enabled = false;
                 childImage.overrideSprite = null;
             }
             else
             {
-                var childImage = hotbarSelectedImages[i].transform.GetChild(0).GetComponentInChildren<Image>(true);
+                var childImage = itemImages[i].transform.GetChild(0).GetComponentInChildren<Image>(true);
                 childImage.enabled = true;
                 childImage.overrideSprite = icons[i].GetComponent<Image>().sprite;
             }
 
         }
+
+        for (int i = icons.Count; i < itemImages.Count; i++)
+        {
+            var childImage = itemImages[i].transform.GetChild(0).GetComponentInChildren<Image>(true);
+            childImage.enabled = false;
+            childImage.overrideSprite = null;
+        }
     }
 
-
-
-
-    public void ChangeHandItem(int index)
+    private void UpdateSelection(int newIndex)
     {
-        playerInventory.hotbarIndex = index;
-        playerInventory.UpdateHandItemFromHotbarIndex();
+        int lastSelectedIndex = selectedIndex;
+        selectedIndex = newIndex;
+        if (selectedIndex >= itemImages.Count) selectedIndex = -1;
+
+        if (lastSelectedIndex == selectedIndex) return;
+        if (lastSelectedIndex >= 0) itemImages[lastSelectedIndex].enabled = false;
+        if (selectedIndex >= 0) itemImages[selectedIndex].enabled = true;
     }
 
-    public void OnHandChanged(GameObject hand)
+    private int GetNewSelection()
     {
-
-        foreach (var item in hotbarSelectedImages)
-        {
-            item.enabled = false;
-        }
-
-        GetIcons();
-
-        if (hand == null) return;
-
-        var result = hand.GetComponent<InventoryIcon>();
-        var sprite = result.GetComponent<Image>().sprite;
-
-        foreach (var item in hotbarSelectedImages)
-        {
-            var childImage = item.transform.GetChild(0).GetComponentInChildren<Image>(true);
-            if (childImage.overrideSprite == sprite)
-            {
-                item.enabled = true;
-            }
-        }
-
+        return hotbarUser.GetSelectedHotbarIndex();
     }
 
-    public void OnInventoryChanged()
+    private int GetNewSelection(GameObject selectedItem)
     {
-        GetIcons();
+        if (selectedItem == null) return -1;
 
-        if (playerInventory.hotbar[playerInventory.hotbarIndex].transform.childCount == 0)
+        var sprite = selectedItem.GetComponent<InventoryIcon>().GetComponent<Image>().sprite;
+        for (int i = 0; i < itemImages.Count; i++)
         {
-            foreach (var item in hotbarSelectedImages)
-            {
-                item.enabled = false;
-            }
+            var childImage = itemImages[i].transform.GetChild(0).GetComponentInChildren<Image>(true);
+            if (childImage.overrideSprite == sprite) return i;
         }
 
+        return -1;
+    }
+
+    public void SelectItem(int hotbarIndex)
+    {
+        // TODO: Configure this as a Component or Trigger
+        hotbarUser.SetHandItem(hotbarIndex);
+    }
+
+    public void OnSelectionChanged()
+    {
+        UpdateSelection(GetNewSelection());
+    }
+
+    public void OnSelectionChanged(GameObject item)
+    {
+        UpdateSelection(GetNewSelection(item));
+    }
+
+    public void OnAvailableItemsChanged()
+    {
+        UpdateAvailableItems();
     }
 
 }
