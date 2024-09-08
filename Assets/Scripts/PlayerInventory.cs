@@ -269,9 +269,15 @@ public class PlayerInventory : MonoBehaviour, SaveSystem.ISaveable
         {
             if (item.transform.childCount > 0)
             {
-                var result = item.transform.GetChild(0).GetComponent<InventoryIcon>();
-                list.Add(result);
-
+                var icon = item.transform.GetChild(0).GetComponent<InventoryIcon>();
+                if (icon.quantity <= 0)
+                {
+                    list.Add(null);
+                }
+                else
+                {
+                    list.Add(icon);
+                }
             }
             else
             {
