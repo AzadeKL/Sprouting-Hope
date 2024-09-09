@@ -12,15 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d1514134bc4fbd41bb739b1b9a49231, type: 3}
   m_Name: Aid Worker 1
   m_EditorClassIdentifier: 
-  m_DefaultSprite: {fileID: -1364795957, guid: da938b6c90cedb3458c0cbf139f3f0bb, type: 3}
+  m_DefaultSprite: {fileID: -1066568640, guid: dd2a3fdc4d09ed6499f26bc1efae2e48, type: 3}
   m_DefaultGameObject: {fileID: 0}
   m_DefaultColliderType: 1
   m_TilingRules:
   - m_Id: 0
     m_Sprites:
-    - {fileID: -1228000216, guid: da938b6c90cedb3458c0cbf139f3f0bb, type: 3}
-    - {fileID: 1408720531, guid: da938b6c90cedb3458c0cbf139f3f0bb, type: 3}
-    - {fileID: 1009152797, guid: da938b6c90cedb3458c0cbf139f3f0bb, type: 3}
+    - {fileID: -1066568640, guid: dd2a3fdc4d09ed6499f26bc1efae2e48, type: 3}
+    - {fileID: -995809834, guid: dd2a3fdc4d09ed6499f26bc1efae2e48, type: 3}
+    - {fileID: -838641380, guid: dd2a3fdc4d09ed6499f26bc1efae2e48, type: 3}
+    - {fileID: 176109502, guid: dd2a3fdc4d09ed6499f26bc1efae2e48, type: 3}
+    - {fileID: 2095293261, guid: dd2a3fdc4d09ed6499f26bc1efae2e48, type: 3}
+    - {fileID: -1867713150, guid: dd2a3fdc4d09ed6499f26bc1efae2e48, type: 3}
+    - {fileID: 1873889331, guid: dd2a3fdc4d09ed6499f26bc1efae2e48, type: 3}
+    - {fileID: 1491366924, guid: dd2a3fdc4d09ed6499f26bc1efae2e48, type: 3}
+    - {fileID: -438531574, guid: dd2a3fdc4d09ed6499f26bc1efae2e48, type: 3}
+    - {fileID: -534862719, guid: dd2a3fdc4d09ed6499f26bc1efae2e48, type: 3}
+    - {fileID: -1496685553, guid: dd2a3fdc4d09ed6499f26bc1efae2e48, type: 3}
+    - {fileID: 1821323665, guid: dd2a3fdc4d09ed6499f26bc1efae2e48, type: 3}
+    - {fileID: -1159937715, guid: dd2a3fdc4d09ed6499f26bc1efae2e48, type: 3}
+    - {fileID: 1357853439, guid: dd2a3fdc4d09ed6499f26bc1efae2e48, type: 3}
     m_GameObject: {fileID: 0}
     m_MinAnimationSpeed: 1
     m_MaxAnimationSpeed: 1

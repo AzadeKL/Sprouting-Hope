@@ -12,15 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d1514134bc4fbd41bb739b1b9a49231, type: 3}
   m_Name: TownsPerson 2
   m_EditorClassIdentifier: 
-  m_DefaultSprite: {fileID: -1364795957, guid: da938b6c90cedb3458c0cbf139f3f0bb, type: 3}
+  m_DefaultSprite: {fileID: 691202682, guid: 9bc962d99cbaccd429509ca65e426ba9, type: 3}
   m_DefaultGameObject: {fileID: 0}
   m_DefaultColliderType: 1
   m_TilingRules:
   - m_Id: 0
     m_Sprites:
-    - {fileID: -1228000216, guid: da938b6c90cedb3458c0cbf139f3f0bb, type: 3}
-    - {fileID: 1408720531, guid: da938b6c90cedb3458c0cbf139f3f0bb, type: 3}
-    - {fileID: 1009152797, guid: da938b6c90cedb3458c0cbf139f3f0bb, type: 3}
+    - {fileID: 691202682, guid: 9bc962d99cbaccd429509ca65e426ba9, type: 3}
+    - {fileID: -887221748, guid: 9bc962d99cbaccd429509ca65e426ba9, type: 3}
+    - {fileID: -1868282550, guid: 9bc962d99cbaccd429509ca65e426ba9, type: 3}
+    - {fileID: 1986554645, guid: 9bc962d99cbaccd429509ca65e426ba9, type: 3}
+    - {fileID: 1594515523, guid: 9bc962d99cbaccd429509ca65e426ba9, type: 3}
+    - {fileID: -2101068312, guid: 9bc962d99cbaccd429509ca65e426ba9, type: 3}
+    - {fileID: -1620389656, guid: 9bc962d99cbaccd429509ca65e426ba9, type: 3}
+    - {fileID: 659948655, guid: 9bc962d99cbaccd429509ca65e426ba9, type: 3}
+    - {fileID: 947607321, guid: 9bc962d99cbaccd429509ca65e426ba9, type: 3}
+    - {fileID: 2022538598, guid: 9bc962d99cbaccd429509ca65e426ba9, type: 3}
+    - {fileID: -833735794, guid: 9bc962d99cbaccd429509ca65e426ba9, type: 3}
+    - {fileID: 669528044, guid: 9bc962d99cbaccd429509ca65e426ba9, type: 3}
+    - {fileID: 887837904, guid: 9bc962d99cbaccd429509ca65e426ba9, type: 3}
+    - {fileID: 155769927, guid: 9bc962d99cbaccd429509ca65e426ba9, type: 3}
     m_GameObject: {fileID: 0}
     m_MinAnimationSpeed: 1
     m_MaxAnimationSpeed: 1

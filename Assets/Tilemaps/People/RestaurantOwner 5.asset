@@ -12,15 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d1514134bc4fbd41bb739b1b9a49231, type: 3}
   m_Name: RestaurantOwner 5
   m_EditorClassIdentifier: 
-  m_DefaultSprite: {fileID: -1364795957, guid: da938b6c90cedb3458c0cbf139f3f0bb, type: 3}
+  m_DefaultSprite: {fileID: -1434532491, guid: 0d240d21380ef2b4b926a0c5aa2b6f4d, type: 3}
   m_DefaultGameObject: {fileID: 0}
   m_DefaultColliderType: 1
   m_TilingRules:
   - m_Id: 0
     m_Sprites:
-    - {fileID: -1228000216, guid: da938b6c90cedb3458c0cbf139f3f0bb, type: 3}
-    - {fileID: 1408720531, guid: da938b6c90cedb3458c0cbf139f3f0bb, type: 3}
-    - {fileID: 1009152797, guid: da938b6c90cedb3458c0cbf139f3f0bb, type: 3}
+    - {fileID: -1434532491, guid: 0d240d21380ef2b4b926a0c5aa2b6f4d, type: 3}
+    - {fileID: -1250220347, guid: 0d240d21380ef2b4b926a0c5aa2b6f4d, type: 3}
+    - {fileID: 1243716243, guid: 0d240d21380ef2b4b926a0c5aa2b6f4d, type: 3}
+    - {fileID: -309339013, guid: 0d240d21380ef2b4b926a0c5aa2b6f4d, type: 3}
+    - {fileID: 10281113, guid: 0d240d21380ef2b4b926a0c5aa2b6f4d, type: 3}
+    - {fileID: 1854199255, guid: 0d240d21380ef2b4b926a0c5aa2b6f4d, type: 3}
+    - {fileID: 382638895, guid: 0d240d21380ef2b4b926a0c5aa2b6f4d, type: 3}
+    - {fileID: -622200034, guid: 0d240d21380ef2b4b926a0c5aa2b6f4d, type: 3}
+    - {fileID: -111662256, guid: 0d240d21380ef2b4b926a0c5aa2b6f4d, type: 3}
+    - {fileID: 1863877261, guid: 0d240d21380ef2b4b926a0c5aa2b6f4d, type: 3}
+    - {fileID: 551202030, guid: 0d240d21380ef2b4b926a0c5aa2b6f4d, type: 3}
+    - {fileID: 1373964440, guid: 0d240d21380ef2b4b926a0c5aa2b6f4d, type: 3}
+    - {fileID: 1453258931, guid: 0d240d21380ef2b4b926a0c5aa2b6f4d, type: 3}
+    - {fileID: -911243554, guid: 0d240d21380ef2b4b926a0c5aa2b6f4d, type: 3}
     m_GameObject: {fileID: 0}
     m_MinAnimationSpeed: 1
     m_MaxAnimationSpeed: 1

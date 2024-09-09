@@ -12,15 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d1514134bc4fbd41bb739b1b9a49231, type: 3}
   m_Name: Aid Worker 2
   m_EditorClassIdentifier: 
-  m_DefaultSprite: {fileID: -1364795957, guid: da938b6c90cedb3458c0cbf139f3f0bb, type: 3}
+  m_DefaultSprite: {fileID: -865950259, guid: 7b4676c836bfa4745b0942d67df39758, type: 3}
   m_DefaultGameObject: {fileID: 0}
   m_DefaultColliderType: 1
   m_TilingRules:
   - m_Id: 0
     m_Sprites:
-    - {fileID: -1228000216, guid: da938b6c90cedb3458c0cbf139f3f0bb, type: 3}
-    - {fileID: 1408720531, guid: da938b6c90cedb3458c0cbf139f3f0bb, type: 3}
-    - {fileID: 1009152797, guid: da938b6c90cedb3458c0cbf139f3f0bb, type: 3}
+    - {fileID: -865950259, guid: 7b4676c836bfa4745b0942d67df39758, type: 3}
+    - {fileID: 1853608885, guid: 7b4676c836bfa4745b0942d67df39758, type: 3}
+    - {fileID: 1566984340, guid: 7b4676c836bfa4745b0942d67df39758, type: 3}
+    - {fileID: 904108452, guid: 7b4676c836bfa4745b0942d67df39758, type: 3}
+    - {fileID: -1730281946, guid: 7b4676c836bfa4745b0942d67df39758, type: 3}
+    - {fileID: 91664850, guid: 7b4676c836bfa4745b0942d67df39758, type: 3}
+    - {fileID: 165330945, guid: 7b4676c836bfa4745b0942d67df39758, type: 3}
+    - {fileID: 869470279, guid: 7b4676c836bfa4745b0942d67df39758, type: 3}
+    - {fileID: -1106597352, guid: 7b4676c836bfa4745b0942d67df39758, type: 3}
+    - {fileID: 1885541004, guid: 7b4676c836bfa4745b0942d67df39758, type: 3}
+    - {fileID: -1781297630, guid: 7b4676c836bfa4745b0942d67df39758, type: 3}
+    - {fileID: -1489928684, guid: 7b4676c836bfa4745b0942d67df39758, type: 3}
+    - {fileID: 108364440, guid: 7b4676c836bfa4745b0942d67df39758, type: 3}
+    - {fileID: 1722717201, guid: 7b4676c836bfa4745b0942d67df39758, type: 3}
     m_GameObject: {fileID: 0}
     m_MinAnimationSpeed: 1
     m_MaxAnimationSpeed: 1

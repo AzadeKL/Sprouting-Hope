@@ -53303,9 +53303,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0.070063695
+    y: 0.01084991
     width: 1
-    height: 0.85987264
+    height: 0.97649187
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
@@ -53355,6 +53355,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1822348381}
   boundsMap: {fileID: 815991780}
+  indoor: 0
 --- !u!114 &519420034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53415,7 +53416,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   helpUI: {fileID: 354474628}
   showHelpOnNewGameKey: showHelpOnNewGame
-  time: 0
   time24HFormat:
     UseConstant: 1
     ConstantValue: 0
@@ -53439,25 +53439,26 @@ MonoBehaviour:
   itemRange: 70
   playerWorldCanvas: {fileID: 1559062218}
   playerActionImage: {fileID: 1247957677}
+  fieldRevertTime: 200
   defaultField: {fileID: 11400000, guid: 25cb27a22e93a7a48939087291505f14, type: 2}
   plowedField: {fileID: 11400000, guid: b1daa110acc0f3e4aaf2d104934d6c30, type: 2}
   wateredField: {fileID: 11400000, guid: 76b4dd8aafe4d664f883f37bdd74046d, type: 2}
   wateringTimeReduction: 0.5
-  wheat:
+  wheatGrowTime: 150
+  wheatGrowthLevels:
   - {fileID: 11400000, guid: db4ee335381aca743a8e99acadee46b0, type: 2}
   - {fileID: 11400000, guid: d2e3ecc9563ace54493b188b4753a462, type: 2}
   - {fileID: 11400000, guid: a35efe357e1c42a4a9a857a56d34574e, type: 2}
-  wheatGrowTime: 150
-  tomato:
+  tomatoGrowTime: 165
+  tomatoGrowthLevels:
   - {fileID: 11400000, guid: 8105efa24acf7fa488fd2f3199880ae7, type: 2}
   - {fileID: 11400000, guid: d6f54f13244871b40808c96222b3c128, type: 2}
   - {fileID: 11400000, guid: 016fca049d47dc34793712e786305ff3, type: 2}
-  tomatoGrowTime: 165
-  lentil:
+  lentilGrowTime: 135
+  lentilGrowthLevels:
   - {fileID: 11400000, guid: a8208d6f707e44040ac0262d6e6d7a13, type: 2}
   - {fileID: 11400000, guid: 88126277d1fb08345a91932c9b2dffe4, type: 2}
   - {fileID: 11400000, guid: 7ed98a2a84df5f54495e57664424839b, type: 2}
-  lentilGrowTime: 135
   mainProgress: 0
   winText: {fileID: 1290855485}
   maxProgress: 10000
@@ -54029,10 +54030,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9b1ac18e7b7f964ebf47214eeffb8c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  handChanged: {fileID: 11400000, guid: 38b3eee96365b2046ae19c4c54c014fc, type: 2}
-  gameManager: {fileID: 548942054}
-  playerInventory: {fileID: 1822348387}
-  hotbarSelectedImages:
+  selectedItemChanged: {fileID: 11400000, guid: 38b3eee96365b2046ae19c4c54c014fc, type: 2}
+  hotbarUser: {fileID: 0}
+  itemImages:
   - {fileID: 1476501579}
   - {fileID: 502816388}
   - {fileID: 1960788829}
@@ -54210,8 +54210,6 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: 1
     Variable: {fileID: 11400000, guid: e581feeb5e30f264bb8c83950014bf56, type: 2}
-  gameManager: {fileID: 548942054}
-  townGameManager: {fileID: 0}
   dayChange: {fileID: 0}
 --- !u!1001 &674813009
 PrefabInstance:
@@ -76559,7 +76557,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floatingTextPrefab: {fileID: 7400483344476064293, guid: 2d8750836b67430499316c043edfc381, type: 3}
   player: {fileID: 1822348381}
-  gameManager: {fileID: 548942054}
+  farmGameManager: {fileID: 548942054}
   RestUIPanelMain: {fileID: 1043249260}
   volumeEffect: {fileID: 768206396}
   restTimer: 120
@@ -79383,7 +79381,7 @@ SpriteRenderer:
   m_SortingLayerID: 534317391
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 370816285, guid: 0864095f993089b4abb6cbc3e9071a7b, type: 3}
+  m_Sprite: {fileID: -1771042824, guid: 184f872338c6edf4fb5af007c70a80f9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -79448,7 +79446,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.25}
-    oldSize: {x: 0.8125, y: 1.875}
+    oldSize: {x: 1, y: 2.0625}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -79496,16 +79494,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9badfc77234d2d8488e39afbf4fb87ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inTown: 0
-  handItem: 
-  inventoryIndex: []
+  disableHandItemAndHotbar: 0
+  hotbarIndex: 0
   hotbar:
   - {fileID: 1966816147}
   - {fileID: 853325668}
   - {fileID: 1783417337}
   - {fileID: 1404549799}
   - {fileID: 1198524950}
-  hotbarIndex: 0
   newInventory:
   - {fileID: 1966816148}
   - {fileID: 853325669}
@@ -79532,7 +79528,7 @@ MonoBehaviour:
   inventoryIcon: {fileID: 2652448401726263400, guid: c21f85f511d219b44a7bde40ecc9e3ea, type: 3}
   handIcon: {fileID: 1848548496}
   playerTool: {fileID: 1822348388}
-  handChanged: {fileID: 11400000, guid: 38b3eee96365b2046ae19c4c54c014fc, type: 2}
+  handItemChanged: {fileID: 11400000, guid: 38b3eee96365b2046ae19c4c54c014fc, type: 2}
   inventoryChanged: {fileID: 11400000, guid: 781bb007457116a4bae988a082a9f33a, type: 2}
 --- !u!114 &1822348388
 MonoBehaviour:
