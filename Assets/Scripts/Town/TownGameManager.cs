@@ -15,9 +15,6 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
     private Toggle helpToggle;
     [SerializeField] private string showHelpOnNewGameKey = "showHelpOnNewGame";
 
-    [Header("DEBUG")]
-    [SerializeField] private bool allowTP;
-
     [Header("Time")]
     private DayNightCycle dayNightCycle;
     private float time;
@@ -60,6 +57,12 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
     [SerializeField] private GameObject toolsUI;
     public List<TileBase> animals;
     [SerializeField] private GameObject animalsUI;
+
+    [Space]
+    [Header("People")]
+    public List<TileBase> aidWorker;
+    public List<TileBase> HardwareWorker;
+    public List<TileBase> restaurantWorker;
 
     [Space]
     [Header("IndoorCoordinates")]
@@ -240,20 +243,29 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
 
                         if (interactWBuildingKeyPressed)
                         {
-                            if (allowTP)
-                            {
-                                playerInventory.gameObject.transform.position = restaurantTP.position;
-                                inBuilding = "Restaurant";
-                                camera.indoor = true;
-                            }
-                            else
-                            {
-                                inventoryUI.SetActive(true);
-                                playerInventory.sellMode = true;
-                                inventoryUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().color = sellInventory;
-                                inventoryUIHeaderImage.color = sellInventory;
-                                inventoryUIHeaderTextField.text = "Fresh Food";
-                            }
+                            playerInventory.gameObject.transform.position = restaurantTP.position;
+                            inBuilding = "Restaurant";
+                            camera.indoor = true;
+                        }
+                        else
+                        {
+                            playerWorldCanvas.SetActive(true);
+                        }
+
+
+                        break;
+                    }
+                    else if (restaurantWorker.Contains(buildings.GetTile(gridPosition + neighborPosition)))
+                    {
+                        Debugger.Log("Interacting with Restaurant Worker!", Debugger.PriorityLevel.LeastImportant);
+
+                        if (interactWBuildingKeyPressed)
+                        {
+                            inventoryUI.SetActive(true);
+                            playerInventory.sellMode = true;
+                            inventoryUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().color = sellInventory;
+                            inventoryUIHeaderImage.color = sellInventory;
+                            inventoryUIHeaderTextField.text = "Fresh Food";
                         }
                         else
                         {
@@ -285,20 +297,29 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
 
                         if (interactWBuildingKeyPressed)
                         {
-                            if (allowTP)
-                            {
-                                playerInventory.gameObject.transform.position = aidTP.position;
-                                inBuilding = "Aid";
-                                camera.indoor = true;
-                            }
-                            else
-                            {
-                                inventoryUI.SetActive(true);
-                                playerInventory.giveMode = true;
-                                inventoryUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().color = giveInventory;
-                                inventoryUIHeaderImage.color = giveInventory;
-                                inventoryUIHeaderTextField.text = "Donate";
-                            }
+                            playerInventory.gameObject.transform.position = aidTP.position;
+                            inBuilding = "Aid";
+                            camera.indoor = true;
+                        }
+                        else
+                        {
+                            playerWorldCanvas.SetActive(true);
+                        }
+
+
+                        break;
+                    }
+                    else if (aidWorker.Contains(buildings.GetTile(gridPosition + neighborPosition)))
+                    {
+                        Debugger.Log("Interacting with Humanitarian Aid Worker!", Debugger.PriorityLevel.LeastImportant);
+
+                        if (interactWBuildingKeyPressed)
+                        {
+                            inventoryUI.SetActive(true);
+                            playerInventory.giveMode = true;
+                            inventoryUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().color = giveInventory;
+                            inventoryUIHeaderImage.color = giveInventory;
+                            inventoryUIHeaderTextField.text = "Donate";
                         }
                         else
                         {
@@ -310,20 +331,28 @@ public class TownGameManager : MonoBehaviour, SaveSystem.ISaveable
                     }
                     else if (tools.Contains(buildings.GetTile(gridPosition + neighborPosition)))
                     {
-                        Debugger.Log("Interacting with tools!", Debugger.PriorityLevel.LeastImportant);
+                        Debugger.Log("Interacting with Hardware Store!", Debugger.PriorityLevel.LeastImportant);
 
                         if (interactWBuildingKeyPressed)
                         {
-                            if (allowTP)
-                            {
-                                playerInventory.gameObject.transform.position = hardwareTP.position;
-                                inBuilding = "Hardware";
-                                camera.indoor = true;
-                            }
-                            else
-                            {
-                                toolsUI.SetActive(true);
-                            }
+                            playerInventory.gameObject.transform.position = hardwareTP.position;
+                            inBuilding = "Hardware";
+                            camera.indoor = true;
+                        }
+                        else
+                        {
+                            playerWorldCanvas.SetActive(true);
+                        }
+
+                        break;
+                    }
+                    else if (HardwareWorker.Contains(buildings.GetTile(gridPosition + neighborPosition)))
+                    {
+                        Debugger.Log("Interacting with Hardware Worker!", Debugger.PriorityLevel.LeastImportant);
+
+                        if (interactWBuildingKeyPressed)
+                        {
+                            toolsUI.SetActive(true);
                         }
                         else
                         {
