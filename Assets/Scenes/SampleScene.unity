@@ -5657,6 +5657,107 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c362d112a9959a040b008f9eb3803721, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &256983925
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 256983926}
+  - component: {fileID: 256983928}
+  - component: {fileID: 256983927}
+  m_Layer: 0
+  m_Name: MovementInteractionTutorial
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &256983926
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 256983925}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 11.27, y: 9.1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 708801685}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &256983927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 256983925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8e4dd7071b3bd04b99bf66b79636109, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tutorialText: "Use the \u201CW\u201D key to move up, the \u201CS\u201D key to move
+    down, \u201CA\u201D and \u201CD\u201D key to move left and right.\nPress \"Tab\"
+    key to open your inventory.\nPress \"F\" key to interact.\nPress \"T\" to toggle
+    Tutorials.\nPress \"H\" for more Help."
+  tutorialEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  tutorialEventClose:
+    m_PersistentCalls:
+      m_Calls: []
+  shouldBeDestroyed: 1
+--- !u!61 &256983928
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 256983925}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 1.6966872, y: 1.5368648}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 8.175801, y: 9.60189}
+  m_EdgeRadius: 0
 --- !u!1 &297240881
 GameObject:
   m_ObjectHideFlags: 0
@@ -6073,14 +6174,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8e4dd7071b3bd04b99bf66b79636109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tutorialText: This take you to the wonderful town of Somehting
+  tutorialText: Go to Town
   tutorialEvent:
     m_PersistentCalls:
       m_Calls: []
   tutorialEventClose:
     m_PersistentCalls:
       m_Calls: []
-  isTutorialActive: 1
+  shouldBeDestroyed: 0
 --- !u!61 &467879372
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -54727,6 +54828,7 @@ Transform:
   - {fileID: 1625442796}
   - {fileID: 935243291}
   - {fileID: 467879370}
+  - {fileID: 256983926}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &716172697
@@ -72667,14 +72769,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8e4dd7071b3bd04b99bf66b79636109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tutorialText: This is a tutorial for Pigs
+  tutorialText: "Pigs can be donated or sold, and are raised in these pens. To start
+    \u201Cproducing\u201D more pigs, have at least 2 pigs in a pen."
   tutorialEvent:
     m_PersistentCalls:
       m_Calls: []
   tutorialEventClose:
     m_PersistentCalls:
       m_Calls: []
-  isTutorialActive: 1
+  shouldBeDestroyed: 0
 --- !u!61 &935243293
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -73317,14 +73420,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8e4dd7071b3bd04b99bf66b79636109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tutorialText: This is a bigger farmland me boy.
+  tutorialText: To farm, you dig up dirt in one of the dedicated farming plots. Once
+    the ground is ready, plant the seed, and wait for it to be ready to harvest after
+    three growth stages!
   tutorialEvent:
     m_PersistentCalls:
       m_Calls: []
   tutorialEventClose:
     m_PersistentCalls:
       m_Calls: []
-  isTutorialActive: 1
+  shouldBeDestroyed: 0
 --- !u!61 &1043117779
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -75308,14 +75413,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8e4dd7071b3bd04b99bf66b79636109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tutorialText: This is a farmland me boy.
+  tutorialText: 'You can use the shovel to prepare the ground to plant seeds.
+
+    You
+    can use the watering can to decrease the time between growth stages of the crop.
+
+    You
+    can use the hoe to harvest crops once they are ready.'
   tutorialEvent:
     m_PersistentCalls:
       m_Calls: []
   tutorialEventClose:
     m_PersistentCalls:
       m_Calls: []
-  isTutorialActive: 1
+  shouldBeDestroyed: 0
 --- !u!61 &1322771751
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -79109,14 +79220,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8e4dd7071b3bd04b99bf66b79636109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tutorialText: This is your house, rest here to speed up time
+  tutorialText: Resting can speed up the growth processes.
   tutorialEvent:
     m_PersistentCalls:
       m_Calls: []
   tutorialEventClose:
     m_PersistentCalls:
       m_Calls: []
-  isTutorialActive: 1
+  shouldBeDestroyed: 0
 --- !u!61 &1601071508
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -79207,14 +79318,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8e4dd7071b3bd04b99bf66b79636109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tutorialText: This is a tutorial for chikens
+  tutorialText: "Chicken eggs can be donated or sold, and are layed in these coops.
+    To start \u201Cproducing\u201D more eggs, have at least 2 chickens in a coop."
   tutorialEvent:
     m_PersistentCalls:
       m_Calls: []
   tutorialEventClose:
     m_PersistentCalls:
       m_Calls: []
-  isTutorialActive: 1
+  shouldBeDestroyed: 0
 --- !u!61 &1625442798
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -80121,7 +80233,7 @@ Transform:
   m_GameObject: {fileID: 1822348381}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10, y: 9.5, z: -8}
+  m_LocalPosition: {x: 13.9, y: 11.04, z: -8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
