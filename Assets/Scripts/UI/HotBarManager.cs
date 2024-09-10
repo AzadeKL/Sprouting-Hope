@@ -5,8 +5,7 @@ using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityEngine.XR;
 
-// TODO: Correct "HotBar" to "Hotbar"
-public class HotBarManager : MonoBehaviour
+public class HotbarManager : MonoBehaviour
 {
     [FormerlySerializedAs("handChanged")]
     [SerializeField] private GameEvent selectedItemChanged;

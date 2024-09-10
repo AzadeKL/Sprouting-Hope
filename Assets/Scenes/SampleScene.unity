@@ -53959,7 +53959,7 @@ GameObject:
   - component: {fileID: 555502815}
   - component: {fileID: 555502816}
   m_Layer: 5
-  m_Name: Hot Bar Panel
+  m_Name: Hotbar Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -54061,7 +54061,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 555502814}
-        m_TargetAssemblyTypeName: HotBarManager, Assembly-CSharp
+        m_TargetAssemblyTypeName: HotbarManager, Assembly-CSharp
         m_MethodName: OnSelectionChanged
         m_Mode: 1
         m_Arguments:
@@ -54092,7 +54092,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 555502814}
-        m_TargetAssemblyTypeName: HotBarManager, Assembly-CSharp
+        m_TargetAssemblyTypeName: HotbarManager, Assembly-CSharp
         m_MethodName: OnAvailableItemsChanged
         m_Mode: 1
         m_Arguments:
@@ -74217,7 +74217,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4892186777328739501, guid: 066bc6c0a3eeaaa4ebd6c80632d57a29, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: HotBarManager, Assembly-CSharp
+      value: HotbarManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 4892186777328739501, guid: 066bc6c0a3eeaaa4ebd6c80632d57a29, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
@@ -74451,7 +74451,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4892186777328739501, guid: 066bc6c0a3eeaaa4ebd6c80632d57a29, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: HotBarManager, Assembly-CSharp
+      value: HotbarManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 4892186777328739501, guid: 066bc6c0a3eeaaa4ebd6c80632d57a29, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
@@ -75486,7 +75486,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4892186777328739501, guid: 066bc6c0a3eeaaa4ebd6c80632d57a29, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: HotBarManager, Assembly-CSharp
+      value: HotbarManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6753579027156479921, guid: 066bc6c0a3eeaaa4ebd6c80632d57a29, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -81219,7 +81219,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4892186777328739501, guid: 066bc6c0a3eeaaa4ebd6c80632d57a29, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: HotBarManager, Assembly-CSharp
+      value: HotbarManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 4892186777328739501, guid: 066bc6c0a3eeaaa4ebd6c80632d57a29, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
@@ -81582,7 +81582,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4892186777328739501, guid: 066bc6c0a3eeaaa4ebd6c80632d57a29, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: HotBarManager, Assembly-CSharp
+      value: HotbarManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 4892186777328739501, guid: 066bc6c0a3eeaaa4ebd6c80632d57a29, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
