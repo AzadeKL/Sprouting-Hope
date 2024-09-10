@@ -10,7 +10,8 @@ public class TutorialTile : MonoBehaviour
     public UnityEvent<string, Collider2D> tutorialEvent;
     public UnityEvent tutorialEventClose;
 
-    public bool isTutorialActive = true;
+    // public bool isTutorialActive = true;
+    public bool shouldBeDestroyed = false;
 
     // Start is called before the first frame update
     void Start()
@@ -37,7 +38,11 @@ public class TutorialTile : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            tutorialEventClose.Invoke();  
+            tutorialEventClose.Invoke(); 
+            if (shouldBeDestroyed)
+            {
+                Destroy(gameObject);
+            } 
         }
     }
 }
