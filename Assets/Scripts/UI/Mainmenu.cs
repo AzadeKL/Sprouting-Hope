@@ -87,12 +87,14 @@ public class Mainmenu : MonoBehaviour
 
     public void Continue()
     {
+        PlayerPrefs.SetInt("NewGame", 0);
         SceneManager.LoadScene(SaveSystem.DataManager.instance.GetLastSceneIndex());
     }
     // This method is called when the Play button is pressed
     public void PlayGame()
     {
         SaveSystem.DataManager.instance.ResetGameData();
+        PlayerPrefs.SetInt("NewGame", 1);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 

@@ -36,13 +36,12 @@ public class TutorialPopUp : MonoBehaviour
         SceneManager.activeSceneChanged += OnSceneChange;
 
         //Check if tutorials are active or not
-        if(PlayerPrefs.HasKey("areTutorialsActive"))
+        if(PlayerPrefs.HasKey("areTutorialsActive") && PlayerPrefs.GetInt("NewGame") != 1)
         {
             areTutorialActive = PlayerPrefs.GetInt("areTutorialsActive") == 1;
         }
         else
         {
-            areTutorialActive = true;
             PlayerPrefs.SetInt("areTutorialsActive", 1);
         }
         
@@ -169,7 +168,12 @@ public class TutorialPopUp : MonoBehaviour
 
     private void OnSceneChange(Scene arg0, Scene arg1)
     {
-        PlayerPrefs.SetInt("areTutorialsActive", areTutorialActive ? 1 : 0);
+        PlayerPrefs.SetInt("NewGame", 2);
+        if(PlayerPrefs.HasKey("areTutorialsActive"))
+        {
+            PlayerPrefs.SetInt("areTutorialsActive", areTutorialActive ? 1 : 0);
+        }
+        
     }
 
 }
