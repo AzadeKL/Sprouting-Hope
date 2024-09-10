@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -7,11 +8,12 @@ public class TutorialTile : MonoBehaviour
     [Header("Tutorial Text")]
     [Multiline,Tooltip("Enter what tutorial should say")]public string tutorialText;
 
-    public UnityEvent<string, Collider2D> tutorialEvent;
+    public UnityEvent<string, Collider2D, bool> tutorialEvent;
     public UnityEvent tutorialEventClose;
 
     // public bool isTutorialActive = true;
     public bool shouldBeDestroyed = false;
+    public bool isFirstTime = true;
 
     // Start is called before the first frame update
     void Start()
@@ -30,7 +32,8 @@ public class TutorialTile : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            tutorialEvent.Invoke(tutorialText, GetComponent<Collider2D>());  
+            tutorialEvent.Invoke(tutorialText, GetComponent<Collider2D>(), isFirstTime);
+            isFirstTime = false;
         }
     }
 
@@ -38,7 +41,7 @@ public class TutorialTile : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            tutorialEventClose.Invoke(); 
+            tutorialEventClose.Invoke();
             if (shouldBeDestroyed)
             {
                 Destroy(gameObject);

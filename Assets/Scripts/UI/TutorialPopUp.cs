@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class TutorialPopUp : MonoBehaviour
@@ -31,6 +34,20 @@ public class TutorialPopUp : MonoBehaviour
         setVisibility(false);
         textObject.SetText("");
         playerCollider = GameObject.FindGameObjectWithTag("Player").GetComponent<Collider2D>();
+        // Subscribe to the scene change event
+        SceneManager.activeSceneChanged += OnSceneChange;
+
+        //Check if tutorials are active or not
+        if(PlayerPrefs.HasKey("areTutorialsActive"))
+        {
+            areTutorialActive = PlayerPrefs.GetInt("areTutorialsActive") == 1;
+        }
+        else
+        {
+            areTutorialActive = true;
+            PlayerPrefs.SetInt("areTutorialsActive", 1);
+        }
+        
     }
 
     // Update is called once per frame
@@ -43,7 +60,7 @@ public class TutorialPopUp : MonoBehaviour
             {
                 if (playerCollider.IsTouching(lastActiveCollider))
                 {
-                    showPopUp(tutorialText, lastActiveCollider);
+                    showPopUp(tutorialText, lastActiveCollider, false);
                 }
             }
             else
@@ -122,16 +139,24 @@ public class TutorialPopUp : MonoBehaviour
 
     //Showing the pop up
     //Called by TutorialTile.cs via Event
-    public void showPopUp(string text, Collider2D collider)
+    public void showPopUp(string text, Collider2D collider, bool isFirstTime)
     {
         lastActiveCollider = collider;
         setText(text);
-        if(!areTutorialActive)
+        if(isFirstTime)
         {
-            return;
+            setDimensionsforText();
+            setVisibility(true);
         }
-        setDimensionsforText();
-        setVisibility(true);
+        else
+        {
+            if(areTutorialActive)
+            {
+                setDimensionsforText();
+                setVisibility(true);
+            }
+        }
+        
     }
 
     //Hiding the pop up
@@ -141,6 +166,12 @@ public class TutorialPopUp : MonoBehaviour
         textObject.SetText("");
         textObject.ForceMeshUpdate();
         setVisibility(false);
+    }
+
+
+    private void OnSceneChange(Scene arg0, Scene arg1)
+    {
+        PlayerPrefs.SetInt("areTutorialsActive", areTutorialActive ? 1 : 0);
     }
 
 }
