@@ -55051,11 +55051,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2979622551374298851, guid: 1cb20ac6951a5d5458f64c419274a56b, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 913
+      value: -913
       objectReference: {fileID: 0}
     - target: {fileID: 2979622551374298851, guid: 1cb20ac6951a5d5458f64c419274a56b, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 239
+      value: 230
       objectReference: {fileID: 0}
     - target: {fileID: 2979622551374298851, guid: 1cb20ac6951a5d5458f64c419274a56b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -55072,6 +55072,10 @@ PrefabInstance:
     - target: {fileID: 3521153258912440584, guid: 1cb20ac6951a5d5458f64c419274a56b, type: 3}
       propertyPath: m_text
       value: This is Tutorial
+      objectReference: {fileID: 0}
+    - target: {fileID: 3521153258912440584, guid: 1cb20ac6951a5d5458f64c419274a56b, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7573985471813013860, guid: 1cb20ac6951a5d5458f64c419274a56b, type: 3}
       propertyPath: m_Name

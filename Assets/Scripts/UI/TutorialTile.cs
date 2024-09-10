@@ -20,9 +20,9 @@ public class TutorialTile : MonoBehaviour
         tutorialEvent.AddListener(GameObject.FindGameObjectWithTag("TutorialPopUp").GetComponent<TutorialPopUp>().showPopUp);
         tutorialEventClose.AddListener(GameObject.FindGameObjectWithTag("TutorialPopUp").GetComponent<TutorialPopUp>().hidePopUp);
 
-        if(PlayerPrefs.HasKey(gameObject.name) && PlayerPrefs.GetInt("NewGame") != 1)
+        if(PlayerPrefs.GetInt("isNewGame") != 1)
         {
-            isFirstTime = PlayerPrefs.GetInt(gameObject.name) == 1;
+            isFirstTime = PlayerPrefs.GetInt(gameObject.name, 1) == 1;
         }
         else
         {

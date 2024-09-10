@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -32,13 +33,13 @@ public class TutorialPopUp : MonoBehaviour
         setVisibility(false);
         textObject.SetText("");
         playerCollider = GameObject.FindGameObjectWithTag("Player").GetComponent<Collider2D>();
-        // Subscribe to the scene change event
-        SceneManager.activeSceneChanged += OnSceneChange;
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
 
         //Check if tutorials are active or not
-        if(PlayerPrefs.HasKey("areTutorialsActive") && PlayerPrefs.GetInt("NewGame") != 1)
+        if(PlayerPrefs.GetInt("isNewGame") != 1)
         {
-            areTutorialActive = PlayerPrefs.GetInt("areTutorialsActive") == 1;
+            areTutorialActive = PlayerPrefs.GetInt("areTutorialsActive", 1) == 1;
         }
         else
         {
@@ -53,6 +54,7 @@ public class TutorialPopUp : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.T))
         {
             areTutorialActive = !areTutorialActive;
+            PlayerPrefs.SetInt("areTutorialsActive", areTutorialActive ? 1 : 0);
             if (areTutorialActive)
             {
                 if (playerCollider.IsTouching(lastActiveCollider))
@@ -129,8 +131,8 @@ public class TutorialPopUp : MonoBehaviour
     private void setBox(Vector2 size)
     {
         tutorialPopUp.GetComponent<RectTransform>().sizeDelta = size + popUpPadding;
-        Vector2 tutorialPosition = new Vector2(-size.x / 2, -size.y / 2);
-        textObject.rectTransform.localPosition = tutorialPosition * new Vector2(2, 1);
+        Vector2 tutorialPosition = new Vector2(size.x / 2, -size.y / 2);
+        textObject.rectTransform.localPosition = tutorialPosition * new Vector2(1, 1);
         tutorialPopUp.GetComponent<RectTransform>().localPosition = tutorialPosition;
     }
 
@@ -165,15 +167,11 @@ public class TutorialPopUp : MonoBehaviour
         setVisibility(false);
     }
 
-
-    private void OnSceneChange(Scene arg0, Scene arg1)
+    //Only here because tutorial popUP gets loaded before the tiles so they
+    // do not get time to load player prefs
+    private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
-        PlayerPrefs.SetInt("NewGame", 2);
-        if(PlayerPrefs.HasKey("areTutorialsActive"))
-        {
-            PlayerPrefs.SetInt("areTutorialsActive", areTutorialActive ? 1 : 0);
-        }
-        
+        PlayerPrefs.SetInt("isNewGame", 0);
     }
 
 }
