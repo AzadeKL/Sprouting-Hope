@@ -95,6 +95,7 @@ public class Mainmenu : MonoBehaviour
     {
         SaveSystem.DataManager.instance.ResetGameData();
         PlayerPrefs.SetInt("isNewGame", 1);
+        PlayerPrefs.DeleteKey("LoadedTutorials");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 

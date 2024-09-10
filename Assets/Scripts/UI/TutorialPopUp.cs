@@ -34,7 +34,7 @@ public class TutorialPopUp : MonoBehaviour
         textObject.SetText("");
         playerCollider = GameObject.FindGameObjectWithTag("Player").GetComponent<Collider2D>();
 
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.activeSceneChanged += OnSceneLoaded;
 
         //Check if tutorials are active or not
         if(PlayerPrefs.GetInt("isNewGame") != 1)
@@ -169,7 +169,7 @@ public class TutorialPopUp : MonoBehaviour
 
     //Only here because tutorial popUP gets loaded before the tiles so they
     // do not get time to load player prefs
-    private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
+    private void OnSceneLoaded(Scene arg0, Scene arg1)
     {
         PlayerPrefs.SetInt("isNewGame", 0);
     }

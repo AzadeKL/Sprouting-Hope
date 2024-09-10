@@ -20,13 +20,10 @@ public class TutorialTile : MonoBehaviour
         tutorialEvent.AddListener(GameObject.FindGameObjectWithTag("TutorialPopUp").GetComponent<TutorialPopUp>().showPopUp);
         tutorialEventClose.AddListener(GameObject.FindGameObjectWithTag("TutorialPopUp").GetComponent<TutorialPopUp>().hidePopUp);
 
-        if(PlayerPrefs.GetInt("isNewGame") != 1)
+        string loadedTutorials = PlayerPrefs.GetString("LoadedTutorials", "");
+        if (loadedTutorials.Contains(gameObject.name))
         {
-            isFirstTime = PlayerPrefs.GetInt(gameObject.name, 1) == 1;
-        }
-        else
-        {
-            PlayerPrefs.SetInt(this.gameObject.name, 1);
+            isFirstTime = false;
         }
     }
 
@@ -42,7 +39,11 @@ public class TutorialTile : MonoBehaviour
         {
             tutorialEvent.Invoke(tutorialText, GetComponent<Collider2D>(), isFirstTime);
             isFirstTime = false;
-            PlayerPrefs.SetInt(gameObject.name, 0);
+            string loadedTutorials = PlayerPrefs.GetString("LoadedTutorials", "");
+            if (!loadedTutorials.Contains(gameObject.name))
+            {
+                PlayerPrefs.SetString("LoadedTutorials", loadedTutorials + gameObject.name + ",");
+            }
         }
     }
 
