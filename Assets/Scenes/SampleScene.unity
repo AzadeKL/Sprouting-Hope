@@ -5420,7 +5420,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 25, y: -50}
+  m_AnchoredPosition: {x: 25, y: -20}
   m_SizeDelta: {x: 1400, y: 800}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &241875310
@@ -5713,6 +5713,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   shouldBeDestroyed: 1
+  isFirstTime: 1
 --- !u!61 &256983928
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6182,6 +6183,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   shouldBeDestroyed: 0
+  isFirstTime: 1
 --- !u!61 &467879372
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -72778,6 +72780,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   shouldBeDestroyed: 0
+  isFirstTime: 1
 --- !u!61 &935243293
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -73430,6 +73433,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   shouldBeDestroyed: 0
+  isFirstTime: 1
 --- !u!61 &1043117779
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -75427,6 +75431,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   shouldBeDestroyed: 0
+  isFirstTime: 1
 --- !u!61 &1322771751
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -79228,6 +79233,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   shouldBeDestroyed: 0
+  isFirstTime: 1
 --- !u!61 &1601071508
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -79327,6 +79333,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   shouldBeDestroyed: 0
+  isFirstTime: 1
 --- !u!61 &1625442798
 BoxCollider2D:
   m_ObjectHideFlags: 0
