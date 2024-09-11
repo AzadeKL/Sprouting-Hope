@@ -6285,7 +6285,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 534317391
   m_SortingLayer: 2
-  m_SortingOrder: 1
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: b840c25712c37184ba6787ee38043cf0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -53309,9 +53309,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0
+    y: 0.01084991
     width: 1
-    height: 1
+    height: 0.97649187
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
@@ -53452,19 +53452,19 @@ MonoBehaviour:
   wateringTimeReduction: 0.5
   wheatGrowTime: 150
   wheatGrowthLevels:
-  - {fileID: 11400000, guid: db4ee335381aca743a8e99acadee46b0, type: 2}
-  - {fileID: 11400000, guid: d2e3ecc9563ace54493b188b4753a462, type: 2}
-  - {fileID: 11400000, guid: a35efe357e1c42a4a9a857a56d34574e, type: 2}
+  - {fileID: 11400000, guid: b8b83e4a707c7ef46a0b34f5a3f8ae5c, type: 2}
+  - {fileID: 11400000, guid: 1c434bd576e1023488e1a171ad167167, type: 2}
+  - {fileID: 11400000, guid: c493097f188d69c4fbc91ae8a8ab129c, type: 2}
   tomatoGrowTime: 165
   tomatoGrowthLevels:
-  - {fileID: 11400000, guid: 8105efa24acf7fa488fd2f3199880ae7, type: 2}
-  - {fileID: 11400000, guid: d6f54f13244871b40808c96222b3c128, type: 2}
-  - {fileID: 11400000, guid: 016fca049d47dc34793712e786305ff3, type: 2}
+  - {fileID: 11400000, guid: 14b93288c82c1fb46af17c57f41a0f5e, type: 2}
+  - {fileID: 11400000, guid: 5d1386f700478974bbe4754ec1b673a0, type: 2}
+  - {fileID: 11400000, guid: c86bbe424b2cb514795f19276e1c3b3f, type: 2}
   lentilGrowTime: 135
   lentilGrowthLevels:
-  - {fileID: 11400000, guid: a8208d6f707e44040ac0262d6e6d7a13, type: 2}
-  - {fileID: 11400000, guid: 88126277d1fb08345a91932c9b2dffe4, type: 2}
-  - {fileID: 11400000, guid: 7ed98a2a84df5f54495e57664424839b, type: 2}
+  - {fileID: 11400000, guid: dc574b6e72194dd49b9747101117a69a, type: 2}
+  - {fileID: 11400000, guid: 85b16485ed9d9934fa0c1055c0d336a4, type: 2}
+  - {fileID: 11400000, guid: 938eb9d41b8126243968cf8a4f8e8836, type: 2}
   mainProgress: 0
   winText: {fileID: 1290855485}
   maxProgress: 10000
