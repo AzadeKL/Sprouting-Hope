@@ -196,7 +196,7 @@ public class AnimalManager : MonoBehaviour, SaveSystem.ISaveable
     //Get the  number of Pigs
     public int GetNumPigs()
     {
-        if (chickenSlot.childCount > 0) return pigSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity;
+        if (pigSlot.childCount > 0) return pigSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>().quantity;
         else return 0;
     }
 
@@ -216,6 +216,7 @@ public class AnimalManager : MonoBehaviour, SaveSystem.ISaveable
 
     public void UpdateAnimals(PlayerInventory playerInventory)
     {
+        Debug.Log("new day");
         // if at least one chicken in coop, attempt at egg production
         if (chickenSlot.childCount > 0 && GetChickenFeed() > 0)
         {
@@ -228,6 +229,7 @@ public class AnimalManager : MonoBehaviour, SaveSystem.ISaveable
             }
             // make 0-[# of chickens] eggs
             InventoryIcon eggIcon = eggSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>();
+            Debug.Log("Max Eggs: " + chickenSlot.GetChild(0).GetComponent<InventoryIcon>().quantity + 1);
             int newEggs = Random.Range(0, chickenSlot.GetChild(0).GetComponent<InventoryIcon>().quantity + 1);
             Debug.Log("Making " + newEggs + " eggs!");
             Debug.Log(eggIcon.quantity);
@@ -250,6 +252,7 @@ public class AnimalManager : MonoBehaviour, SaveSystem.ISaveable
         {
             InventoryIcon pigIcon = pigSlot.GetChild(0).gameObject.GetComponent<InventoryIcon>();
             // make 0-[half total pigs] more pigs
+            Debug.Log("Max Pigs: " + ((int)Mathf.Floor(pigIcon.quantity / 2)) + 1);
             int newPigs = UnityEngine.Random.Range(0, ((int)Mathf.Floor(pigIcon.quantity / 2)) + 1);
             Debug.Log("Making " + newPigs + " pigs!");
             Debug.Log(pigIcon.quantity);
